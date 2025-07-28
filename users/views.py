@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 
-from allauth.account.utils import send_email_confirmation
+
 from django.contrib.auth import get_user_model
 
 
@@ -78,11 +78,6 @@ class CustomSignupView(SignupView):
         user.role = 'customer'
         user.save()
 
-        # ✅ Send email confirmation
-        send_email_confirmation(self.request, user)
-
-        # ✅ Send welcome email (optional/custom)
-        self.send_welcome_email(user.email)
 
         messages.success(
             self.request,
