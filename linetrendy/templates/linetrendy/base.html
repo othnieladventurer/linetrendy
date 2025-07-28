@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linetrendy | Hair product for all hair types.</title>
+    <meta name="description" content="Discover Linetrendy’s organic hair care: oils, pomades, shampoos, conditioners, masks & serums. Eco-conscious and sustainable for all hair types.">
+    <meta name="keywords" content="consistency is key, ,  Hair productp, sustainable beauty products, luxury cosmetics, clean beauty, cruelty-free">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+   
+   <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFEBEE',
+                        secondary: '#FFCDD2',
+                        accent: '#F44336',
+                        dark: '#000000',
+                        light: '#FFEBEE'
+                    },
+                    fontFamily: {
+                        heading: ['"Playfair Display"', 'serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ine rendy",
+      "url": "https://bloombeauty.example.com",
+      "logo": "https://bloombeauty.example.com/logo.png",
+      "description": "Premium organic and sustainable beauty products",
+      "sameAs": [
+        "https://www.facebook.com/bloombeauty",
+        "https://www.instagram.com/bloombeauty",
+        "https://www.pinterest.com/bloombeauty"
+      ]
+    }
+    </script>
+</head>
+<body class="font-body">
+    {% include 'linetrendy/partials/navbar.html' %}
+
+
+    {% block content %}
+
+    {% endblock content %}
+
+    {% include 'linetrendy/partials/footer.html' %}
+
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

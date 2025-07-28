@@ -1,0 +1,64 @@
+<!-- Header with Navigation -->
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="flex items-center">
+                <span class="text-2xl font-heading font-bold text-accent">Linetrendy</span>
+               
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="/" class="text-black hover:text-accent transition">Home</a>
+                <a href="{% url 'shop:shop' %}" class="text-black hover:text-accent transition">Shop</a>
+                <a href="{% url 'shop:about' %}" class="text-black hover:text-accent transition">About Us</a>
+                <a href="{% url 'shop:contact' %}" class="text-black hover:text-accent transition">Contact</a>
+            </nav>
+            
+            <!-- Icons -->
+            <div class="hidden md:flex items-center space-x-6">
+                <button class="text-dark hover:text-accent transition" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="text-dark hover:text-accent transition" aria-label="Account">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="text-dark hover:text-accent transition relative" aria-label="Cart">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden hamburger focus:outline-none" id="menu-btn" aria-label="Menu">
+                <span class="block w-6 h-0.5 bg-dark mb-1.5 transition"></span>
+                <span class="block w-6 h-0.5 bg-dark mb-1.5 transition"></span>
+                <span class="block w-6 h-0.5 bg-dark transition"></span>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden bg-white" id="mobile-menu">
+            <div class="flex flex-col space-y-4 py-4">
+                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Home</a>
+                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Shop</a>
+                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Categories</a>
+                <a href="#" class="text-black hover:text-accent transition px-4 py-2">About Us</a>
+                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Contact</a>
+                <div class="flex space-x-6 px-4 py-2">
+                    <button class="text-dark hover:text-accent transition" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="text-dark hover:text-accent transition" aria-label="Account">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="text-dark hover:text-accent transition relative" aria-label="Cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

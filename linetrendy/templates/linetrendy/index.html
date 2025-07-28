@@ -1,0 +1,410 @@
+{% extends 'linetrendy/base.html' %}
+
+
+
+{% load static %}
+
+
+
+{% block content %}
+<section class="hero-section relative h-screen flex items-center justify-center text-center text-white px-4 animate-fade-in">
+    <div class="max-w-4xl mx-auto relative z-10">
+        <h1 class="text-4xl md:text-6xl font-heading font-bold mb-6 animate-slide-up">Welcome to Linetrendy</h1>
+        <p class="text-xl md:text-2xl mb-8 animate-slide-up">Remember: consistency is key! Hair product for all hair types.</p>
+        <button class="bg-accent hover:bg-dark text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
+            Shop Now
+        </button>
+    </div>
+</section>
+
+
+
+<section class="bg-gray-100 text-black min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-3xl text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Meet the Founder</h2>
+    <p class="text-lg mb-8 opacity-80">
+      Hear directly from the creator of Linetrendy — a journey of vision, values, and the passion behind every product.
+    </p>
+
+    <!-- Smaller Responsive 16:9 Video -->
+    <div class="relative w-full mb-4" style="padding-top: 56.25%;">
+      <iframe
+        class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+        src="{% static 'video/video_presentation.mp4' %}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <br>
+
+  </div>
+</section>
+
+
+
+<!-- Featured Products Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-heading font-bold text-center mb-12 text-black">Our Products</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-6 gap-8">
+            <!-- Product 1 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80" alt="Radiant Glow Serum" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">BESTSELLER</span>
+                    </div>
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Radiant Glow Serum</h3>
+                    <p class="text-gray-600 text-sm mb-3">Nourish your skin with our organic, vitamin-rich serum for a luminous complexion.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$45.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-black px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://cdn.pixabay.com/photo/2016/01/05/15/00/skincare-1122666_1280.jpg" alt="Hydrating Face Cream" class="w-full h-64 object-cover">
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Hydrating Face Cream</h3>
+                    <p class="text-gray-600 text-sm mb-3">Deeply moisturizing cream with hyaluronic acid and natural botanicals.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$38.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://cdn.pixabay.com/photo/2016/01/05/15/00/skincare-1122666_1280.jpg" alt="Luxury Lipstick Set" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">NEW</span>
+                    </div>
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Luxury Lipstick Set</h3>
+                    <p class="text-gray-600 text-sm mb-3">Vegan, long-lasting lipsticks in 5 universally flattering shades.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$65.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://images.pexels.com/photos/5240369/pexels-photo-5240369.jpeg" alt="Detox Clay Mask" class="w-full h-64 object-cover">
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Detox Clay Mask</h3>
+                    <p class="text-gray-600 text-sm mb-3">Purifying mask with French green clay to deeply cleanse and refine pores.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$32.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Product 1 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80" alt="Radiant Glow Serum" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">BESTSELLER</span>
+                    </div>
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Radiant Glow Serum</h3>
+                    <p class="text-gray-600 text-sm mb-3">Nourish your skin with our organic, vitamin-rich serum for a luminous complexion.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$45.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://cdn.pixabay.com/photo/2016/01/05/15/00/skincare-1122666_1280.jpg" alt="Hydrating Face Cream" class="w-full h-64 object-cover">
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Hydrating Face Cream</h3>
+                    <p class="text-gray-600 text-sm mb-3">Deeply moisturizing cream with hyaluronic acid and natural botanicals.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$38.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://cdn.pixabay.com/photo/2016/01/05/15/00/skincare-1122666_1280.jpg" alt="Luxury Lipstick Set" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">NEW</span>
+                    </div>
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Luxury Lipstick Set</h3>
+                    <p class="text-gray-600 text-sm mb-3">Vegan, long-lasting lipsticks in 5 universally flattering shades.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$65.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <img src="https://images.pexels.com/photos/5240369/pexels-photo-5240369.jpeg" alt="Detox Clay Mask" class="w-full h-64 object-cover">
+                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1">Detox Clay Mask</h3>
+                    <p class="text-gray-600 text-sm mb-3">Purifying mask with French green clay to deeply cleanse and refine pores.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">$32.00</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary text-dark px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="text-center mt-12">
+            <button class="border-2 border-black hover:bg-black hover:text-white text-black px-8 py-3 rounded-full font-medium transition duration-300">
+                View All Products
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-heading font-bold text-center mb-12 text-black">Shop By Category</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Category 1 -->
+            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80" alt="Skincare" class="w-full h-64 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
+                    <h3 class="text-white text-2xl font-heading font-bold">Skincare</h3>
+                </div>
+                <a href="#" class="absolute inset-0" aria-label="Shop Skincare"></a>
+            </div>
+            
+            <!-- Category 2 -->
+            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Makeup" class="w-full h-64 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
+                    <h3 class="text-white text-2xl font-heading font-bold">Makeup</h3>
+                </div>
+                <a href="#" class="absolute inset-0" aria-label="Shop Makeup"></a>
+            </div>
+            
+            <!-- Category 3 -->
+            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
+                <img src="https://images.pexels.com/photos/8467963/pexels-photo-8467963.jpeg" alt="Haircare" class="w-full h-64 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
+                    <h3 class="text-white text-2xl font-heading font-bold">Haircare</h3>
+                </div>
+                <a href="#" class="absolute inset-0" aria-label="Shop Haircare"></a>
+            </div>
+            
+            <!-- Category 4 -->
+            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
+                <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80" alt="Fragrance" class="w-full h-64 object-cover">
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
+                    <h3 class="text-white text-2xl font-heading font-bold">Fragrance</h3>
+                </div>
+                <a href="#" class="absolute inset-0" aria-label="Shop Fragrance"></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section class="py-16 bg-red-50">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pr-12">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80" alt="About Bloom Beauty" class="rounded-lg shadow-lg w-full">
+            </div>
+            <div class="lg:w-1/2">
+                <h2 class="text-3xl font-heading font-bold mb-6 text-black">Our Story</h2>
+                <p class="text-black mb-4">At Bloom Beauty, we believe that true beauty comes from harmony with nature. Founded in 2015, our mission has been to create high-performance beauty products that are as kind to your skin as they are to the planet.</p>
+                <p class="text-black mb-6">All our products are crafted with sustainably sourced, organic ingredients, free from harmful chemicals and never tested on animals. We're committed to reducing our environmental footprint through eco-friendly packaging and responsible sourcing.</p>
+                <button class="bg-accent hover:bg-dark text-white px-8 py-3 rounded-full font-medium transition duration-300">
+                    Learn More
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-heading font-bold text-center mb-12 text-black">What Our Customers Say</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                </div>
+                <p class="text-black mb-4">"This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah L." class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Sarah L.</h4>
+                        <p class="text-sm text-gray-600">Verified Customer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                </div>
+                <p class="text-black mb-4">"I've tried many organic brands but Bloom Beauty stands out. The quality is exceptional and my skin has never looked better."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Jessica M." class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Jessica M.</h4>
+                        <p class="text-sm text-gray-600">Verified Customer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star-half-alt text-yellow-400"></i>
+                </div>
+                <p class="text-black mb-4">"The lipsticks are amazing! So many compliments and they last all day without drying my lips. Will definitely repurchase."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Emily R." class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Emily R.</h4>
+                        <p class="text-sm text-gray-600">Verified Customer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="py-16 bg-red-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-heading font-bold mb-4">Join Our Beauty Community</h2>
+        <p class="mb-8 max-w-2xl mx-auto">Subscribe to our newsletter for exclusive offers, beauty tips, and early access to new products.</p>
+        
+        <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+            <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full focus:outline-none text-dark" required>
+            <button type="submit" class="bg-dark hover:bg-primary text-white px-6 py-3 rounded-full font-medium transition duration-300 whitespace-nowrap">
+                Subscribe
+            </button>
+        </form>
+        
+        <p class="mt-4 text-sm opacity-80">We respect your privacy. Unsubscribe at any time.</p>
+    </div>
+</section>
+
+
+
+{% include 'linetrendy/partials/quick_view_modal.html' %}
+
+
+
+<!-- Add to Cart Notification -->
+<div class="fixed bottom-4 right-4 bg-white shadow-lg rounded-lg p-4 flex items-center z-50 hidden" id="cart-notification">
+    <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mr-4">
+        <i class="fas fa-check text-accent text-xl"></i>
+    </div>
+    <div>
+        <p class="font-bold">Added to Cart</p>
+        <p class="text-sm text-gray-600">1 x Radiant Glow Serum</p>
+    </div>
+</div>
+
+
+
+{% endblock content%}
