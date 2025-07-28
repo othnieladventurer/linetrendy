@@ -81,7 +81,7 @@ class CustomSignupView(SignupView):
 
         messages.success(
             self.request,
-            "You have successfully signed up. Check your email for a confirmation link and welcome message."
+            "You have successfully signed up. Check your email for a confirmation link and welcome message"
         )
         return response
 
