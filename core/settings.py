@@ -50,14 +50,15 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Application definition
-
 INSTALLED_APPS = [
+    "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     # Allauth
     'allauth',
     'allauth.account',
@@ -66,7 +67,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 
-    'linetrendy'
+    'linetrendy',
+    'users'
 
 
 ]
@@ -120,7 +122,9 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+AUTH_USER_MODEL = 'users.CustomUser'
 
+USERNAME_FIELD = 'email'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
