@@ -36,7 +36,17 @@ SECRET_KEY = 'django-insecure-+#n8ro4q#50(m@sw__9napjvs1$#-77jto8w8$&p_*ci1#jm_q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'linetrendy.saasiskey.com',  'linetrendy-production.up.railway.app' ]
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://www.linetrendy.saasiskey.com',
+    'https://linetrendy.saasiskey.com',
+    'https://linetrendy-production.up.railway.app'
+]
+
+
 
 
 # Application definition
