@@ -15,16 +15,15 @@ try:
 except NotRegistered:
     pass
 
-
 @admin.register(CustomUser)
-class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
+class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
 
-    list_display = ('email', 'first_name', 'last_name', 'role', 'is_superuser', 'is_staff', 'is_active')
-    list_filter = ('role', 'is_superuser', 'is_staff', 'is_active')
+    list_display = ('email', 'first_name', 'last_name', 'is_superuser', 'is_staff', 'is_active')
+    list_filter = ('is_superuser', 'is_staff', 'is_active')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 
@@ -34,11 +33,11 @@ class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
             'classes': ('tab-login',),
         }),
         ('Personal Info', {
-            'fields': ('first_name', 'last_name', 'phone_number', 'company'),
+            'fields': ('first_name', 'last_name', 'phone_number', 'company', 'profile_picture'),
             'classes': ('tab-personal',),
         }),
-        ('Permissions & Role', {
-            'fields': ('role', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        ('Permissions', {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
             'classes': ('tab-permissions',),
         }),
         ('Important Dates', {
@@ -57,13 +56,12 @@ class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
     add_fieldsets = (
         ('Create User', {
             'classes': ('wide', 'tab-login'),
-            'fields': ('email', 'password1', 'password2', 'role', 'is_active', 'is_staff', 'is_superuser')
+            'fields': ('email', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
         }),
     )
 
+
+
+
+
     
-
-
-
-
-

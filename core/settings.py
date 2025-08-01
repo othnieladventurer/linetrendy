@@ -111,9 +111,17 @@ AUTHENTICATION_BACKENDS = (
 
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+
+# ✅ Use new settings format
+ACCOUNT_LOGIN_METHODS = {'email'}
+
+# ✅ Define signup fields (and only those you support in your form)
+ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+
+# ✅ Username is not used
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# ✅ Disable email verification (for dev/test or non-email flows)
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SOCIALACCOUNT_PROVIDERS = {
