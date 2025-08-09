@@ -15,6 +15,8 @@ try:
 except NotRegistered:
     pass
 
+
+
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
@@ -64,4 +66,3 @@ class CustomUserAdmin(BaseUserAdmin):
 
 
 
-    

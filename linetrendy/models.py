@@ -36,7 +36,8 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
-
+    # ✅ Manually chosen related products
+    related_products = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -49,14 +50,17 @@ class Product(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
-
     def get_first_image(self):
         return self.images.first()
 
+    def get_all_images(self):
+        return self.images.all()
 
     def __str__(self):
         return self.name
+    
 
+    
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)

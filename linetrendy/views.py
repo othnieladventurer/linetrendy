@@ -16,10 +16,15 @@ def index(request):
     return render(request, 'linetrendy/index.html', context)
 
 
-#modal for quick view
-def quick_view(request, slug):
+
+def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    return render(request, 'linetrendy/partials/quick_view_modal.html', {'product': product})
+
+    context = {
+        'product': product,
+  
+    }
+    return render(request, 'linetrendy/product_detail.html', context)
 
 
 

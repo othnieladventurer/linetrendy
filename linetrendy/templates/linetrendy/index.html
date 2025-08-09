@@ -69,7 +69,7 @@
             {% for product in products %}
             <div class="product-card bg-white roundedlg overflow-hidden shadow-md">
                 <div class="relative overflow-hidden">
-                    <a href="">
+                    <a href="{% url 'shop:product_detail' slug=product.slug %}">
                         {% with product.get_first_image as first_image %}
                             {% if first_image %}
                                 <img src="{{ product.get_first_image.image.url }}" class="w-full h-64 object-cover" alt="{{ product.name }}">
@@ -84,9 +84,7 @@
                         <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">BESTSELLER</span>
                     </div>
                     {% endif %}
-                    <button class="quick-view-btn absolute bottom-0 left-0 right-0 bg-dark text-white py-2 text-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                        Quick View
-                    </button>
+                   
                 </div>
                 <div class="p-4">
                     <h3 class="font-bold text-lg mb-1"><a href="">{{ product.name }}</a></h3>
@@ -100,73 +98,7 @@
                 </div>
             </div>
 
-            <!-- Quick View Modal -->
-            <div class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible" id="quick-view-modal">
-                <div class="modal-content bg-white rounded-lg max-w-3xl w-full mx-4 max-h-[95vh] overflow-hidden">
-                    <div class="relative">
-                        <button class="close-modal absolute right-2 top-2 bg-red-800 text-white rounded-full h-8 w-8 flex items-center justify-center z-10 hover:bg-red-600 transition text-sm" aria-label="Close">
-                            <i class="fas fa-times"></i>
-                        </button>
-
-                        <div class="flex flex-col lg:flex-row h-full">
-                            <div class="lg:w-1/2 flex">
-                                <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
-                                    alt="Radiant Glow Serum"
-                                    class="w-full h-full object-contain rounded-t-lg lg:rounded-l-lg lg:rounded-tr-none">
-                            </div>
-
-                            <div class="lg:w-1/2 p-4 flex flex-col justify-between text-sm">
-                                <div>
-                                    <h3 class="text-xl font-bold mb-2">Radiant Glow Serum</h3>
-                                    <div class="flex items-center mb-2">
-                                        <div class="flex mr-2 text-yellow-400">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <span class="text-gray-600">(42 reviews)</span>
-                                    </div>
-
-                                    <p class="text-accent text-lg font-bold mb-3">$45.00</p>
-
-                                    <p class="text-gray-700 mb-3 leading-snug">
-                                        Our best-selling serum combines organic botanicals with cutting-edge skincare science to deliver visible radiance.
-                                    </p>
-
-                                    <ul class="list-disc pl-5 space-y-1 text-gray-700 mb-3">
-                                        <li>Reduces dark spots</li>
-                                        <li>Boosts collagen</li>
-                                        <li>24-hour hydration</li>
-                                        <li>Protects skin</li>
-                                        <li>Vegan & cruelty-free</li>
-                                    </ul>
-                                </div>
-
-                                <div>
-                                    <div class="flex items-center mb-3">
-                                        <div class="flex items-center border rounded-full mr-3">
-                                            <button class="px-3 py-1">-</button>
-                                            <span class="px-3">1</span>
-                                            <button class="px-3 py-1">+</button>
-                                        </div>
-                                        <button class="bg-accent hover:bg-dark text-white px-5 py-2 rounded-full font-medium transition text-sm">
-                                            Add to Cart
-                                        </button>
-                                    </div>
-
-                                    <div class="text-xs text-gray-600">
-                                        <p class="mb-1"><i class="fas fa-truck mr-1"></i> Free shipping over $50</p>
-                                        <p><i class="fas fa-undo mr-1"></i> 30-day return policy</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            
             {% endfor %}
             
         </div>

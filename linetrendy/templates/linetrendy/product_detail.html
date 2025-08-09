@@ -1,0 +1,99 @@
+{% extends 'linetrendy/base.html' %}
+
+
+
+{% load static %}
+
+
+
+{% block content %}
+
+<!-- Product Detail Hero -->
+<section class=" py-12 px-4 md:px-12">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    
+    <!-- Product Image -->
+    <div class="w-full">
+    {% with product.get_first_image as first_image %}
+        {% if first_image %}
+        <img src="{{ product.get_first_image.image.url }}" 
+            alt="{{ product.name }}" 
+            class="w-full h-[500px] object-cover rounded-xl shadow-lg">
+        {% endif %}
+    {% endwith %}
+    </div>
+    
+    <!-- Product Info -->
+    <div class="flex flex-col justify-center space-y-6">
+      <h1 class="text-4xl md:text-5xl font-bold text-black">{{ product.name }}</h1>
+      <p class="text-lg text-gray-700 leading-relaxed">
+        {{ product.description|linebreaksbr }}
+      </p>
+      
+      {% if product.bestseller %}
+        <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full w-fit">BESTSELLER</span>
+      {% endif %}
+      <hr>
+
+      <div class="flex items-center space-x-4">
+        <span class="text-3xl font-bold text-red-500">${{ product.price }}</span>
+        <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-full text-sm font-medium transition duration-300 transform hover:scale-105">
+          Add to Cart
+        </button>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-black mb-2">Category:</h3>
+        <p class="text-gray-600">{{ product.category}}</p>
+      </div>
+
+      
+    </div>
+
+  </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="py-24 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-black">Related Products</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Related Product 1 -->
+      <div class="bg-white rounded-lg overflow-hidden shadow-md">
+        <a href="#">
+
+            {% with product.get_first_image as first_image %}
+            {% if first_image %}
+                <img src="{{ product.get_first_image.image.url }}"   class="w-full h-64 object-cover rounded-lg shadow-md" alt="{{ product.name }}">
+            {% else %}
+                <img class="w-full h-64 object-cover" src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80" alt="No image available">
+            {% endif %}
+        {% endwith %}
+
+        </a>
+
+        <div class="p-4">
+          <h3 class="font-bold text-lg mb-1">Revitalizing Shampoo</h3>
+          <p class="text-gray-600 text-sm mb-3">Gentle yet effective cleansing for everyday use.</p>
+          <span class="font-bold text-red-500">$18.50</span>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <br>
+</section>
+{% endif %}
+
+
+
+
+{% endblock %}
+
+
+
