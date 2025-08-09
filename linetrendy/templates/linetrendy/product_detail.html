@@ -26,9 +26,9 @@
     <!-- Product Info (start at same top line) -->
     <div class="w-full flex flex-col justify-start space-y-6">
       <!-- remove any top margin that could push the heading down -->
-      <h1 class="mt-0 text-4xl md:text-5xl font-bold text-black">{{ product.name }}</h1>
+      <h1 class="mt-0 text-4xl md:text-5xl font-bold text-red-600">{{ product.name }}</h1>
 
-      <p class="text-lg text-gray-700 leading-relaxed">
+      <p class="text-lg text-blue-600 leading-relaxed">
         {{ product.description|linebreaksbr }}
       </p>
 
@@ -39,7 +39,7 @@
 
       <div class="flex items-center space-x-4">
         <span class="text-3xl font-bold text-red-500">${{ product.price }}</span>
-        <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded-full text-sm font-medium transition duration-300 transform hover:scale-105">
+        <button class="bg-red-400 hover:bg-red-600 text-white px-6 py-3 rounded-full text-sm font-medium transition duration-300 transform hover:scale-105">
           Add to Cart
         </button>
       </div>
