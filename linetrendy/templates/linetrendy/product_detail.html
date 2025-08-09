@@ -9,27 +9,29 @@
 {% block content %}
 
 <!-- Product Detail Hero -->
-<section class=" py-12 px-4 md:px-12">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<section class="py-12 px-4 md:px-12">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
     
-    <!-- Product Image -->
-    <div class="w-full">
-    {% with product.get_first_image as first_image %}
+    <!-- Product Image (align to top) -->
+    <div class="w-full self-start">
+      {% with product.get_first_image as first_image %}
         {% if first_image %}
-        <img src="{{ product.get_first_image.image.url }}" 
-            alt="{{ product.name }}" 
-            class="w-full h-[500px] object-cover rounded-xl shadow-lg">
+          <img src="{{ first_image.image.url }}" 
+               alt="{{ product.name }}" 
+               class="w-full h-[500px] object-cover rounded-xl shadow-lg">
         {% endif %}
-    {% endwith %}
+      {% endwith %}
     </div>
     
-    <!-- Product Info -->
-    <div class="flex flex-col justify-center space-y-6">
-      <h1 class="text-4xl md:text-5xl font-bold text-black">{{ product.name }}</h1>
+    <!-- Product Info (start at same top line) -->
+    <div class="w-full flex flex-col justify-start space-y-6">
+      <!-- remove any top margin that could push the heading down -->
+      <h1 class="mt-0 text-4xl md:text-5xl font-bold text-black">{{ product.name }}</h1>
+
       <p class="text-lg text-gray-700 leading-relaxed">
         {{ product.description|linebreaksbr }}
       </p>
-      
+
       {% if product.bestseller %}
         <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full w-fit">BESTSELLER</span>
       {% endif %}
@@ -44,14 +46,15 @@
 
       <div>
         <h3 class="text-lg font-semibold text-black mb-2">Category:</h3>
-        <p class="text-gray-600">{{ product.category}}</p>
+        <p class="text-gray-600">{{ product.category }}</p>
       </div>
-
-      
     </div>
 
   </div>
 </section>
+
+
+
 
 <!-- Related Products -->
 {% if related_products %}
