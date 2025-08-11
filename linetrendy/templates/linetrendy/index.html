@@ -7,30 +7,27 @@
 
 
 {% block content %}
-<section class="hero-section h-screen flex items-center text-white px-4">
-  <div class="max-w-7xl mx-auto grid grid-cols-12 w-full relative z-10 items-center gap-4">
-    
-    <!-- Left Side: Text -->
-    <div class="col-span-12 md:col-span-7 flex flex-col justify-center space-y-6 px-4 md:px-8">
-      <h1 class="text-6xl md:text-6xl font-heading font-bold animate-slide-up text-red-600">Welcome to Linetrendy</h1>
-      <p class="text-2xl md:text-3xl animate-slide-up text-blue-800">Remember: consistency is key! Hair product for all hair types.</p>
-      <button class="w-fit bg-accent hover:bg-dark text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
-          Go To Shop
-      </button>
-    </div>
+<!-- Hero Section -->
+<section 
+    class="hero-image h-screen flex items-center justify-center text-center text-white px-4 animate-fade-in relative bg-cover bg-center"
+    style="background-image: url('{% static 'img/my_hero.jpg' %}');"
+>
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black/70"></div>
 
-    <!-- Right Side: PNG Image -->
-    <div class="hidden md:flex justify-center items-center px-4 col-span-12 md:col-span-5">
-        <div 
-            class="w-full h-[90vh] bg-contain bg-no-repeat bg-center animate-fade-in" 
-            style="background-image: url('{% static 'img/hero_png.png' %}');">
-        </div>
+    <!-- Content -->
+    <div class="relative max-w-4xl mx-auto z-10">
+        <h1 class="text-4xl md:text-6xl font-heading text-red-500 font-bold mb-6 animate-slide-up">
+            Welcome to Linetrendy
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 animate-slide-up text-blue-500">
+            Remember: consistency is key! Hair product for all hair types.
+        </p>
+        <button class="bg-accent hover:bg-dark text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
+            Shop Now
+        </button>
     </div>
-
-  </div>
 </section>
-
-
 
 
 
@@ -121,45 +118,30 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Category 1 -->
+             {% for category in categories %}
             <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80" alt="Skincare" class="w-full h-64 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
-                    <h3 class="text-white text-2xl font-heading font-bold">Skincare</h3>
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80" 
+                    alt="Skincare" 
+                    class="w-full h-64 object-cover">
+                
+                <!-- Overlay with centered text -->
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center px-4 text-center group-hover:bg-opacity-40 transition">
+                    <h3 class="text-white text-xl sm:text-2xl font-heading font-bold leading-tight">
+                        {{ category.name }}
+                    </h3>
                 </div>
+
                 <a href="#" class="absolute inset-0" aria-label="Shop Skincare"></a>
             </div>
+
+            {% endfor%}
             
-            <!-- Category 2 -->
-            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
-                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Makeup" class="w-full h-64 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
-                    <h3 class="text-white text-2xl font-heading font-bold">Makeup</h3>
-                </div>
-                <a href="#" class="absolute inset-0" aria-label="Shop Makeup"></a>
-            </div>
             
-            <!-- Category 3 -->
-            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
-                <img src="https://images.pexels.com/photos/8467963/pexels-photo-8467963.jpeg" alt="Haircare" class="w-full h-64 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
-                    <h3 class="text-white text-2xl font-heading font-bold">Haircare</h3>
-                </div>
-                <a href="#" class="absolute inset-0" aria-label="Shop Haircare"></a>
-            </div>
-            
-            <!-- Category 4 -->
-            <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
-                <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80" alt="Fragrance" class="w-full h-64 object-cover">
-                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center group-hover:bg-opacity-40 transition">
-                    <h3 class="text-white text-2xl font-heading font-bold">Fragrance</h3>
-                </div>
-                <a href="#" class="absolute inset-0" aria-label="Shop Fragrance"></a>
-            </div>
         </div>
     </div>
 </section>
 
-<!-- About Us Section -->
+<!-- About Us Section 
 <section class="py-16 bg-red-50">
     <div class="container mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-center">
@@ -177,6 +159,7 @@
         </div>
     </div>
 </section>
+-->
 
 <!-- Testimonials Section -->
 <section class="py-16 bg-white">
@@ -187,20 +170,20 @@
             <!-- Testimonial 1 -->
             <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
                 <div class="flex mb-4">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
                 </div>
-                <p class="text-black mb-4">"This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."</p>
+                <p class="text-red-800 mb-4">"This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
                         <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah L." class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h4 class="font-bold">Sarah L.</h4>
-                        <p class="text-sm text-gray-600">Verified Customer</p>
+                        <h4 class="font-bold text-blue-500">Sarah L.</h4>
+                        <p class="text-sm text-red-600">Verified Customer</p>
                     </div>
                 </div>
             </div>
@@ -208,20 +191,20 @@
             <!-- Testimonial 2 -->
             <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
                 <div class="flex mb-4">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
                 </div>
-                <p class="text-black mb-4">"I've tried many organic brands but Bloom Beauty stands out. The quality is exceptional and my skin has never looked better."</p>
+                <p class="text-red-800 mb-4">"This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Jessica M." class="w-full h-full object-cover">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah L." class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h4 class="font-bold">Jessica M.</h4>
-                        <p class="text-sm text-gray-600">Verified Customer</p>
+                        <h4 class="font-bold text-blue-500">Sarah L.</h4>
+                        <p class="text-sm text-red-600">Verified Customer</p>
                     </div>
                 </div>
             </div>
@@ -229,23 +212,24 @@
             <!-- Testimonial 3 -->
             <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
                 <div class="flex mb-4">
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star text-yellow-400"></i>
-                    <i class="fas fa-star-half-alt text-yellow-400"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
+                    <i class="fas fa-star text-blue-600"></i>
                 </div>
-                <p class="text-black mb-4">"The lipsticks are amazing! So many compliments and they last all day without drying my lips. Will definitely repurchase."</p>
+                <p class="text-red-800 mb-4">"This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
-                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Emily R." class="w-full h-full object-cover">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah L." class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h4 class="font-bold">Emily R.</h4>
-                        <p class="text-sm text-gray-600">Verified Customer</p>
+                        <h4 class="font-bold text-blue-500">Sarah L.</h4>
+                        <p class="text-sm text-red-600">Verified Customer</p>
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
@@ -258,7 +242,7 @@
         
         <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
             <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full focus:outline-none text-dark" required>
-            <button type="submit" class="bg-dark hover:bg-primary text-white px-6 py-3 rounded-full font-medium transition duration-300 whitespace-nowrap">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-medium transition duration-300 whitespace-nowrap">
                 Subscribe
             </button>
         </form>

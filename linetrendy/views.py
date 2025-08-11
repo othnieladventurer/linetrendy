@@ -9,9 +9,11 @@ from .models import *
 
 def index(request):
     product=Product.objects.all().order_by('-created_at')
+    category = Category.objects.all()
 
     context = {
-        'products': product[:8],  
+        'products': product[:8],
+        'categories': category,  
     }
     return render(request, 'linetrendy/index.html', context)
 
