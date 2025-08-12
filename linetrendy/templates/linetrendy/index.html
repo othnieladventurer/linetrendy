@@ -133,9 +133,10 @@
             <!-- Category 1 -->
              {% for category in categories %}
             <div class="category-card relative rounded-lg overflow-hidden shadow-md group">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1930&q=80" 
+                <img src="{{ category.thumbnail.url }}" 
                     alt="Skincare" 
-                    class="w-full h-64 object-cover">
+                    class="w-full h-64 object-cover"
+                    style="object-fit: cover;">
                 
                 <!-- Overlay with centered text -->
                 <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center px-4 text-center group-hover:bg-opacity-40 transition">

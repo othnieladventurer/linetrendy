@@ -6,7 +6,12 @@ from django.utils.text import slugify
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    thumbnail = models.ImageField(upload_to="categories",blank=True, null=True)
     slug = models.SlugField(unique=True, null=True, blank=True)  # ✅ add slug field
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
     def save(self, *args, **kwargs):
         if not self.slug:
