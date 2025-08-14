@@ -7,6 +7,132 @@
 
 
 {% block content %}
+<!-- Hero  -->
+<!-- Banner Section -->
+
+
+
+<section class="py-12 bg-white">
+    
+  <div class="container mx-auto px-4">
+    <section class="bg-gray-300 text-white rounded p-16  mb-5">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center lg:justify-between gap-8">
+            
+            <!-- Left: Text Content -->
+            <div class="lg:w-1/2 space-y-4">
+                <h2 class="text-5xl font-bold text-red-600">Discover Our Exclusive Collection</h2>
+                <p class="text-2xl text-blue-500">Upgrade your wardrobe with the latest trends and timeless classics. Shop now and elevate your style!</p>
+                <br>
+                <a href="#products" 
+                class="bg-red-600 hover:bg-red-800 text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
+                Shop Now
+                </a>
+            </div>
+
+            <!-- Right: Image -->
+            <div class="lg:w-1/2">
+                <img src="{% static 'img/shop_banner_2.png' %}" 
+                    alt="Fashion Banner" 
+                    class="w-full rounded shadow-lg object-cover" >
+            </div>
+
+            </div>
+        </div>
+        </section>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- Sidebar Filters -->
+    <aside class="lg:col-span-1 space-y-6">
+        <!-- Search -->
+        <div>
+          <input type="text" name="q" placeholder="Search products..."
+            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-purple-500" />
+        </div>
+
+      
+        <!-- Categories -->
+        <div>
+          <h2 class="text-red-600 font-semibold mb-2 text-2xl">Categories</h2>
+          <ul class="space-y-1 text-blue-600">
+            {% for category in categories %}
+            <li><a href="#" class="hover:underline">{{ category.name }}</a></li>
+            {% endfor %}
+           
+          </ul>
+        </div>
+    </aside>
+
+      <!-- Products Grid -->
+      <div class="lg:col-span-3 space-y-6">
+        <!-- Header: Title + Sorting -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold text-red-600">Tshirts</h2>
+          <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+            <label for="sort" class="text-gray-600">Sort by:</label>
+            <select id="sort" class="border border-gray-300 rounded p-1">
+              <option>Default sorting</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+            <span class="text-gray-500">Showing 1–16 of 26 results</span>
+          </div>
+        </div>
+
+        <!-- Product Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-6 gap-8">
+            <!-- Product 1 -->
+            {% for product in products %}
+            <div class="product-card bg-white roundedlg overflow-hidden shadow-md">
+                <div class="relative overflow-hidden">
+                    <a href="{% url 'shop:product_detail' slug=product.slug %}">
+                        {% with product.get_first_image as first_image %}
+                            {% if first_image %}
+                               <img src="{{ first_image.image.url }}" 
+                                    class="w-full h-90 sm:h-100 md:h-85 lg:h-72 object-cover" 
+                                    alt="{{ product.name }}">
+                            {% else %}
+                                <img class="w-full h-64 object-cover" src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80" alt="No image available">
+                            {% endif %}
+                        {% endwith %}
+
+                    </a>
+                    {% if product.bestseller %}
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-accent text-white text-xs px-2 py-1 rounded-full">BESTSELLER</span>
+                    </div>
+                    {% endif %}
+                   
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1 text-red-600"><a href="">{{ product.name }}</a></h3>
+                    <p class="text-sm mb-3 text-blue-800">{{product.description|slice:"90"}}...</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-accent">${{ product.price }}</span>
+                        <button class="add-to-cart-btn bg-primary hover:bg-secondary  text-red-600 px-4 py-2 rounded-full text-sm transition">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            
+            {% endfor %}
+            
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex justify-end space-x-2 mt-6">
+          <button class="px-3 py-1 border rounded hover:bg-gray-100">1</button>
+          <button class="px-3 py-1 border rounded hover:bg-gray-100">2</button>
+          <button class="px-3 py-1 border rounded hover:bg-gray-100">→</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
 
 

@@ -33,7 +33,14 @@ def product_detail(request, slug):
 
 
 def shop(request):
-    return render(request, 'linetrendy/shop.html')
+    product=Product.objects.all().order_by('-created_at')
+    category = Category.objects.all()
+
+    context = {
+        'products': product[:8],
+        'categories': category,  
+    }
+    return render(request, 'linetrendy/shop.html', context)
 
 
 
