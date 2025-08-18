@@ -18,16 +18,24 @@
             
             <!-- Icons -->
             <div class="hidden md:flex items-center space-x-6">
-                <button class="text-dark hover:text-accent transition" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button class="text-dark hover:text-accent transition" aria-label="Account">
+                {% if user.is_authenticated %}
+                <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
+                    <i class="fas fa-user"></i> Hello ({{ user.email|slice:":5" }}...)
+                </a>
+
+                {% else %}
+                <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
                     <i class="fas fa-user"></i>
-                </button>
-                <button class="text-dark hover:text-accent transition relative" aria-label="Cart">
+                </a>
+                {% endif%}
+                
+                <a href="{% url 'shop:cart' %}" class="text-dark hover:text-accent transition relative" aria-label="Cart">
                     <i class="fas fa-shopping-bag"></i>
-                    <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
-                </button>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ cart_count }}
+                    </span>
+                </a>
+                
             </div>
             
             <!-- Mobile Menu Button -->
@@ -47,15 +55,22 @@
                 <a href="#" class="text-black hover:text-accent transition px-4 py-2">About Us</a>
                 <a href="#" class="text-black hover:text-accent transition px-4 py-2">Contact</a>
                 <div class="flex space-x-6 px-4 py-2">
-                    <button class="text-dark hover:text-accent transition" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
+
+                    {% if user.is_authenticated %}
                     <button class="text-dark hover:text-accent transition" aria-label="Account">
+                        <i class="fas fa-user"></i>{{ user }} 
+                    </button>
+                    {% else %}
+                     <button class="text-dark hover:text-accent transition" aria-label="Account">
                         <i class="fas fa-user"></i>
                     </button>
+                    {% endif %}
+
                     <button class="text-dark hover:text-accent transition relative" aria-label="Cart">
                         <i class="fas fa-shopping-bag"></i>
-                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {{ cart_count }}
+                        </span>
                     </button>
                 </div>
             </div>

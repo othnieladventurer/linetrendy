@@ -6,7 +6,7 @@ from users.forms import CustomSignupForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from .decorators import require_roles
 
 
 from django.contrib.auth import get_user_model
@@ -14,15 +14,17 @@ from django.contrib.auth import get_user_model
 
 
 
-
-
 def custom_login(request):
+    # Redirect authenticated users away from the login page
+    if request.user.is_authenticated:
+        return redirect('/')  # or another page like 'shop:index'
+
     if request.method == 'POST':
         username = request.POST.get('login')
         password = request.POST.get('password')
 
         if not username or not password:
-            return render(request, 'account/login.html', {'error': 'Both username/email and password are required'})
+            return render(request, 'users/account/login.html', {'error': 'Both username/email and password are required'})
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -31,16 +33,15 @@ def custom_login(request):
             pending_slug = request.session.pop('pending_cart_add', None)
             if pending_slug:
                 return redirect('cart:add', plan_slug=pending_slug)
-
-            # ✅ Role-based redirect after login
-            if user.role == 'customer':
-                return redirect('dashboard:dashboard')
             else:
-                return redirect('support:index')
+                return redirect('shop:index')
         else:
-            return render(request, 'account/login.html', {'error': 'Invalid username/email or password'})
+            return render(request, 'users/account/login.html', {'error': 'Invalid username/email or password'})
 
-    return render(request, 'account/login.html')
+    return render(request, 'users/account/login.html')
+
+
+
 
 
 
@@ -69,7 +70,7 @@ def access_denied_view(request):
 
 class CustomSignupView(SignupView):
     form_class = CustomSignupForm
-    template_name = "account/signup.html"
+    template_name = "users/account/signup.html"
     success_url = reverse_lazy("account_login")
 
     def form_valid(self, form):

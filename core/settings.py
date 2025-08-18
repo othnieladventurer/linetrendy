@@ -68,7 +68,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'linetrendy',
-    'users'
+    'users',
+    'django_recaptcha',
+    'widget_tweaks'
 
 
 ]
@@ -97,6 +99,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'linetrendy.context_processors.cart_count',
             ],
         },
     },
@@ -104,25 +107,34 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
 
 
-SITE_ID = 1
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default
+    'allauth.account.auth_backends.AuthenticationBackend',  # Allauth
+]
+# Redirect after login/logout
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm',
+}
 
-# ✅ Use new settings format
-ACCOUNT_LOGIN_METHODS = {'email'}
 
-# ✅ Define signup fields (and only those you support in your form)
-ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+LOGIN_URL =  '/accounts/login/'  
+LOGOUT_REDIRECT_URL = '/'
 
-# ✅ Username is not used
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
-# ✅ Disable email verification (for dev/test or non-email flows)
+# Use new settings
+ACCOUNT_LOGIN_METHODS = {'email'}       # replaces ACCOUNT_AUTHENTICATION_METHOD
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # replaces ACCOUNT_EMAIL_REQUIRED & ACCOUNT_USERNAME_REQUIRED
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None # still correct for removing username
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
+
+ACCOUNT_ADAPTER = "users.adapters.CustomAccountAdapter"
+
+
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -133,7 +145,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-USERNAME_FIELD = 'email'
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -201,8 +213,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development")  # default to dev
 
-
+if ENVIRONMENT == "production":
+    RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY_PROD")
+    RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY_PROD")
+else:
+    RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY_DEV")
+    RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY_DEV")
 
 
 

@@ -1,10 +1,10 @@
-{% extends "services/base.html" %}
+{% extends 'linetrendy/base.html' %}
 {% load i18n widget_tweaks %}
 
 {% block content %}
-<main class="min-h-screen flex items-center justify-center bg-gray-50 pt-[100px]">
+<main class="min-h-screen flex items-center justify-center bg-gray-50 ">
   <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mt-5">
-    <div class="gradient-bg p-6 text-white text-center">
+    <div class="bg-red-600 p-6 text-white text-center">
       <div class="flex justify-center mb-4">
         <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
           <i class="fas fa-user-plus text-3xl gradient-text" style="background: linear-gradient(135deg, #6e8efb, #a777e3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
@@ -72,7 +72,7 @@
         </div>
         {% endif %}
 
-        <button type="submit" class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition duration-300 flex items-center justify-center">
+        <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition duration-300 flex items-center justify-center">
           <span id="signupText">{% trans "Sign up" %}</span>
           <i id="signupSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
         </button>
@@ -80,21 +80,13 @@
 
       <p class="mt-4 text-center text-sm text-gray-600">
         {% trans "Already have an account?" %} 
-        <a href="{% url 'account_login' %}" class="font-medium text-purple-600 hover:text-purple-500">{% trans "Sign in" %}</a>
+        <a href="{% url 'users:account_login' %}" class="font-medium text-purple-600 hover:text-purple-500">{% trans "Sign in" %}</a>
       </p>
     </div>
   </div>
 </main>
-<br><br><br>
+<br>
 
-<style>
-  .gradient-bg {
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
-  }
-  body {
-    background: #f8fafc;
-  }
-</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {

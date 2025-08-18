@@ -1,7 +1,34 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from .models import *
-
+from .cart import Cart
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+
+
+
+
+
+
+#Add to cart
+@login_required
+def add_to_cart(request):
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")
+        quantity = int(request.POST.get("quantity", 1))
+        product = get_object_or_404(Product, id=product_id)
+
+        cart = Cart(request)
+        cart.add(product_id=product.id, quantity=quantity)
+
+        # Redirect back to the page user came from
+        next_url = request.META.get('HTTP_REFERER', '/')
+        return redirect(next_url)
+
+
 
 
 
@@ -41,6 +68,14 @@ def shop(request):
         'categories': category,  
     }
     return render(request, 'linetrendy/shop.html', context)
+
+
+
+@login_required
+def cart(request):
+    return render(request, 'linetrendy/cart.html')
+
+
 
 
 

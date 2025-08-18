@@ -1,18 +1,18 @@
-{% extends "services/base.html" %}
+{% extends 'linetrendy/base.html' %}
 
 {% load i18n %}
 
 {% block content %}
-<main class="min-h-screen flex items-center justify-center bg-gray-50 pt-[100px]">
+<main class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mt-5">
-        <div class="gradient-bg p-6 text-white text-center">
+        <div class="bg-red-600 p-6 text-white text-center">
             <div class="flex justify-center mb-4">
                 <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
                     <i class="fas fa-key text-3xl gradient-text" style="background: linear-gradient(135deg, #6e8efb, #a777e3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
                 </div>
             </div>
-            <h1 class="text-2xl font-bold">Saasiskey</h1>
-            <p class="text-sm opacity-90 mt-1">Project Manager - Access all your projects</p>
+            <h1 class="text-2xl font-bold">Linetrendy</h1>
+            <p class="text-sm opacity-90 mt-1"></p>
         </div>
 
         <div class="p-8">
@@ -60,17 +60,14 @@
                 {% endif %}
 
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember" name="remember" type="checkbox" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                    </div>
+                    
                     <div class="text-sm">
-                        <a href="{% url 'account_reset_password' %}" class="font-medium text-purple-600 hover:text-purple-500">Forgot password?</a>
+                        <a href="{% url 'account_reset_password' %}" class="font-medium text-blue-600 hover:text-purple-500">Forgot password?</a>
                     </div>
                 </div>
 
                 <div>
-                    <button type="submit" class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition duration-300 flex items-center justify-center">
+                    <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition duration-300 flex items-center justify-center">
                         <span id="loginText">Sign in</span>
                         <i id="loginSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
                     </button>
@@ -93,31 +90,12 @@
             {% endif %}
 
             <div class="mt-6 text-center text-sm">
-                <p class="text-gray-500">Don't have an account? <a href="{% url 'account_signup' %}" class="font-medium text-purple-600 hover:text-purple-500">Get started</a></p>
+                <p class="text-gray-500">Don't have an account? <a href="{% url 'users:account_signup' %}" class="font-medium text-blue-500 hover:text-purple-500">Get started</a></p>
             </div>
         </div>
     </div>
 </main>
 <br><br>
 
-<style>
-    .gradient-bg {
-        background: linear-gradient(135deg, #6e8efb, #a777e3);
-    }
-    body {
-        background: #f8fafc;
-    }
-    .input-focus:focus {
-        box-shadow: 0 0 0 3px rgba(167, 119, 227, 0.3);
-    }
-    .shake {
-        animation: shake 0.5s;
-    }
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-</style>
 
 {% endblock %}

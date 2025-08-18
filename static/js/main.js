@@ -1,3 +1,11 @@
+
+console.log('main.js loaded and running ✅');
+
+document.addEventListener('click', function(e) {
+    console.log('You clicked on:', e.target);
+});
+
+
 // Mobile Menu Toggle
 const menuBtn = document.getElementById('menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
@@ -83,3 +91,62 @@ cartBtn.addEventListener('click', () => {
     // In a real app, this would open cart sidebar
     alert('Cart sidebar would appear here');
 });
+
+
+
+
+
+
+
+
+// Add to Cart AJAX Functionality
+document.addEventListener("DOMContentLoaded", function() {
+    // Select all Add to Cart buttons
+    const buttons = document.querySelectorAll(".add-to-cart-btn");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function() {
+            const productId = this.dataset.id;
+
+            fetch("{% url 'shop:add_to_cart' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    product_id: productId,
+                    quantity: 1
+                })
+            })
+            .then(response => {
+                // Handle redirect to login
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return; // redirected
+                if (data.success) {
+                    // Update cart count badge
+                    const cartCount = document.querySelector("#cart-count");
+                    cartCount.textContent = data.cart_count;
+                } else {
+                    alert("Could not add product to cart.");
+                }
+            })
+            .catch(error => {
+                console.error("Error adding to cart:", error);
+            });
+        });
+    });
+});
+
+
+
+
+
+
+
