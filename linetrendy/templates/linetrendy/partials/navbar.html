@@ -97,13 +97,13 @@
                 {% endif %}
 
                 <!-- Mobile Cart inside mobile menu -->
-                <a href="{% url 'shop:cart' %}" class="flex items-center justify-between text-dark hover:text-accent transition px-4 py-2 relative">
-                    <div class="flex items-center space-x-2">
+                <a href="{% url 'shop:cart' %}" 
+                class="flex items-center justify-between text-dark hover:text-accent transition px-4 py-2">
+                    <div class="flex items-center space-x-2 relative">
                         <i class="fas fa-shopping-bag text-lg"></i>
-                        <span>Cart</span>
+                        {% include "linetrendy/partials/cart_count.html" %}
+                        
                     </div>
-                    <!-- Badge -->
-                    {% include "linetrendy/partials/cart_count.html" %}
                 </a>
             </div>
         </div>
