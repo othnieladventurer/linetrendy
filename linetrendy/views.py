@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import *
 from .cart import Cart
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse  
 from django.contrib.auth.decorators import login_required
-from datetime import date
+from django.contrib import messages
 # Create your views here.
 
 
@@ -15,9 +14,18 @@ from datetime import date
 
 
 #Add to cart
-
-@login_required
 def add_to_cart(request):
+    # Unauthenticated users → redirect to login with message
+    if not request.user.is_authenticated:
+        login_url = f"{reverse('users:account_login')}?next={request.get_full_path()}"
+        messages.warning(request, "You need to sign in first to add items to the cart.")
+        if request.headers.get("HX-Request") == "true":
+            response = HttpResponse(status=401)
+            response["HX-Redirect"] = login_url
+            return response
+        return redirect(login_url)
+
+    # Authenticated POST → add item to cart
     if request.method == "POST":
         product_id = request.POST.get("product_id")
         quantity = int(request.POST.get("quantity", 1))
@@ -26,15 +34,16 @@ def add_to_cart(request):
         cart = Cart(request.user)
         cart.add(product_id=product.id, quantity=quantity)
 
-        # If it's an HTMX request, return partial update
+        # HTMX request → update only the badge
         if request.headers.get("HX-Request") == "true":
-            cart_count = cart.count()  # make sure you have this method
+            cart_count = cart.count()
             return render(request, "linetrendy/partials/cart_count.html", {"cart_count": cart_count})
 
         # fallback redirect
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+        return redirect(request.META.get("HTTP_REFERER", "/"))
 
-
+    # Fallback for non-POST requests (prevent None return)
+    return redirect("/")
 
 
 
