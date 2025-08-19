@@ -36,4 +36,12 @@ class ProductImageAdmin(ModelAdmin):
 
 
 
-    
+
+
+
+@admin.register(CartItem)
+class CategoryAdmin(ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'created_at')
+    search_fields = ('name',)
+
+

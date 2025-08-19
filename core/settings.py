@@ -21,11 +21,7 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-ENVIRONMENT= env('ENVIRONMENT', default='production')
-SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -41,9 +37,12 @@ ALLOWED_HOSTS = ['127.0.0.1', 'linetrendy.saasiskey.com',  'linetrendy-productio
 
 
 CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
     'https://www.linetrendy.saasiskey.com',
     'https://linetrendy.saasiskey.com',
-    'https://linetrendy-production.up.railway.app'
+    'https://linetrendy-production.up.railway.app',
+
 ]
 
 
@@ -211,12 +210,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+# Initialize
+env = environ.Env(
+    # set casting and default values
+    ENVIRONMENT=(str, 'development'),  # default to development
+)
 
+# Read .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Get environment
+ENVIRONMENT = env('ENVIRONMENT')  # will default to 'development' if not set
+
+# reCAPTCHA keys
 if ENVIRONMENT == "production":
-    RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY_PROD", "")
-    RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY_PROD", "")
+    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_PROD', default='')
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_PROD', default='')
+    print("Running in production mode")
 else:
-    RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY_DEV", "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI")
-    RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY_DEV", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")
+    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV', default='')
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV', default='')
+    #print("Running in development mode")
 
+# Example for service account file
+SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
 

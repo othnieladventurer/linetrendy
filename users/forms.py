@@ -14,6 +14,9 @@ class AdminEmailAuthenticationForm(AuthenticationForm):
 
 
 
+
+
+
 class CustomSignupForm(SignupForm):
     email = forms.EmailField(required=True, label="Email")
     password1 = forms.CharField(
@@ -26,10 +29,11 @@ class CustomSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-        user.email = self.cleaned_data["email"]
-        user.role = 'customer'
+        # role is already default "customer", but you can enforce it here
+        user.role = "customer"
         user.save()
         return user
+
 
 
 

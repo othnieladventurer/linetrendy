@@ -53,14 +53,13 @@
 
     <!-- Smaller Responsive 16:9 Video -->
     <div class="relative w-full mb-4" style="padding-top: 56.25%;">
-      <iframe
-        class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
-        src="{% static 'video/video_presentation.mp4' %}"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
+        <video
+            class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+            controls
+            >
+            <source src="{% static 'video/video_presentation.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
     <br>
 
@@ -104,16 +103,20 @@
                     <p class="text-sm mb-3 text-blue-800"><a href="{% url 'shop:product_detail' slug=product.slug %}">{{product.description|slice:"90"}}...</a></p>
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-accent">${{ product.price }}</span>
-                        <form method="POST" action="{% url 'shop:add_to_cart' %}">
+                        <form 
+                            method="POST" 
+                            action="{% url 'shop:add_to_cart' %}" 
+                            hx-post="{% url 'shop:add_to_cart' %}" 
+                            hx-target="#cart-count" 
+                            hx-swap="outerHTML">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             <input type="hidden" name="quantity" value="1">
-                            <button 
-                                type="submit"
-                                class="bg-primary hover:bg-secondary text-red-600 px-4 py-2 rounded-full text-sm transition">
+                            <button type="submit" class="bg-primary hover:bg-secondary text-red-600 px-4 py-2 rounded-full text-sm transition">
                                 Add to Cart
                             </button>
                         </form>
+
                     </div>
                 </div>
             </div>

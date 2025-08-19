@@ -15,6 +15,7 @@ from datetime import date
 
 
 #Add to cart
+
 @login_required
 def add_to_cart(request):
     if request.method == "POST":
@@ -22,13 +23,16 @@ def add_to_cart(request):
         quantity = int(request.POST.get("quantity", 1))
         product = get_object_or_404(Product, id=product_id)
 
-        cart = Cart(request)
+        cart = Cart(request.user)
         cart.add(product_id=product.id, quantity=quantity)
 
-        # Redirect back to the page user came from
-        next_url = request.META.get('HTTP_REFERER', '/')
-        return redirect(next_url)
+        # If it's an HTMX request, return partial update
+        if request.headers.get("HX-Request") == "true":
+            cart_count = cart.count()  # make sure you have this method
+            return render(request, "linetrendy/partials/cart_count.html", {"cart_count": cart_count})
 
+        # fallback redirect
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 

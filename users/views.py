@@ -1,53 +1,48 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from allauth.account.views import  SignupView
 from django.contrib.auth import authenticate, login, logout
-from users.forms import CustomSignupForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
-from .decorators import require_roles
 
+from django.urls import reverse_lazy
+from allauth.account.views import SignupView
+from .forms import CustomSignupForm
 
-from django.contrib.auth import get_user_model
-
-
+# from django.contrib.auth import get_user_model
 
 
 def custom_login(request):
     # Redirect authenticated users away from the login page
     if request.user.is_authenticated:
-        return redirect('/')  # or another page like 'shop:index'
+        return redirect('/')  # or a named url like: return redirect('shop:index')
 
     if request.method == 'POST':
-        username = request.POST.get('login')
-        password = request.POST.get('password')
+        identifier = (request.POST.get('login') or '').strip()
+        password = (request.POST.get('password') or '').strip()
 
-        if not username or not password:
-            return render(request, 'users/account/login.html', {'error': 'Both username/email and password are required'})
+        if not identifier or not password:
+            messages.error(request, 'Both username/email and password are required.')
+            return render(request, 'users/account/login.html')
 
-        user = authenticate(request, username=username, password=password)
+        # With USERNAME_FIELD='email', passing username=identifier is fine (identifier can be the email)
+        user = authenticate(request, username=identifier, password=password)
         if user is not None:
             login(request, user)
-
             pending_slug = request.session.pop('pending_cart_add', None)
             if pending_slug:
                 return redirect('cart:add', plan_slug=pending_slug)
-            else:
-                return redirect('shop:index')
-        else:
-            return render(request, 'users/account/login.html', {'error': 'Invalid username/email or password'})
+            return redirect('shop:index')
 
+        messages.error(request, 'Invalid username/email or password.')
+        return render(request, 'users/account/login.html')
+
+    # GET
     return render(request, 'users/account/login.html')
 
 
 
 
-
-
-
-
-def send_welcome_email(self, email):
+def send_welcome_email(email: str) -> None:
     subject = "Welcome to Our Platform!"
     message = (
         "Hello,\n\n"
@@ -55,10 +50,28 @@ def send_welcome_email(self, email):
         "Best regards,\n"
         "Saasiskey LLC"
     )
-    sender_email = settings.EMAIL_HOST_USER  # Use EMAIL_HOST_USER instead
-    recipient_list = [email]
+    sender_email = getattr(settings, "DEFAULT_FROM_EMAIL", getattr(settings, "EMAIL_HOST_USER", None))
+    send_mail(subject, message, sender_email, [email], fail_silently=False)
 
-    send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
+
+
+
+
+class CustomSignupView(SignupView):
+    form_class = CustomSignupForm
+    template_name = "users/account/signup.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(
+            self.request,
+            "You have successfully signed up. Check your email for a confirmation link and welcome message."
+        )
+        return response
+
+    def get_success_url(self):
+        return reverse_lazy("users:account_login")  #
+
 
 
 
@@ -68,32 +81,7 @@ def access_denied_view(request):
 
 
 
-class CustomSignupView(SignupView):
-    form_class = CustomSignupForm
-    template_name = "users/account/signup.html"
-    success_url = reverse_lazy("account_login")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = self.user
-        user.role = 'customer'
-        user.save()
-
-
-        messages.success(
-            self.request,
-            "You have successfully signed up. Check your email for a confirmation link and welcome message."
-        )
-        return response
-
-
-
-
-
 
 def custom_logout(request):
     logout(request)
-    return redirect('index')
-
-
-
+    return redirect('shop:index')

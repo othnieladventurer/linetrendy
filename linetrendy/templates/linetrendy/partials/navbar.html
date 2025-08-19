@@ -19,21 +19,40 @@
             <!-- Icons -->
             <div class="hidden md:flex items-center space-x-6">
                 {% if user.is_authenticated %}
-                <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
-                    <i class="fas fa-user"></i> Hello ({{ user.email|slice:":5" }}...)
-                </a>
+                <div class="relative inline-block text-left" id="userDropdownContainer">
+                    <!-- Trigger Button -->
+                    <button id="userDropdownBtn"
+                        class="flex items-center text-dark hover:text-accent transition focus:outline-none">
+                        <i class="fas fa-user mr-1"></i>
+                        Hello ({{ user.email|slice:":5" }}...)
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
 
-                {% else %}
-                <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
+                    <!-- Dropdown Menu -->
+                    <div id="userDropdownMenu"
+                        class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50">
+                        <a href="{% url 'users:account_login' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Account
+                        </a>
+                        <a href="{% url 'users:custom_logout' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Logout
+                        </a>
+                    </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
                     <i class="fas fa-user"></i>
-                </a>
-                {% endif%}
-                
-                <a href="{% url 'shop:cart' %}" class="text-dark hover:text-accent transition relative" aria-label="Cart">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {{ cart_count }}
-                    </span>
+                    </a>
+                {% endif %}
+                    
+                <a href="{% url 'shop:cart' %}" class="relative text-dark hover:text-accent transition" aria-label="Cart">
+                    <i class="fas fa-shopping-bag text-lg md:text-xl"></i>
+                    {% include "linetrendy/partials/cart_count.html" %}
                 </a>
                 
             </div>
@@ -47,33 +66,110 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div class="mobile-menu md:hidden bg-white" id="mobile-menu">
+        <div class="mobile-menu md:hidden bg-white hidden" id="mobile-menu">
             <div class="flex flex-col space-y-4 py-4">
-                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Home</a>
-                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Shop</a>
+                <a href="/" class="text-black hover:text-accent transition px-4 py-2">Home</a>
+                <a href="{% url 'shop:shop' %}" class="text-black hover:text-accent transition px-4 py-2">Shop</a>
                 <a href="#" class="text-black hover:text-accent transition px-4 py-2">Categories</a>
-                <a href="#" class="text-black hover:text-accent transition px-4 py-2">About Us</a>
-                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Contact</a>
-                <div class="flex space-x-6 px-4 py-2">
+                <a href="{% url 'shop:about' %}" class="text-black hover:text-accent transition px-4 py-2">About Us</a>
+                <a href="{% url 'shop:contact' %}" class="text-black hover:text-accent transition px-4 py-2">Contact</a>
 
-                    {% if user.is_authenticated %}
-                    <button class="text-dark hover:text-accent transition" aria-label="Account">
-                        <i class="fas fa-user"></i>{{ user }} 
+                <!-- Mobile User Dropdown -->
+                {% if user.is_authenticated %}
+                <div class="relative px-4 py-2" id="mobileUserDropdownContainer">
+                    <button id="mobileUserDropdownBtn" class="flex items-center w-full text-dark hover:text-accent transition focus:outline-none">
+                        <i class="fas fa-user mr-2"></i>
+                        Hello ({{ user.email|slice:":5" }}...)
+                        <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
+                        </svg>
                     </button>
-                    {% else %}
-                     <button class="text-dark hover:text-accent transition" aria-label="Account">
-                        <i class="fas fa-user"></i>
-                    </button>
-                    {% endif %}
-
-                    <button class="text-dark hover:text-accent transition relative" aria-label="Cart">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {{ cart_count }}
-                        </span>
-                    </button>
+                    <div id="mobileUserDropdownMenu" class="mt-2 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
+                        <a href="{% url 'users:account_login' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Account</a>
+                        <a href="{% url 'users:custom_logout' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
                 </div>
+                {% else %}
+                <a href="{% url 'users:account_login' %}" class="flex items-center px-4 py-2 text-dark hover:text-accent transition">
+                    <i class="fas fa-user mr-2"></i> Login
+                </a>
+                {% endif %}
+
+                <!-- Mobile Cart inside mobile menu -->
+                <a href="{% url 'shop:cart' %}" class="flex items-center justify-between text-dark hover:text-accent transition px-4 py-2 relative">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span>Cart</span>
+                    </div>
+                    <!-- Badge -->
+                    {% include "linetrendy/partials/cart_count.html" %}
+                </a>
             </div>
         </div>
+
     </div>
 </header>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ===== Desktop User Dropdown =====
+    const userBtn = document.getElementById('userDropdownBtn');
+    const userMenu = document.getElementById('userDropdownMenu');
+
+    if (userBtn && userMenu) {
+        userBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('hidden');
+        });
+        userMenu.addEventListener('click', e => e.stopPropagation());
+    }
+
+    // ===== Mobile Menu Toggle =====
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('hidden');
+        });
+        mobileMenu.addEventListener('click', e => e.stopPropagation());
+    }
+
+    // ===== Mobile User Dropdown =====
+    const mobileUserBtn = document.getElementById('mobileUserDropdownBtn');
+    const mobileUserMenu = document.getElementById('mobileUserDropdownMenu');
+
+    if (mobileUserBtn && mobileUserMenu) {
+        mobileUserBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            mobileUserMenu.classList.toggle('hidden');
+        });
+        mobileUserMenu.addEventListener('click', e => e.stopPropagation());
+    }
+
+    // ===== Close menus on outside click =====
+    document.addEventListener('click', function () {
+        if (userMenu) userMenu.classList.add('hidden');
+        if (mobileMenu) mobileMenu.classList.add('hidden');
+        if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
+    });
+
+    // ===== Close menus on Escape key =====
+    document.addEventListener('keydown', function (e) {
+        if (e.key === "Escape") {
+            if (userMenu) userMenu.classList.add('hidden');
+            if (mobileMenu) mobileMenu.classList.add('hidden');
+            if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
+        }
+    });
+});
+</script>
+
+
+
+
+

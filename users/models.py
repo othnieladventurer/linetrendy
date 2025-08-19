@@ -20,10 +20,19 @@ class CustomUserManager(BaseUserManager):
 
 
 
+
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = (
+        ("customer", "Customer"),
+        ("admin", "Admin"),
+    )
+
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="customer")  # ✅ Add this
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -31,12 +40,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []  # Or include first_name, etc.
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email
-    
 
 
 
