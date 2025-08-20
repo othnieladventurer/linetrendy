@@ -1,6 +1,3 @@
-
-console.log('main.js loaded and running ✅');
-
 document.addEventListener('click', function(e) {
     console.log('You clicked on:', e.target);
 });
@@ -38,6 +35,9 @@ quickViewModal.addEventListener('click', (e) => {
         document.body.style.overflow = 'auto';
     }
 });
+
+
+
 
 // Add to Cart Functionality
 const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
@@ -142,6 +142,32 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     });
+});
+
+
+
+
+
+
+
+
+
+document.addEventListener('htmx:afterRequest', function(evt) {
+    const form = evt.target.closest('.add-to-cart-form');
+    if (!form) return;
+
+    const button = form.querySelector('button[type="submit"]');
+    if (!button) return;
+
+    // Temporarily change text to "Added to Cart"
+    const originalText = button.textContent;
+    button.textContent = "Added to Cart";
+    button.disabled = true;
+
+    setTimeout(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+    }, 5000); // 5 seconds
 });
 
 

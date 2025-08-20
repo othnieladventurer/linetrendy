@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from decimal import Decimal
 
 # Create your models here.
 
@@ -82,6 +83,8 @@ class ProductImage(models.Model):
 
 
 
+
+
 class CartItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
@@ -93,3 +96,52 @@ class CartItem(models.Model):
 
 
 
+class ShippingMethod(models.Model):
+    name = models.CharField(max_length=100)
+    fee = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    free_over = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True,
+                                    help_text="Subtotal amount over which shipping is free")
+
+    def get_fee(self, subtotal):
+        """Return fee based on subtotal and free_over threshold"""
+        if self.free_over and subtotal >= self.free_over:
+            return Decimal('0.00')
+        return self.fee
+
+    def __str__(self):
+        return self.name
+    
+
+
+
+
+
+class Discount(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    percent = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True,
+                                  help_text="Percentage discount, e.g., 10 for 10%")
+    active = models.BooleanField(default=True)
+
+    def get_discount(self, subtotal):
+        """Calculate discount amount based on subtotal"""
+        if self.amount:
+            return self.amount
+        elif self.percent:
+            return subtotal * (self.percent / 100)
+        return Decimal('0.00')
+
+    def __str__(self):
+        return self.code
+
+
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    shipping_method = models.ForeignKey(ShippingMethod, null=True, blank=True, on_delete=models.SET_NULL)
+    discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+        

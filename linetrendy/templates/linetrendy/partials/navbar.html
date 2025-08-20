@@ -98,11 +98,15 @@
 
                 <!-- Mobile Cart inside mobile menu -->
                 <a href="{% url 'shop:cart' %}" 
-                class="flex items-center justify-between text-dark hover:text-accent transition px-4 py-2">
+                    class="flex items-center justify-between text-dark hover:text-accent transition px-4 py-2">
                     <div class="flex items-center space-x-2 relative">
                         <i class="fas fa-shopping-bag text-lg"></i>
-                        {% include "linetrendy/partials/cart_count.html" %}
-                        
+                        <!-- Cart count badge -->
+                        <span id="cart-count"
+                            hx-swap-oob="true"
+                            class="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-accent text-white text-xs md:text-sm rounded-full h-4 w-4 md:h-5 md:w-5 flex items-center justify-center overflow-hidden">
+                            {{ cart_count }}
+                        </span>
                     </div>
                 </a>
             </div>
@@ -112,62 +116,71 @@
 </header>
 
 
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+function initMenus() {
     // ===== Desktop User Dropdown =====
     const userBtn = document.getElementById('userDropdownBtn');
     const userMenu = document.getElementById('userDropdownMenu');
-
     if (userBtn && userMenu) {
-        userBtn.addEventListener('click', function (e) {
+        userBtn.onclick = function (e) {
             e.stopPropagation();
             userMenu.classList.toggle('hidden');
-        });
-        userMenu.addEventListener('click', e => e.stopPropagation());
+        };
+        userMenu.onclick = e => e.stopPropagation();
     }
 
     // ===== Mobile Menu Toggle =====
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-
     if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', function (e) {
+        menuBtn.onclick = function (e) {
             e.stopPropagation();
             mobileMenu.classList.toggle('hidden');
-        });
-        mobileMenu.addEventListener('click', e => e.stopPropagation());
+        };
+        mobileMenu.onclick = e => e.stopPropagation();
     }
 
     // ===== Mobile User Dropdown =====
     const mobileUserBtn = document.getElementById('mobileUserDropdownBtn');
     const mobileUserMenu = document.getElementById('mobileUserDropdownMenu');
-
     if (mobileUserBtn && mobileUserMenu) {
-        mobileUserBtn.addEventListener('click', function (e) {
+        mobileUserBtn.onclick = function (e) {
             e.stopPropagation();
             mobileUserMenu.classList.toggle('hidden');
-        });
-        mobileUserMenu.addEventListener('click', e => e.stopPropagation());
+        };
+        mobileUserMenu.onclick = e => e.stopPropagation();
     }
 
     // ===== Close menus on outside click =====
-    document.addEventListener('click', function () {
-        if (userMenu) userMenu.classList.add('hidden');
-        if (mobileMenu) mobileMenu.classList.add('hidden');
-        if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
+    document.addEventListener('click', function (e) {
+        if (userMenu && !userBtn?.contains(e.target) && !userMenu.contains(e.target)) {
+            userMenu.classList.add('hidden');
+        }
+        if (mobileMenu && !menuBtn?.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+        }
+        if (mobileUserMenu && !mobileUserBtn?.contains(e.target) && !mobileUserMenu.contains(e.target)) {
+            mobileUserMenu.classList.add('hidden');
+        }
     });
 
     // ===== Close menus on Escape key =====
     document.addEventListener('keydown', function (e) {
         if (e.key === "Escape") {
-            if (userMenu) userMenu.classList.add('hidden');
-            if (mobileMenu) mobileMenu.classList.add('hidden');
-            if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
+            userMenu?.classList.add('hidden');
+            mobileMenu?.classList.add('hidden');
+            mobileUserMenu?.classList.add('hidden');
         }
     });
-});
+}
+
+// Run once on page load
+document.addEventListener('DOMContentLoaded', initMenus);
+
+// Re-run after any HTMX swap (e.g. cart badge updates)
+document.body.addEventListener('htmx:afterSwap', initMenus);
 </script>
+
 
 
 

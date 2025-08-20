@@ -2,23 +2,20 @@ from django.contrib import admin
 from .models import *
 from unfold.admin import ModelAdmin
 
-# Register your models here.
-
+# Inline for product images
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1  # Number of empty image fields to show
 
 
-
-
+# Category
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
 
-
-
+# Product
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
     list_display = ('name', 'category', 'price', 'created_at')
@@ -27,21 +24,33 @@ class ProductAdmin(ModelAdmin):
     inlines = [ProductImageInline]  # Allows adding images inline
 
 
-
-
+# Product Image
 @admin.register(ProductImage)
 class ProductImageAdmin(ModelAdmin):
     list_display = ('product', 'image', 'created_at')
     search_fields = ('product__name',)
 
 
-
-
-
-
+# CartItem
 @admin.register(CartItem)
-class CategoryAdmin(ModelAdmin):
+class CartItemAdmin(ModelAdmin):
     list_display = ('user', 'product', 'quantity', 'created_at')
+    search_fields = ('user__username', 'product__name')
+
+
+# ShippingMethod
+@admin.register(ShippingMethod)
+class ShippingMethodAdmin(ModelAdmin):
+    list_display = ('name', 'fee', 'free_over')
     search_fields = ('name',)
+
+
+# Discount
+@admin.register(Discount)
+class DiscountAdmin(ModelAdmin):
+    list_display = ('code', 'amount', 'percent', 'active')
+    list_filter = ('active',)
+    search_fields = ('code',)
+
 
 
