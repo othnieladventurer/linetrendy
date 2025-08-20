@@ -2,66 +2,72 @@
 {% load static %}
 
 {% block content %}
-<section class="bg-gray-100 min-h-screen p-10">
-    <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-heading font-bold text-red-600 mb-8 text-center">Your Cart</h1>
+<section class="bg-gray-100 min-h-screen p-4 sm:p-10">
+    <div class="container mx-auto px-2 sm:px-4">
+        <h1 class="text-3xl sm:text-4xl font-heading font-bold text-red-600 mb-6 sm:mb-8 text-center">Your Cart</h1>
 
         {% if cart_items %}
-        <div class="flex flex-col lg:flex-row gap-8">
+        <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
             <!-- Left: Cart Items -->
-            <div class="flex-1 bg-white shadow-md rounded-lg p-6">
+            <div class="w-full md:w-3/4 lg:w-2/3 bg-white shadow-md rounded-lg p-4 sm:p-6">
                 {% for item in cart_items %}
-                <div class="flex items-center justify-between border-b py-4">
+                <div class="flex flex-col sm:flex-row items-center sm:justify-between border-b py-4">
                     <!-- Product Info -->
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
                         {% with item.product.get_first_image as first_image %}
                             {% if first_image %}
-                                <img src="{{ first_image.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover rounded">
+                                <a href=""><img src="{{ first_image.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover rounded"></a>
                             {% else %}
                                 <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center">No Image</div>
                             {% endif %}
                         {% endwith %}
                         <div>
-                            <h2 class="text-red-600 font-medium">{{ item.product.name }}</h2>
+                            <h2 class="text-red-600 font-medium"><a href="">{{ item.product.name }}</a></h2>
                             <p class="text-gray-700">${{ item.product.price }}</p>
                         </div>
                     </div>
 
                     <!-- Quantity & Remove -->
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end">
                         <form action="{% url 'shop:update_cart_quantity' item.id %}" method="POST" class="flex items-center border rounded overflow-hidden">
                             {% csrf_token %}
                             <button type="submit" name="action" value="decrease" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 transition">-</button>
                             <span class="px-4 py-1 text-center">{{ item.quantity }}</span>
                             <button type="submit" name="action" value="increase" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 transition">+</button>
                         </form>
-                        <form method="POST" hx-post="{% url 'shop:remove_from_cart' item.id %}" hx-target="#cart-item-{{ item.id }}" hx-swap="outerHTML">
+
+                        <form method="POST" action="{% url 'shop:remove_from_cart' item.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition">Remove</button>
-                        </form>
+                            <button type="submit" class="btn text-red-600 px-3 py-1 rounded transition transform active:scale-95 active:bg-red-100">
+                                <i class="fa fa-close"></i>
+                            </button>
+                        </form>                  
                     </div>
                 </div>
                 {% endfor %}
+
+                <!-- Keep Shopping Link -->
+                <div class="mt-6 text-center">
+                    <a href="{% url 'shop:shop' %}" class="text-red-600 font-medium hover:underline">
+                        ← Keep Shopping
+                    </a>
+                </div>
             </div>
 
-
             <!-- Right: Cart Summary -->
-            <div class="w-full lg:w-1/3 bg-white shadow-md rounded-lg p-6">
+            <div class="w-full md:w-1/2 lg:w-1/3 bg-white shadow-md rounded-lg p-4 sm:p-6">
                 <h2 class="text-2xl font-semibold text-red-600 mb-4">Order Summary</h2>
                 
-                <!-- Items Count -->
                 <div class="flex justify-between mb-2 text-gray-700">
                     <span>Items:</span>
                     <span>{{ cart_items|length }}X</span>
                 </div>
 
-                <!-- Subtotal -->
                 <div class="flex justify-between mb-2 text-gray-700">
                     <span>Subtotal:</span>
                     <span>${{ total_price|floatformat:2 }}</span>
                 </div>
 
-                <!-- Shipping Fee -->
                 {% if shipping_fee %}
                 <div class="flex justify-between mb-2 text-gray-700">
                     <span>Shipping:</span>
@@ -69,7 +75,6 @@
                 </div>
                 {% endif %}
 
-                <!-- Discount (Promo Code) -->
                 {% if discount %}
                 <div class="flex justify-between mb-2 text-green-600 font-medium">
                     <span>Discount:</span>
@@ -77,7 +82,6 @@
                 </div>
                 {% endif %}
 
-                <!-- Promo Code Form -->
                 <form method="POST" action="" class="mt-4">
                     {% csrf_token %}
                     <input 
@@ -94,19 +98,16 @@
                     </button>
                 </form>
 
-                <!-- Total -->
                 <div class="border-t mt-4 pt-3 flex justify-between font-bold text-red-600 text-xl">
                     <span>Total:</span>
                     <span>${{ final_total|floatformat:2 }}</span>
                 </div>
 
-                <!-- Checkout Button -->
                 <a href="{% url 'shop:checkout' %}" 
                 class="block mt-6 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold text-center transition duration-200">
                 Proceed to Checkout
                 </a>
             </div>
-
         </div>
 
         {% else %}
@@ -115,6 +116,7 @@
     </div>
 </section>
 {% endblock content %}
+
 
 
 

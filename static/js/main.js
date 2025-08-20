@@ -174,4 +174,22 @@ document.addEventListener('htmx:afterRequest', function(evt) {
 
 
 
+//owl-carousel 
+$(document).ready(function(){
+    $(".owl-carousel").owlCarousel({
+        loop: true,
+        margin: 20,
+        nav: false,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 4000,
+        responsive: {
+            0: { items: 1 },
+            768: { items: 2 },
+            1024: { items: 3 }
+        }
+    });
+});
+
+
 

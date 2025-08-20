@@ -86,23 +86,17 @@ def shop(request):
 
 
 
-
-from decimal import Decimal
 @login_required
 def cart(request):
-    # Get all cart items for the logged-in user
+    if request.method == 'POST' and 'promo_code' in request.POST:
+        code = request.POST.get('promo_code')
+        # Apply promo logic here
+        return redirect('shop:cart')  # redirect after POST
+
     cart_items = CartItem.objects.filter(user=request.user).select_related('product')
-
-    # Calculate subtotal
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-
-    # Shipping logic
     shipping_fee = Decimal('10.00') if total_price > 0 else Decimal('0.00')
-
-    # Discount logic (update if promo code applied)
     discount = Decimal('0.00')
-
-    # Calculate final total
     final_total = total_price + shipping_fee - discount
 
     context = {
@@ -110,11 +104,9 @@ def cart(request):
         'total_price': total_price,
         'shipping_fee': shipping_fee,
         'discount': discount,
-        'final_total': final_total,  # pass final total
+        'final_total': final_total,
     }
-
     return render(request, 'linetrendy/cart.html', context)
-
 
 
 
@@ -123,23 +115,28 @@ def cart(request):
 @login_required
 def update_cart_quantity(request, item_id):
     item = get_object_or_404(CartItem, id=item_id, user=request.user)
-    action = request.POST.get('action')
-
-    if action == 'increase':
-        item.quantity += 1
-    elif action == 'decrease' and item.quantity > 1:
-        item.quantity -= 1
-
-    item.save()
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'increase':
+            item.quantity += 1
+            item.save()
+        elif action == 'decrease':
+            if item.quantity > 1:
+                item.quantity -= 1
+                item.save()
+            else:
+                item.delete()
     return redirect('shop:cart')
+
 
 
 
 @login_required
 def remove_from_cart(request, item_id):
-    item = get_object_or_404(CartItem, id=item_id, user=request.user)
-    item.delete()
-    return redirect('shop:cart')
+    if request.method == 'POST':
+        item = get_object_or_404(CartItem, id=item_id, user=request.user)
+        item.delete()
+    return redirect('shop:cart') 
 
 
 
