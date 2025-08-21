@@ -43,18 +43,19 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True, blank=True, max_length=255)
 
     # ✅ Manually chosen related products
     related_products = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.name)
+            base_slug = slugify(self.name)[:50]  # truncate to 50 chars
             slug = base_slug
             counter = 1
-            while Product.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
+            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                # leave room for "-1", "-2" etc
+                slug = f"{base_slug[:45]}-{counter}"
                 counter += 1
             self.slug = slug
         super().save(*args, **kwargs)
@@ -85,14 +86,7 @@ class ProductImage(models.Model):
 
 
 
-class CartItem(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
-    class Meta:
-        unique_together = ('user', 'product')
 
 
 
@@ -110,10 +104,6 @@ class ShippingMethod(models.Model):
 
     def __str__(self):
         return self.name
-    
-
-
-
 
 
 class Discount(models.Model):
@@ -133,15 +123,34 @@ class Discount(models.Model):
 
     def __str__(self):
         return self.code
+    
+
 
 
 
 
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    shipping_method = models.ForeignKey(ShippingMethod, null=True, blank=True, on_delete=models.SET_NULL)
-    discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL)
+    shipping_method = models.ForeignKey('ShippingMethod', null=True, blank=True, on_delete=models.SET_NULL)
+    discount = models.ForeignKey('Discount', null=True, blank=True, on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+    def __str__(self):
+        return f"Cart of {self.user.email}"
         
+
+
+
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE,related_name="items", null=True, blank=True)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('cart', 'product')
+
+    def __str__(self):
+        return f"{self.quantity} × {self.product.name}"

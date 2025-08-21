@@ -31,11 +31,27 @@ class ProductImageAdmin(ModelAdmin):
     search_fields = ('product__name',)
 
 
-# CartItem
+
+
+
 @admin.register(CartItem)
-class CartItemAdmin(ModelAdmin):
-    list_display = ('user', 'product', 'quantity', 'created_at')
-    search_fields = ('user__username', 'product__name')
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('get_user', 'product', 'quantity', 'created_at')
+    search_fields = ('cart__user__username', 'product__name')  # <-- use related lookup
+    list_filter = ('cart__user', 'product')  # <-- use related lookup
+
+    def get_user(self, obj):
+        return obj.cart.user
+    get_user.short_description = 'User'
+
+
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'updated_at', 'shipping_method', 'discount')
+    search_fields = ('user__username', 'user__email')
+
 
 
 # ShippingMethod

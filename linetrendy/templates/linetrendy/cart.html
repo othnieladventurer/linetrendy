@@ -7,120 +7,46 @@
         <h1 class="text-3xl sm:text-4xl font-heading font-bold text-red-600 mb-6 sm:mb-8 text-center">Your Cart</h1>
 
         {% if cart_items %}
-        <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
-            <!-- Left: Cart Items -->
-            <div class="w-full md:w-3/4 lg:w-2/3 bg-white shadow-md rounded-lg p-4 sm:p-6">
-                {% for item in cart_items %}
-                <div class="flex flex-col sm:flex-row items-center sm:justify-between border-b py-4">
-                    <!-- Product Info -->
-                    <div class="flex items-center gap-4 w-full sm:w-auto">
-                        {% with item.product.get_first_image as first_image %}
-                            {% if first_image %}
-                                <a href=""><img src="{{ first_image.image.url }}" alt="{{ item.product.name }}" class="w-20 h-20 object-cover rounded"></a>
-                            {% else %}
-                                <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center">No Image</div>
-                            {% endif %}
-                        {% endwith %}
-                        <div>
-                            <h2 class="text-red-600 font-medium"><a href="">{{ item.product.name }}</a></h2>
-                            <p class="text-gray-700">${{ item.product.price }}</p>
-                        </div>
+        <!-- Main cart wrapper for HTMX -->
+        <div id="cart-wrapper">
+
+            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+
+                <!-- Left: Cart Items -->
+                <!-- Left: Cart Items -->
+                <div class="w-full md:w-3/4 lg:w-2/3 bg-white shadow-md rounded-lg p-4 sm:p-6 flex flex-col">
+                    
+                    <!-- Cart Items -->
+                    <div id="cart-items" class="flex-1">
+                        {% for item in cart_items %}
+                            <div id="cart-item-{{ item.id }}">
+                                {% include 'linetrendy/partials/cart_item.html' %}
+                            </div>
+                        {% endfor %}
                     </div>
 
-                    <!-- Quantity & Remove -->
-                    <div class="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end">
-                        <form action="{% url 'shop:update_cart_quantity' item.id %}" method="POST" class="flex items-center border rounded overflow-hidden">
-                            {% csrf_token %}
-                            <button type="submit" name="action" value="decrease" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 transition">-</button>
-                            <span class="px-4 py-1 text-center">{{ item.quantity }}</span>
-                            <button type="submit" name="action" value="increase" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300 transition">+</button>
-                        </form>
-
-                        <form method="POST" action="{% url 'shop:remove_from_cart' item.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn text-red-600 px-3 py-1 rounded transition transform active:scale-95 active:bg-red-100">
-                                <i class="fa fa-close"></i>
-                            </button>
-                        </form>                  
+                    <!-- Keep Shopping Link -->
+                    <div class="mt-6 text-center">
+                        <a href="{% url 'shop:shop' %}" class="text-red-600 font-medium hover:underline">
+                            ← Keep Shopping
+                        </a>
                     </div>
                 </div>
-                {% endfor %}
 
-                <!-- Keep Shopping Link -->
-                <div class="mt-6 text-center">
-                    <a href="{% url 'shop:shop' %}" class="text-red-600 font-medium hover:underline">
-                        ← Keep Shopping
-                    </a>
+                <!-- Right: Cart Summary -->
+                <div class="w-full md:w-1/2 lg:w-1/3">
+                    <div id="cart-totals">
+                        {% include 'linetrendy/partials/cart_totals.html' %}
+                    </div>
                 </div>
-            </div>
-
-            <!-- Right: Cart Summary -->
-            <div class="w-full md:w-1/2 lg:w-1/3 bg-white shadow-md rounded-lg p-4 sm:p-6">
-                <h2 class="text-2xl font-semibold text-red-600 mb-4">Order Summary</h2>
-                
-                <div class="flex justify-between mb-2 text-gray-700">
-                    <span>Items:</span>
-                    <span>{{ cart_items|length }}X</span>
-                </div>
-
-                <div class="flex justify-between mb-2 text-gray-700">
-                    <span>Subtotal:</span>
-                    <span>${{ total_price|floatformat:2 }}</span>
-                </div>
-
-                {% if shipping_fee %}
-                <div class="flex justify-between mb-2 text-gray-700">
-                    <span>Shipping:</span>
-                    <span>${{ shipping_fee|floatformat:2 }}</span>
-                </div>
-                {% endif %}
-
-                {% if discount %}
-                <div class="flex justify-between mb-2 text-green-600 font-medium">
-                    <span>Discount:</span>
-                    <span>- ${{ discount|floatformat:2 }}</span>
-                </div>
-                {% endif %}
-
-                <form method="POST" action="" class="mt-4">
-                    {% csrf_token %}
-                    <input 
-                        type="text" 
-                        name="promo_code" 
-                        placeholder="Enter promo code" 
-                        class="w-full border rounded-lg p-2 mb-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
-                    >
-                    <button 
-                        type="submit" 
-                        class="w-full bg-blue-800 hover:bg-blue-500 text-white py-2 rounded-lg font-medium transition duration-200"
-                    >
-                        Apply
-                    </button>
-                </form>
-
-                <div class="border-t mt-4 pt-3 flex justify-between font-bold text-red-600 text-xl">
-                    <span>Total:</span>
-                    <span>${{ final_total|floatformat:2 }}</span>
-                </div>
-
-                <a href="{% url 'shop:checkout' %}" 
-                class="block mt-6 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold text-center transition duration-200">
-                Proceed to Checkout
-                </a>
             </div>
         </div>
 
         {% else %}
-        <p class="text-center text-red-600 text-lg mt-12">Your cart is empty. <a href="{% url 'shop:shop' %}" class="underline">Shop Now</a></p>
+        <p class="text-center text-red-600 text-lg mt-12">
+            Your cart is empty. <a href="{% url 'shop:shop' %}" class="underline">Shop Now</a>
+        </p>
         {% endif %}
     </div>
 </section>
 {% endblock content %}
-
-
-
-
-
-
-
-

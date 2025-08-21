@@ -101,24 +101,23 @@
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-accent">${{ product.price }}</span>
                         <form 
-                            method="POST" 
-                            action="{% url 'shop:add_to_cart' %}" 
-                            hx-post="{% url 'shop:add_to_cart' %}" 
-                            hx-target="#cart-btn-{{ product.id }}" 
-                            hx-swap="outerHTML"
-                            class="add-to-cart-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            <input type="hidden" name="quantity" value="1">
+                          method="POST" 
+                          action="{% url 'shop:add_to_cart' %}" 
+                          hx-post="{% url 'shop:add_to_cart' %}" 
+                          hx-target="#cart-btn-{{ product.id }}" 
+                          hx-swap="outerHTML"
+                          class="add-to-cart-form">
+                          {% csrf_token %}
+                          <input type="hidden" name="product_id" value="{{ product.id }}">
+                          <input type="hidden" name="quantity" value="1">
 
-                            <div id="cart-btn-{{ product.id }}">
-                                <button type="submit" 
-                                    class="bg-primary text-red-600 px-4 py-2 rounded-full text-sm transition transform active:scale-95 active:translate-y-1">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </form>
-
+                          <div id="cart-btn-{{ product.id }}">
+                              <button type="submit" 
+                                  class="bg-primary text-red-600 px-4 py-2 rounded-full text-sm transition transform active:scale-95 active:translate-y-1">
+                                  Add to Cart
+                              </button>
+                          </div>
+                      </form>
                     </div>
                 </div>
             </div>

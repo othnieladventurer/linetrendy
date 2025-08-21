@@ -1,0 +1,53 @@
+<div id="cart-item-{{ item.id }}" class="flex flex-col sm:flex-row items-center sm:justify-between border-b py-4">
+    <div class="flex items-center gap-4 w-full sm:w-auto">
+        {% with item.product.get_first_image as first_image %}
+            {% if first_image %}
+                <img src="{{ first_image.image.url }}" class="w-20 h-20 object-cover rounded">
+            {% else %}
+                <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center">No Image</div>
+            {% endif %}
+        {% endwith %}
+        <div>
+            <h2 class="text-red-600 font-medium">{{ item.product.name }}</h2>
+            <p class="text-gray-700">${{ item.product.price|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto justify-between sm:justify-end">
+
+        <form method="POST"
+            hx-post="{% url 'shop:update_cart_quantity' item.id %}"
+            hx-target="#cart-item-{{ item.id }}, #cart-totals"
+            hx-swap="outerHTML"
+            class="flex items-center gap-2">
+            {% csrf_token %}
+            
+            <!-- Decrease button -->
+            <button type="submit" name="action" value="decrease"
+                    class="flex-none w-10 h-10 flex items-center justify-center bg-gray-200 text-gray-800 font-semibold rounded hover:bg-gray-300">
+                -
+            </button>
+
+            <!-- Quantity display -->
+            <span class="flex-none w-12 h-10 flex items-center justify-center border rounded text-center">
+                {{ item.quantity }}
+            </span>
+
+            <!-- Increase button -->
+            <button type="submit" name="action" value="increase"
+                    class="flex-none w-10 h-10 flex items-center justify-center bg-gray-200 text-gray-800 font-semibold rounded hover:bg-gray-300">
+                +
+            </button>
+        </form>
+
+        <form method="POST"
+              action="{% url 'shop:remove_from_cart' item.id %}"
+              hx-post="{% url 'shop:remove_from_cart' item.id %}"
+              hx-target="#cart-item-{{ item.id }}, #cart-totals"
+              hx-swap="outerHTML">
+            {% csrf_token %}
+            <button type="submit" class="flex-none w-10 h-10 ..."><i class="fa fa-close"></i></button>
+        </form>
+
+    </div>
+</div>

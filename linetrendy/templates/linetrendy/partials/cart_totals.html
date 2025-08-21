@@ -1,0 +1,70 @@
+<div id="cart-totals" class="bg-white shadow-md rounded-lg p-4 sm:p-6">
+    <h2 class="text-2xl font-semibold text-red-600 mb-4">Order Summary</h2>
+
+    <div class="flex justify-between mb-2 text-gray-700">
+        <span>Items:</span>
+        <span>{{ cart_items|length }}X</span>
+    </div>
+
+    <div class="flex justify-between mb-2 text-gray-700">
+        <span>Subtotal:</span>
+        <span>${{ total_price|floatformat:2 }}</span>
+    </div>
+
+    <!-- Shipping -->
+    <form method="POST" hx-post="{% url 'shop:cart' %}" hx-target="#cart-totals" hx-swap="outerHTML">
+
+        {% csrf_token %}
+        <label for="shipping_method" class="block text-gray-700 mb-1">Shipping Method:</label>
+        <select 
+            name="shipping_method" 
+            id="shipping_method" 
+            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
+            onchange="this.form.submit()"
+        >
+            {% for method in shipping_methods %}
+                <option value="{{ method.id }}" {% if cart.shipping_method and cart.shipping_method.id == method.id %}selected{% endif %}>
+                    {{ method.name }} - 
+                    {% if method.free_over and total_price >= method.free_over %}Free
+                    {% else %}${{ method.fee|floatformat:2 }}{% if method.free_over %} (Free over ${{ method.free_over|floatformat:2 }}){% endif %}{% endif %}
+                </option>
+            {% empty %}
+                <option disabled>No shipping methods available</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if shipping_fee %}
+    <div class="flex justify-between mb-2 text-gray-700">
+        <span>Shipping:</span>
+        <span>${{ shipping_fee|floatformat:2 }}</span>
+    </div>
+    {% endif %}
+
+    {% if discount %}
+    <div class="flex justify-between mb-2 text-green-600 font-medium">
+        <span>Discount:</span>
+        <span>- ${{ discount|floatformat:2 }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Promo code -->
+    <form method="POST" hx-post="{% url 'shop:cart' %}" hx-target="#cart-totals" hx-swap="outerHTML" class="mt-4">
+        {% csrf_token %}
+        <input type="text" name="promo_code" placeholder="Enter promo code"
+               class="w-full border rounded-lg p-2 mb-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+        <button type="submit" class="w-full bg-blue-800 hover:bg-blue-500 text-white py-2 rounded-lg font-medium transition duration-200">
+            Apply
+        </button>
+    </form>
+
+    <div class="border-t mt-4 pt-3 flex justify-between font-bold text-red-600 text-xl">
+        <span>Total:</span>
+        <span>${{ final_total|floatformat:2 }}</span>
+    </div>
+
+    <a href="{% url 'shop:checkout' %}" 
+       class="block mt-6 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold text-center transition duration-200">
+        Proceed to Checkout
+    </a>
+</div>
