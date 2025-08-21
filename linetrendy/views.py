@@ -225,10 +225,6 @@ def add_to_cart(request):
     return redirect("/")
 
 
-
-
-
-
 @login_required
 def update_cart_quantity(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
@@ -240,32 +236,30 @@ def update_cart_quantity(request, item_id):
         cart_item.quantity = max(1, cart_item.quantity - 1)
 
     cart_item.save()
-    cart_items = cart_item.cart.items.select_related('product').all()
     cart = cart_item.cart
+    cart_items = cart.items.select_related('product').all()
 
+    # totals
     subtotal = sum(i.product.price * i.quantity for i in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
     final_total = max(subtotal + shipping_fee - discount, 0)
     cart_count = sum(i.quantity for i in cart_items)
-    shipping_methods = ShippingMethod.objects.all()
 
     context = {
-        "cart_items": cart_items,
+        "cart_item": cart_item,             # single updated item
+        "cart_items": cart_items,           # ✅ needed for {{ cart_items|length }}
         "cart": cart,
-        "total_price": subtotal,
+        "total_price": subtotal,            # ✅ template expects this name
+        "shipping_methods": ShippingMethod.objects.all(),  # ✅ needed for <select>
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
         "cart_count": cart_count,
-        "shipping_methods": shipping_methods,
     }
 
     html = render_to_string("linetrendy/partials/cart_updated_htmx.html", context, request=request)
     return HttpResponse(html)
-
-
-
 
 
 
@@ -303,16 +297,41 @@ def remove_from_cart(request, item_id):
 
 
 
-
 @login_required
 def checkout(request):
-    cart_items = CartItem.objects.filter(user=request.user)
-    cart_total = sum(item.product.price * item.quantity for item in cart_items)
-    return render(request, 'linetrendy/checkout.html', {
-        'cart_items': cart_items,
-        'cart_total': cart_total,
-    })
+    # get the user’s cart
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_items = cart.items.select_related('product').all()
 
+    # calculate subtotal
+    subtotal = sum(item.product.price * item.quantity for item in cart_items)
+
+    # calculate shipping fee (if shipping method selected)
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
+
+    # calculate discount
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
+
+    # calculate final total
+    final_total = max(subtotal + shipping_fee - discount, 0)
+
+    context = {
+        "cart": cart,
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "shipping_fee": shipping_fee,
+        "discount": discount,
+        "final_total": final_total,
+    }
+
+    return render(request, "linetrendy/checkout.html", context)
+
+
+
+
+
+
+    
 
 def about(request):
     return render(request, 'linetrendy/about.html')
