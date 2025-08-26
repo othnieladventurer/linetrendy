@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
 from decimal import Decimal
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -182,3 +183,55 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} × {self.product_name} (${self.price})"
+    
+
+
+
+
+
+class BillingAddress(models.Model):
+    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='billing_address')
+    full_name = models.CharField(max_length=255)
+    line1 = models.CharField("Street Address", max_length=255)
+    line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country = CountryField(default='US')
+
+    def __str__(self):
+        return f"{self.full_name}, {self.line1}, {self.city}"
+
+
+
+
+
+
+
+class ShippingAddress(models.Model):
+    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='shipping_address')
+    full_name = models.CharField(max_length=255)
+    line1 = models.CharField("Street Address", max_length=255)
+    line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country = CountryField(default='US')
+
+    def __str__(self):
+        return f"{self.full_name}, {self.line1}, {self.city}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

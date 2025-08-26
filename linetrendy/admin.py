@@ -80,9 +80,36 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
 
 
-    
+
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'order', 'product_name', 'quantity', 'price')
     search_fields = ('product_name', 'order__id')
+
+
+
+
+
+@admin.register(BillingAddress)
+class BillingAddressAdmin(admin.ModelAdmin):
+    list_display = ("order", "full_name", "city", "state", "country")
+    search_fields = ("full_name", "city", "state", "postal_code", "country")
+
+
+
+@admin.register(ShippingAddress)
+class ShippingAddressAdmin(admin.ModelAdmin):
+    list_display = ("order", "full_name", "city", "state", "country")
+    search_fields = ("full_name", "city", "state", "postal_code", "country")
+
+
+
+
+
+
+
+
+
+
+
