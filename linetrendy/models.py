@@ -131,13 +131,21 @@ class Discount(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        null=True, blank=True
+    )
+    session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)
     shipping_method = models.ForeignKey('ShippingMethod', null=True, blank=True, on_delete=models.SET_NULL)
     discount = models.ForeignKey('Discount', null=True, blank=True, on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Cart of {self.user.email}"
+        if self.user:
+            return f"Cart of {self.user.email}"
+        return f"Guest Cart {self.session_key}"
+
         
 
 
