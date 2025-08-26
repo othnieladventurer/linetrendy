@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 
@@ -336,10 +338,77 @@ def checkout(request):
 
 
 
-
 @login_required
 def checkout_success(request):
-    return render(request, "linetrendy/checkout_success.html")
+    # Get the latest completed payment intent from session
+    last_order_intent = request.session.get("last_payment_intent_id")
+    if not last_order_intent:
+        return HttpResponse("No recent order found.", status=400)
+
+    # Get the cart
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_items = list(cart.items.select_related('product').all())  # convert to list to preserve
+
+    # Calculate totals BEFORE clearing cart
+    subtotal = sum(item.product.price * item.quantity for item in cart_items)
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
+    final_total = max(subtotal + shipping_fee - discount, 0)
+
+    # Create Order
+    order = Order.objects.create(
+        user=request.user,
+        cart=cart,
+        payment_intent_id=last_order_intent,
+        total_amount=final_total,
+        status="completed",
+    )
+
+    # Create OrderItems and keep them in a list
+    order_items = []
+    for item in cart_items:
+        order_item = OrderItem.objects.create(
+            order=order,
+            product_name=item.product.name,
+            quantity=item.quantity,
+            price=item.product.price,
+        )
+        order_items.append(order_item)
+
+    # Clear the cart
+    cart.items.all().delete()
+    cart.shipping_method = None
+    cart.discount = None
+    cart.save()
+
+    # Clear session variable
+    request.session.pop("last_payment_intent_id", None)
+
+    context = {
+        "order": order,
+        "order_items": order_items,  # use list of OrderItems, not cart
+        "subtotal": subtotal,
+        "shipping_fee": shipping_fee,
+        "discount": discount,
+        "final_total": final_total,
+    }
+
+    return render(request, "linetrendy/checkout_success.html", context)
+
+
+
+
+
+
+@csrf_exempt
+@login_required
+def store_payment_intent(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        request.session["last_payment_intent_id"] = data.get("payment_intent_id")
+        return HttpResponse("OK")
+    return HttpResponse("Method not allowed", status=405)
+
 
 
     

@@ -92,46 +92,70 @@ cardElement.mount("#card-element");
 const payButton = document.getElementById("pay-button");
 
 payButton.addEventListener("click", async (e) => {
-  e.preventDefault();
-  console.log("Pay button clicked.");
+    e.preventDefault();
+    console.log("Pay button clicked.");
 
-  const billingCountry = document.getElementById("billing-country").value;
-  if (!billingCountry) { alert("Please select a country"); return; }
-
-  try {
-    const { error, paymentIntent } = await stripe.confirmCardPayment(
-      "{{ client_secret }}", {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: document.getElementById("cardholder-name").value,
-            address: {
-              line1: document.getElementById("billing-line1").value,
-              line2: document.getElementById("billing-line2").value,
-              city: document.getElementById("billing-city").value,
-              state: document.getElementById("billing-state").value,
-              postal_code: document.getElementById("billing-zip").value,
-              country: billingCountry,
-            }
-          }
-        }
-      }
-    );
-
-    if (error) {
-      console.error("Stripe Payment Error:", error);
-      document.getElementById("card-errors").textContent = error.message;
-    } else if (paymentIntent && paymentIntent.status === "succeeded") {
-      console.log("Payment succeeded:", paymentIntent.id);
-      alert("Payment succeeded! PaymentIntent ID: " + paymentIntent.id);
-      window.location.href = "{% url 'shop:checkout_success' %}";
-    } else {
-      console.warn("Unexpected PaymentIntent status:", paymentIntent);
+    const billingCountry = document.getElementById("billing-country").value;
+    if (!billingCountry) {
+        alert("Please select a country");
+        return;
     }
-  } catch (err) {
-    console.error("JS Exception during payment:", err);
-    document.getElementById("card-errors").textContent = "Unexpected error. Check console.";
-  }
+
+    try {
+        // Confirm the card payment with Stripe
+        const { error, paymentIntent } = await stripe.confirmCardPayment(
+            "{{ client_secret }}", {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: document.getElementById("cardholder-name").value,
+                        address: {
+                            line1: document.getElementById("billing-line1").value,
+                            line2: document.getElementById("billing-line2").value,
+                            city: document.getElementById("billing-city").value,
+                            state: document.getElementById("billing-state").value,
+                            postal_code: document.getElementById("billing-zip").value,
+                            country: billingCountry,
+                        }
+                    }
+                }
+            }
+        );
+
+        if (error) {
+            console.error("Stripe Payment Error:", error);
+            document.getElementById("card-errors").textContent = error.message;
+            return;
+        }
+
+        if (paymentIntent && paymentIntent.status === "succeeded") {
+            console.log("Payment succeeded:", paymentIntent.id);
+
+            // Send PaymentIntent ID to Django to create Order & OrderItems
+            const response = await fetch("{% url 'shop:store_payment_intent' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ payment_intent_id: paymentIntent.id })
+            });
+
+            if (!response.ok) {
+                console.error("Error storing payment intent in Django:", await response.text());
+                alert("Payment succeeded but failed to record order. Contact support.");
+                return;
+            }
+
+            // Redirect to success page
+            window.location.href = "{% url 'shop:checkout_success' %}";
+        } else {
+            console.warn("Unexpected PaymentIntent status:", paymentIntent);
+        }
+    } catch (err) {
+        console.error("JS Exception during payment:", err);
+        document.getElementById("card-errors").textContent = "Unexpected error. Check console.";
+    }
 });
 </script>
 {% endblock %}

@@ -70,3 +70,19 @@ class DiscountAdmin(ModelAdmin):
 
 
 
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'total_amount', 'status', 'payment_intent_id', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('user__email', 'payment_intent_id')
+    ordering = ('-created_at',)
+
+
+    
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'order', 'product_name', 'quantity', 'price')
+    search_fields = ('product_name', 'order__id')
