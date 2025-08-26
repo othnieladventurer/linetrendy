@@ -1,3 +1,4 @@
+import stripe
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from .models import *
@@ -9,7 +10,7 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
-
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 
@@ -295,25 +296,28 @@ def remove_from_cart(request, item_id):
 
 
 
-
-
 @login_required
 def checkout(request):
-    # get the user’s cart
     cart = get_object_or_404(Cart, user=request.user)
     cart_items = cart.items.select_related('product').all()
 
-    # calculate subtotal
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
-
-    # calculate shipping fee (if shipping method selected)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
-
-    # calculate discount
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
-
-    # calculate final total
     final_total = max(subtotal + shipping_fee - discount, 0)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=int(final_total * 100),  # Stripe expects cents
+            currency="usd",
+            automatic_payment_methods={"enabled": True},
+        )
+        print("Created PaymentIntent:", intent.id, intent.status, intent.amount)
+    except Exception as e:
+        print("Stripe PaymentIntent error:", str(e))
+        return HttpResponse("Error creating payment intent. Check server logs.", status=500)
 
     context = {
         "cart": cart,
@@ -322,6 +326,8 @@ def checkout(request):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
+        "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
+        "client_secret": intent.client_secret,
     }
 
     return render(request, "linetrendy/checkout.html", context)
@@ -329,6 +335,11 @@ def checkout(request):
 
 
 
+
+
+@login_required
+def checkout_success(request):
+    return render(request, "linetrendy/checkout_success.html")
 
 
     

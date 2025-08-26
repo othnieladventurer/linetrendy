@@ -119,6 +119,7 @@ ACCOUNT_FORMS = {
 
 
 LOGIN_URL =  '/users/account/login/'  
+LOGin_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
@@ -231,3 +232,12 @@ else:
 # Example for service account file
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
 
+
+
+
+
+
+
+
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
