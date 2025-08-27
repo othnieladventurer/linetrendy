@@ -74,10 +74,16 @@ class DiscountAdmin(ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'total_amount', 'status', 'payment_intent_id', 'created_at')
-    list_filter = ('status', 'created_at')
-    search_fields = ('user__email', 'payment_intent_id')
-    ordering = ('-created_at',)
+    list_display = ("order_number", "customer_display", "total_amount", "status", "created_at")
+    readonly_fields = ("order_number",)
+
+    def customer_display(self, obj):
+        if obj.user:
+            return obj.user.email
+        elif obj.guest_email:
+            return f"Guest ({obj.guest_email})"
+        return f"Guest #{obj.id}"
+    customer_display.short_description = "Customer"
 
 
 

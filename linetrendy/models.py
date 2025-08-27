@@ -1,8 +1,11 @@
 from django.db import models
 from django.utils.text import slugify
+from django.utils import timezone
 from django.conf import settings
 from decimal import Decimal
 from django_countries.fields import CountryField
+from django.db import transaction
+import uuid
 
 # Create your models here.
 
@@ -169,17 +172,50 @@ class CartItem(models.Model):
 
 
 
-
 class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    guest_email = models.EmailField(null=True, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     payment_intent_id = models.CharField(max_length=255)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, default="pending")
+    order_number = models.CharField(max_length=30, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            today = timezone.now().strftime("%Y%m%d")
+            with transaction.atomic():
+                last_order = (
+                    Order.objects.filter(order_number__startswith=f"ORD{today}")
+                    .order_by("-order_number")
+                    .first()
+                )
+                if last_order:
+                    last_seq = int(last_order.order_number.split("-")[-1])
+                    new_seq = last_seq + 1
+                else:
+                    new_seq = 1
+                self.order_number = f"ORD{today}-{new_seq:03d}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Order {self.id} by {self.user.email} - {self.status} (${self.total_amount})"
+        if self.user:
+            return f"Order {self.order_number} by {self.user.email} - {self.status} (${self.total_amount})"
+        elif self.guest_email:
+            return f"Order {self.order_number} by Guest ({self.guest_email}) - {self.status} (${self.total_amount})"
+        else:
+            return f"Order {self.order_number} by Guest #{self.id} - {self.status} (${self.total_amount})"
+
+
+
+
+
+
+
+
+
+
 
 
 

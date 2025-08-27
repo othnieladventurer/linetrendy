@@ -61,9 +61,12 @@ def shop(request):
 
 
 def cart(request):
-    # Get or create cart for this user
+    # Get or create cart for this user (guest or authenticated)
     cart = get_cart(request)
-    cart_items = cart.items.select_related('product')
+    cart_items = cart.items.select_related('product').all()
+
+    # Compute cart count
+    cart_count = sum(item.quantity for item in cart_items)
 
     # Handle shipping selection or promo code
     if request.method == 'POST':
@@ -94,6 +97,7 @@ def cart(request):
             context = {
                 'cart_items': cart_items,
                 'cart': cart,
+                'cart_count': cart_count,
                 'total_price': subtotal,
                 'shipping_fee': shipping_fee,
                 'discount': discount,
@@ -129,6 +133,7 @@ def cart(request):
     context = {
         'cart_items': cart_items,
         'cart': cart,
+        'cart_count': cart_count,
         'total_price': subtotal,
         'shipping_fee': shipping_fee,
         'discount': discount,
@@ -137,6 +142,7 @@ def cart(request):
     }
 
     return render(request, 'linetrendy/cart.html', context)
+
 
 
 
@@ -248,11 +254,15 @@ def remove_from_cart(request, item_id):
 
 
 
-@login_required
+
 def checkout(request):
-    cart = get_object_or_404(Cart, user=request.user)
+    cart = get_cart(request)
     cart_items = cart.items.select_related('product').all()
 
+    if not cart_items:
+        return redirect("shop:cart")  # No items, redirect to cart
+
+    # Calculate totals
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
@@ -271,6 +281,41 @@ def checkout(request):
         print("Stripe PaymentIntent error:", str(e))
         return HttpResponse("Error creating payment intent. Check server logs.", status=500)
 
+    # Handle POST for creating order
+    if request.method == "POST":
+        payment_intent_id = intent.id
+        if request.user.is_authenticated:
+            order = Order.objects.create(
+                user=request.user,
+                cart=cart,
+                total_amount=final_total,
+                payment_intent_id=payment_intent_id
+            )
+        else:
+            guest_email = request.POST.get("email")
+            if not guest_email:
+                return HttpResponse("Guest email is required", status=400)
+            order = Order.objects.create(
+                guest_email=guest_email,
+                cart=cart,
+                total_amount=final_total,
+                payment_intent_id=payment_intent_id
+            )
+
+        # Copy cart items to order items
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product_name=item.product.name,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+
+        # Clear cart after order
+        cart.items.all().delete()
+
+        return redirect("order_success_page")  # Replace with your success URL
+
     context = {
         "cart": cart,
         "cart_items": cart_items,
@@ -288,33 +333,47 @@ def checkout(request):
 
 
 
-@login_required
+
 def checkout_success(request):
-    # Get the latest completed payment intent from session
+    # Get the last payment intent from session
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
         return HttpResponse("No recent order found.", status=400)
 
-    # Get the cart
-    cart = get_object_or_404(Cart, user=request.user)
-    cart_items = list(cart.items.select_related('product').all())  # convert to list to preserve
+    # Get the cart for user or guest
+    cart = get_cart(request)
+    cart_items = list(cart.items.select_related('product').all())  # preserve items
+
+    if not cart_items:
+        return HttpResponse("Cart is empty.", status=400)
 
     # Calculate totals BEFORE clearing cart
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
-    final_total = max(subtotal + shipping_fee - discount, 0)
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
+    final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
 
-    # Create Order
-    order = Order.objects.create(
-        user=request.user,
-        cart=cart,
-        payment_intent_id=last_order_intent,
-        total_amount=final_total,
-        status="completed",
-    )
+    # Create order
+    if request.user.is_authenticated:
+        order = Order.objects.create(
+            user=request.user,
+            cart=cart,
+            payment_intent_id=last_order_intent,
+            total_amount=final_total,
+            status="completed",
+        )
+    else:
+        guest_email = request.session.get("guest_email")
+        order = Order.objects.create(
+            user=None,
+            guest_email=guest_email,
+            cart=cart,
+            payment_intent_id=last_order_intent,
+            total_amount=final_total,
+            status="completed",
+        )
 
-    # Create OrderItems and keep them in a list
+    # Create OrderItems
     order_items = []
     for item in cart_items:
         order_item = OrderItem.objects.create(
@@ -331,12 +390,14 @@ def checkout_success(request):
     cart.discount = None
     cart.save()
 
-    # Clear session variable
+    # Clear session variables
     request.session.pop("last_payment_intent_id", None)
+    if "guest_email" in request.session:
+        request.session.pop("guest_email")
 
     context = {
         "order": order,
-        "order_items": order_items,  # use list of OrderItems, not cart
+        "order_items": order_items,
         "subtotal": subtotal,
         "shipping_fee": shipping_fee,
         "discount": discount,
@@ -350,12 +411,15 @@ def checkout_success(request):
 
 
 
+
 @csrf_exempt
-@login_required
 def store_payment_intent(request):
     if request.method == "POST":
         data = json.loads(request.body)
         request.session["last_payment_intent_id"] = data.get("payment_intent_id")
+        # also store guest email if present
+        if "guest_email" in data:
+            request.session["guest_email"] = data["guest_email"]
         return HttpResponse("OK")
     return HttpResponse("Method not allowed", status=405)
 

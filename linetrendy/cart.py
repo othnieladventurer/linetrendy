@@ -2,6 +2,9 @@
 from .models import CartItem, Product
 from django.db.models import Sum
 
+
+
+
 class Cart:
     def __init__(self, user):
         if not user.is_authenticated:

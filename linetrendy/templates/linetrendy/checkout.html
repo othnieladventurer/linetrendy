@@ -26,23 +26,23 @@
 
         <!-- Billing Address -->
         <div class="space-y-4">
-          <h3>Billing Address</h3>
-          <input id="billing-line1" type="text" placeholder="Street Address" class="w-full px-4 py-2 border rounded-lg">
-          <input id="billing-line2" type="text" placeholder="Apartment / Suite (Optional)" class="w-full px-4 py-2 border rounded-lg">
+          <h3>Shipping Address</h3>
+          <input id="shipping-line1" type="text" placeholder="Street Address" class="w-full px-4 py-2 border rounded-lg">
+          <input id="shipping-line2" type="text" placeholder="Apartment / Suite (Optional)" class="w-full px-4 py-2 border rounded-lg">
           <div class="flex gap-4">
-            <input id="billing-city" type="text" placeholder="City" class="w-1/2 px-4 py-2 border rounded-lg">
-            <input id="billing-state" type="text" placeholder="State / Province" class="w-1/2 px-4 py-2 border rounded-lg">
+              <input id="shipping-city" type="text" placeholder="City" class="w-1/2 px-4 py-2 border rounded-lg">
+              <input id="shipping-state" type="text" placeholder="State / Province" class="w-1/2 px-4 py-2 border rounded-lg">
           </div>
           <div class="flex gap-4">
-            <input id="billing-zip" type="text" placeholder="ZIP / Postal Code" class="w-1/2 px-4 py-2 border rounded-lg">
-            <select id="billing-country" class="w-1/2 px-4 py-2 border rounded-lg">
-              <option value="US" selected>United States</option>
-              <option value="CA">Canada</option>
-              <option value="GB">United Kingdom</option>
-              <option value="AU">Australia</option>
-            </select>
+              <input id="shipping-zip" type="text" placeholder="ZIP / Postal Code" class="w-1/2 px-4 py-2 border rounded-lg">
+              <select id="shipping-country" class="w-1/2 px-4 py-2 border rounded-lg">
+                  <option value="US" selected>United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="AU">Australia</option>
+              </select>
           </div>
-        </div>
+      </div>
 
         <div class="pt-4">
           <button id="pay-button" class="w-full bg-red-600 text-white py-3 rounded-lg">Pay Now</button>
@@ -95,8 +95,9 @@ payButton.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("Pay button clicked.");
 
-    const billingCountry = document.getElementById("billing-country").value;
-    if (!billingCountry) {
+    // Get shipping address values
+    const shippingCountry = document.getElementById("shipping-country").value;
+    if (!shippingCountry) {
         alert("Please select a country");
         return;
     }
@@ -110,12 +111,12 @@ payButton.addEventListener("click", async (e) => {
                     billing_details: {
                         name: document.getElementById("cardholder-name").value,
                         address: {
-                            line1: document.getElementById("billing-line1").value,
-                            line2: document.getElementById("billing-line2").value,
-                            city: document.getElementById("billing-city").value,
-                            state: document.getElementById("billing-state").value,
-                            postal_code: document.getElementById("billing-zip").value,
-                            country: billingCountry,
+                            line1: document.getElementById("shipping-line1").value,
+                            line2: document.getElementById("shipping-line2").value,
+                            city: document.getElementById("shipping-city").value,
+                            state: document.getElementById("shipping-state").value,
+                            postal_code: document.getElementById("shipping-zip").value,
+                            country: shippingCountry,
                         }
                     }
                 }
@@ -158,6 +159,7 @@ payButton.addEventListener("click", async (e) => {
     }
 });
 </script>
+
 {% endblock %}
 
 

@@ -14,26 +14,36 @@
 
     <!-- Shipping -->
     <form method="POST" hx-post="{% url 'shop:cart' %}" hx-target="#cart-totals" hx-swap="outerHTML">
+    {% csrf_token %}
+    <label for="shipping_method" class="block text-gray-700 mb-1">Shipping Method:</label>
+    <select 
+        name="shipping_method" 
+        id="shipping_method" 
+        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
+        onchange="this.form.submit()"
+    >
+        <!-- Placeholder -->
+        <option value="" disabled {% if not cart.shipping_method %}selected{% endif %}>
+            Select your shipping method
+        </option>
 
-        {% csrf_token %}
-        <label for="shipping_method" class="block text-gray-700 mb-1">Shipping Method:</label>
-        <select 
-            name="shipping_method" 
-            id="shipping_method" 
-            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none"
-            onchange="this.form.submit()"
-        >
-            {% for method in shipping_methods %}
-                <option value="{{ method.id }}" {% if cart.shipping_method and cart.shipping_method.id == method.id %}selected{% endif %}>
-                    {{ method.name }} - 
-                    {% if method.free_over and total_price >= method.free_over %}Free
-                    {% else %}${{ method.fee|floatformat:2 }}{% if method.free_over %} (Free over ${{ method.free_over|floatformat:2 }}){% endif %}{% endif %}
-                </option>
-            {% empty %}
-                <option disabled>No shipping methods available</option>
-            {% endfor %}
-        </select>
-    </form>
+        <!-- Real methods -->
+        {% for method in shipping_methods %}
+            <option value="{{ method.id }}" {% if cart.shipping_method and cart.shipping_method.id == method.id %}selected{% endif %}>
+                {{ method.name }} - 
+                {% if method.free_over and total_price >= method.free_over %}
+                    Free
+                {% else %}
+                    ${{ method.fee|floatformat:2 }}
+                    {% if method.free_over %}(Free over ${{ method.free_over|floatformat:2 }}){% endif %}
+                {% endif %}
+            </option>
+        {% empty %}
+            <option disabled>No shipping methods available</option>
+        {% endfor %}
+    </select>
+</form>
+
 
     {% if shipping_fee %}
     <div class="flex justify-between mb-2 text-gray-700">
