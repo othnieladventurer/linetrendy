@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from .utils import get_cart
 import json
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -333,56 +334,49 @@ def checkout(request):
 
 
 
-
 def checkout_success(request):
-    # Get the last payment intent from session
+    # Get last payment intent
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
         return HttpResponse("No recent order found.", status=400)
 
-    # Get the cart for user or guest
+    # Get cart and items
     cart = get_cart(request)
-    cart_items = list(cart.items.select_related('product').all())  # preserve items
-
+    cart_items = list(cart.items.select_related('product').all())
     if not cart_items:
         return HttpResponse("Cart is empty.", status=400)
 
-    # Calculate totals BEFORE clearing cart
+    # Calculate totals
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
-    final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
+    final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # Create order
+    # Prepare order fields
+    order_data = {
+        "cart": cart,
+        "payment_intent_id": last_order_intent,
+        "total_amount": final_total,
+        # Status will default to "placed"
+    }
+
     if request.user.is_authenticated:
-        order = Order.objects.create(
-            user=request.user,
-            cart=cart,
-            payment_intent_id=last_order_intent,
-            total_amount=final_total,
-            status="completed",
-        )
+        order_data["user"] = request.user
     else:
-        guest_email = request.session.get("guest_email")
-        order = Order.objects.create(
-            user=None,
-            guest_email=guest_email,
-            cart=cart,
-            payment_intent_id=last_order_intent,
-            total_amount=final_total,
-            status="completed",
-        )
+        order_data["guest_email"] = request.session.get("guest_email")
 
-    # Create OrderItems
-    order_items = []
+    # Create the order
+    order = Order.objects.create(**order_data)
+
+    # Create order items
     for item in cart_items:
-        order_item = OrderItem.objects.create(
+        OrderItem.objects.create(
             order=order,
+            product=item.product,
             product_name=item.product.name,
             quantity=item.quantity,
             price=item.product.price,
         )
-        order_items.append(order_item)
 
     # Clear the cart
     cart.items.all().delete()
@@ -392,21 +386,17 @@ def checkout_success(request):
 
     # Clear session variables
     request.session.pop("last_payment_intent_id", None)
-    if "guest_email" in request.session:
-        request.session.pop("guest_email")
+    request.session.pop("guest_email", None)
 
+    # Render confirmation
     context = {
         "order": order,
-        "order_items": order_items,
         "subtotal": subtotal,
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
     }
-
     return render(request, "linetrendy/checkout_success.html", context)
-
-
 
 
 
@@ -433,6 +423,31 @@ def about(request):
 
 def contact(request):
     return render(request, 'linetrendy/contact.html')
+
+
+
+
+
+
+@login_required
+def account_page(request):
+    # Fetch orders for the logged-in user
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
+
+    # Paginate: 10 orders per page
+    paginator = Paginator(orders, 10)  # 10 orders per page
+    page_number = request.GET.get('page')   # Get page number from query params
+    orders = paginator.get_page(page_number)  # This returns a Page object
+
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'linetrendy/account_page.html', context)
+
+
+
+
 
 
 

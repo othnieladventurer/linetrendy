@@ -73,9 +73,11 @@ class DiscountAdmin(ModelAdmin):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ModelAdmin):
     list_display = ("order_number", "customer_display", "total_amount", "status", "created_at")
     readonly_fields = ("order_number",)
+    search_fields = ("user__email", "guest_email", "order_number")
+    list_filter = ("status", "created_at")
 
     def customer_display(self, obj):
         if obj.user:
@@ -84,6 +86,7 @@ class OrderAdmin(admin.ModelAdmin):
             return f"Guest ({obj.guest_email})"
         return f"Guest #{obj.id}"
     customer_display.short_description = "Customer"
+
 
 
 

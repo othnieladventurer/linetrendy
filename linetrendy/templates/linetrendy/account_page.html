@@ -1,0 +1,266 @@
+{% extends 'linetrendy/base.html' %}
+
+{% block content %}
+<section class="bg-gray-100 min-h-screen py-10">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl md:text-4xl font-bold text-red-600 mb-8 text-center">My Account</h1>
+    
+    <div class="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
+      
+      <!-- Sidebar Navigation -->
+      <div class="md:w-1/4 bg-gray-50 border-r border-gray-200 p-6">
+        <ul class="space-y-4">
+          <li>
+            <button onclick="showTab('orders')" 
+                    class="w-full text-left font-medium text-gray-700 hover:text-red-600 transition-colors" 
+                    id="tab-orders-btn">
+              Orders
+            </button>
+          </li>
+          <li>
+            <button onclick="showTab('address')" 
+                    class="w-full text-left font-medium text-gray-700 hover:text-red-600 transition-colors" 
+                    id="tab-address-btn">
+              Addresses
+            </button>
+          </li>
+          <li>
+            <button onclick="showTab('profile')" 
+                    class="w-full text-left font-medium text-gray-700 hover:text-red-600 transition-colors" 
+                    id="tab-profile-btn">
+              Profile
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="md:w-3/4 p-6">
+        
+        <!-- Orders Tab -->
+        <div id="orders-tab" class="tab-content">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Orders</h2>
+            {% if orders %}
+                <div class="space-y-4">
+                    {% for order in orders %}
+                    <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50">
+                    
+                        <!-- Order Header (clickable to expand) -->
+                        <button type="button" 
+                                class="w-full flex justify-between items-center text-left"
+                                onclick="toggleOrder('{{ order.id }}')">
+                            <div>
+                              <span class="font-medium text-red-600">{{ order.product.name }}</span>
+                              <span class="font-medium text-red-600">Order #: {{ order.order_number }}</span>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">{{ order.items.count }} item(s)</span>
+                              <span class="ml-4 font-semibold text-gray-800">${{ order.total_amount|floatformat:2 }}</span>
+                            </div>
+                        </button>
+
+                        <!-- Expandable Order Items -->                        <!-- Expandable Order Items -->
+                        <div id="order-{{ order.id }}" class="hidden mt-4 border-t pt-3 space-y-4">
+
+                          <!-- Order date and status -->
+                          <div class="flex justify-between items-center mb-2">
+                              <p class="text-sm text-gray-500">Placed on: {{ order.created_at|date:"F d, Y" }}</p>
+                              <p class="text-sm font-medium
+                                  {% if order.status == 'placed' %}text-yellow-600
+                                  {% elif order.status == 'shipped' %}text-blue-600
+                                  {% elif order.status == 'delivered' %}text-green-600
+                                  {% elif order.status == 'cancelled' or order.status == 'refunded' %}text-red-600
+                                  {% else %}text-gray-600{% endif %}">
+                                  {{ order.status|capfirst }}
+                              </p>
+                          </div>
+
+                          {% for item in order.items.all %}
+                          <div class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+
+                              <!-- Product Image -->
+                              <div class="w-16 h-16 mr-4">
+                                  {% with item.product.get_first_image as first_image %}
+                                      {% if first_image %}
+                                          <img src="{{ first_image.image.url }}" 
+                                              alt="{{ item.product.name }}" 
+                                              class="w-16 h-16 object-cover rounded-md">
+                                      {% else %}
+                                          <img class="w-16 h-16 object-cover rounded-md" 
+                                              src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1888&q=80" 
+                                              alt="No image available">
+                                      {% endif %}
+                                  {% endwith %}
+                              </div>
+
+                              <!-- Product Details -->
+                              <div class="flex-1">
+                                  <p class="font-medium text-gray-800">{{ item.product.name }}</p>
+                                  <p class="text-sm text-gray-600">Qty: {{ item.quantity }}</p>
+                              </div>
+
+                              <!-- Price -->
+                              <div class="font-semibold text-gray-800">
+                                  ${{ item.price|floatformat:2 }}
+                              </div>
+                          </div>
+                          {% endfor %}
+
+                          <!-- Action Buttons -->
+                          <div class="flex gap-2 mt-4">
+                              <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-sm shadow transition flex items-center justify-center">
+                                  Track
+                              </a>
+
+                              {% if order.status == "placed" %}
+                              <form method="post" action="">
+                                  {% csrf_token %}
+                                  <button type="submit" 
+                                      class="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-full text-sm shadow transition flex items-center justify-center">
+                                      Cancel
+                                  </button>
+                              </form>
+                              {% elif order.status == "delivered"  %}
+
+
+                              {% else %}
+                              <div class="relative group">
+                                <button 
+                                    class="bg-gray-300 text-gray-600 py-1 px-3 rounded-full text-sm cursor-not-allowed flex items-center justify-center" 
+                                    disabled>
+                                    Cancel
+                                </button>
+                                
+                                <!-- Tooltip -->
+                                <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 
+                                      opacity-0 group-hover:opacity-100 transition-opacity 
+                                      bg-blue-800 text-white text-xs rounded-md p-2 w-64 text-center shadow-lg pointer-events-none z-50">
+                                        Cancellation Not Available: This order has already been shipped and cannot be canceled. 
+                                        You may initiate a return after delivery according to our return policy.
+                                </div>
+                              </div>
+
+                              {% endif %}
+                          </div>
+
+                      </div>
+
+                    </div>
+                    {% endfor %}
+
+
+                     <!-- Pagination -->
+                        {% if orders.has_other_pages %}
+                        <div class="mt-6 flex justify-center space-x-2 flex-wrap">
+                            {% if orders.has_previous %}
+                                <a href="?page={{ orders.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
+                            {% endif %}
+                            {% for num in orders.paginator.page_range %}
+                                {% if orders.number == num %}
+                                    <span class="px-3 py-1 bg-red-600 text-white rounded">{{ num }}</span>
+                                {% else %}
+                                    <a href="?page={{ num }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if orders.has_next %}
+                                <a href="?page={{ orders.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                </div>
+                {% else %}
+                <p class="text-gray-600">You have no orders yet.</p>
+                {% endif %}
+
+        </div>
+
+        <!-- My Address Tab -->
+        <div id="address-tab" class="tab-content hidden">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Addresses</h2>
+          {% if addresses %}
+          <div class="space-y-4">
+            {% for address in addresses %}
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50">
+              <p class="text-gray-700">{{ address.full_name }}</p>
+              <p class="text-gray-600">{{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.zip_code }}</p>
+              <p class="text-gray-600">{{ address.country }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-gray-600">You haven't added any addresses yet.</p>
+          {% endif %}
+          <button class="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">Add New Address</button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile-tab" class="tab-content hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Profile</h2>
+            <form method="POST" class="space-y-4">
+                {% csrf_token %}
+                
+                <!-- First Name -->
+                <div class="flex flex-col sm:flex-row sm:space-x-4">
+                    <!-- First Name -->
+                    <div class="flex-1">
+                        <label class="block text-gray-700 mb-1">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}"
+                              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="flex-1 mt-4 sm:mt-0">
+                        <label class="block text-gray-700 mb-1">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}"
+                              class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    </div>
+                 </div>
+
+
+                <!-- Email -->
+                <div>
+                <label class="block text-gray-700 mb-1">Email</label>
+                <input type="email" name="email" value="{{ user.email }}" 
+                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+
+                <!-- Phone -->
+                <div>
+                <label class="block text-gray-700 mb-1">Phone</label>
+                <input type="text" name="phone" value="{{ user.profile.phone }}" 
+                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+                Save Changes
+                </button>
+            </form>
+            </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function showTab(tab) {
+    const tabs = ['orders', 'address', 'profile'];
+    tabs.forEach(t => {
+      document.getElementById(`${t}-tab`).classList.add('hidden');
+      document.getElementById(`tab-${t}-btn`).classList.remove('text-red-600', 'font-bold');
+    });
+    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+    document.getElementById(`tab-${tab}-btn`).classList.add('text-red-600', 'font-bold');
+  }
+
+  // Initialize default tab
+  showTab('orders');
+
+
+  //Viewing order details
+  function toggleOrder(orderId) {
+    const section = document.getElementById(`order-${orderId}`);
+    section.classList.toggle('hidden');
+  }
+</script>
+{% endblock %}

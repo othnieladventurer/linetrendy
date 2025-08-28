@@ -21,6 +21,10 @@ urlpatterns = [
     path('store-payment-intent/', views.store_payment_intent, name='store_payment_intent'),
     path('about/', views.about, name="about" ),
     path('contact/', views.contact, name="contact" ),
+
+    #account page
+    path('account-page/', views.account_page, name="account_page"),
+
     
 
 ]

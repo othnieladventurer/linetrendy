@@ -171,15 +171,29 @@ class CartItem(models.Model):
 
 
 
-
+  
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ("placed", "Order Placed"),
+        ("shipped", "Shipped"),
+        ("delivered", "Delivered"),
+        ("cancelled", "Cancelled"),
+        ("refunded", "Refunded"),
+    ]
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     guest_email = models.EmailField(null=True, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     payment_intent_id = models.CharField(max_length=255)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, default="pending")
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="placed"
+    )
+
     order_number = models.CharField(max_length=30, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -200,14 +214,13 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
+        display_status = dict(self.STATUS_CHOICES).get(self.status, self.status)
         if self.user:
-            return f"Order {self.order_number} by {self.user.email} - {self.status} (${self.total_amount})"
+            return f"Order {self.order_number} by {self.user.email} - {display_status} (${self.total_amount})"
         elif self.guest_email:
-            return f"Order {self.order_number} by Guest ({self.guest_email}) - {self.status} (${self.total_amount})"
+            return f"Order {self.order_number} by Guest ({self.guest_email}) - {display_status} (${self.total_amount})"
         else:
-            return f"Order {self.order_number} by Guest #{self.id} - {self.status} (${self.total_amount})"
-
-
+            return f"Order {self.order_number} by Guest #{self.id} - {display_status} (${self.total_amount})"
 
 
 
@@ -221,7 +234,8 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product_name = models.CharField(max_length=255)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)  # ✅ new field
+    product_name = models.CharField(max_length=255)  # keep for snapshot history
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
