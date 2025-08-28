@@ -40,23 +40,23 @@
       <div class="flex items-center space-x-4">
         <span class="text-3xl font-bold text-red-500">${{ product.price }}</span>
         <form 
-            method="POST" 
-            action="{% url 'shop:add_to_cart' %}" 
-            hx-post="{% url 'shop:add_to_cart' %}" 
-            hx-target="#cart-count" 
-            hx-swap="outerHTML">
-            
-            {% csrf_token %}
-            <input type="hidden" name="product_id" value="{{ product.id }}">
-            <input type="hidden" name="quantity" value="1">
+          method="POST" 
+          action="{% url 'shop:add_to_cart' %}" 
+          hx-post="{% url 'shop:add_to_cart' %}" 
+          hx-target="#cart-btn-{{ product.id }}" 
+          hx-swap="outerHTML"
+          class="add-to-cart-form">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <input type="hidden" name="quantity" value="1">
 
-            <button 
-                type="submit" 
-                class="bg-red-400 hover:bg-red-600 text-white px-6 py-3 rounded-full text-sm font-medium transition duration-300 transform hover:scale-105">
-                Add to Cart
-            </button>
-        </form>
-
+          <div id="cart-btn-{{ product.id }}">
+              <button type="submit" 
+                  class="bg-red-600 text-white px-4 py-2 rounded-full text-sm transition transform active:scale-95 active:translate-y-1">
+                  Add to Cart
+              </button>
+          </div>
+      </form>
       </div>
 
       <div>

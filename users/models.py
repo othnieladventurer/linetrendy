@@ -32,11 +32,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="customer")  # ✅ Add this
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="customer")  
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True) 
+    phone_number = models.CharField(max_length=15, blank=True) 
 
     objects = CustomUserManager()
 

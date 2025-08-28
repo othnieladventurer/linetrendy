@@ -19,12 +19,15 @@
             {% if messages %}
             <div class="mb-4">
                 {% for message in messages %}
-                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded shadow-md">
+                {% if message.tags != 'success' %}
+                    <div class="bg-gray-100 border-l-4 border-blue-500 text-dark p-4 rounded shadow-md">
                     {{ message }}
-                </div>
+                    </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
+
             <!-- Error Messages -->
             {% if form.errors %}
                 <div class="mb-4 p-4 bg-red-100 text-red-700 text-sm rounded">
@@ -38,7 +41,8 @@
                 </div>
             {% endif %}
 
-            <form method="post" action="{% url 'account_login' %}?next={{ request.GET.next }}" id="loginForm" class="space-y-6">
+            <form method="post" action="{% url 'users:account_login' %}?next={{ request.GET.next }}" id="loginForm" class="space-y-6">
+
                 {% csrf_token %}
 
                 <div>
@@ -71,7 +75,7 @@
                 <div class="flex items-center justify-between">
                     
                     <div class="text-sm">
-                        <a href="{% url 'account_reset_password' %}" class="font-medium text-blue-600 hover:text-purple-500">Forgot password?</a>
+                        <a href="{% url 'users:password_reset' %}" class="font-medium text-blue-600 hover:text-purple-500">Forgot password?</a>
                     </div>
                 </div>
 

@@ -91,7 +91,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,7 +119,7 @@ ACCOUNT_FORMS = {
 
 
 LOGIN_URL =  '/users/account/login/'  
-LOGin_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
@@ -221,23 +221,29 @@ ENVIRONMENT = env('ENVIRONMENT')  # will default to 'development' if not set
 
 # reCAPTCHA keys
 if ENVIRONMENT == "production":
-    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_PROD', default='')
-    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_PROD', default='')
+    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_PROD')
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_PROD')
     print("Running in production mode")
 else:
-    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV', default='')
-    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV', default='')
+    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV')
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV')
     #print("Running in development mode")
 
 # Example for service account file
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
 
-
-
-
-
-
-
-
+#stp api key
 STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+
+
+
+#Email setup
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.privateemail.com'  # Private Mail's SMTP host
+EMAIL_PORT = 587                     # Typically 587 for TLS
+EMAIL_USE_TLS = True                 # Use TLS for secure communication
+EMAIL_HOST_USER = 'orders@saasiskey.com'  # Your professional email address
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')     # Your Private Mail email password
+DEFAULT_FROM_EMAIL = 'Orders <orders@saasiskey.com>'
+

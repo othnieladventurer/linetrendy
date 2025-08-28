@@ -7,71 +7,121 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from allauth.account.views import SignupView
 from .forms import CustomSignupForm
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
+
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django import forms
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 # from django.contrib.auth import get_user_model
-
+class LoginForm(forms.Form):
+    login = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Email or username', 'class': 'input-focus'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': '••••••••', 'class': 'input-focus'})
+    )
 
 def custom_login(request):
-    # Redirect authenticated users away from the login page
     if request.user.is_authenticated:
-        return redirect('/')  # or a named url like: return redirect('shop:index')
+        return redirect('/')  # already logged in
+
+    form = LoginForm(request.POST or None)
 
     if request.method == 'POST':
-        identifier = (request.POST.get('login') or '').strip()
-        password = (request.POST.get('password') or '').strip()
+        if form.is_valid():
+            identifier = form.cleaned_data['login']
+            password = form.cleaned_data['password']
 
-        if not identifier or not password:
-            messages.error(request, 'Both username/email and password are required.')
-            return render(request, 'users/account/login.html')
+            try:
+                user_obj = User.objects.get(email__iexact=identifier)
+                username = user_obj.get_username()
+            except User.DoesNotExist:
+                username = identifier  # fallback to raw input
 
-        # With USERNAME_FIELD='email', passing username=identifier is fine (identifier can be the email)
-        user = authenticate(request, username=identifier, password=password)
-        if user is not None:
-            login(request, user)
-            pending_slug = request.session.pop('pending_cart_add', None)
-            if pending_slug:
-                return redirect('cart:add', plan_slug=pending_slug)
-            return redirect('shop:index')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                next_url = request.POST.get('next') or '/'
+                return redirect(next_url)
+            else:
+                messages.error(request, "Invalid username/email or password.")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
 
-        messages.error(request, 'Invalid username/email or password.')
-        return render(request, 'users/account/login.html')
-
-    # GET
-    return render(request, 'users/account/login.html')
-
+    return render(request, 'users/account/login.html', {'form': form})
 
 
-
-def send_welcome_email(email: str) -> None:
-    subject = "Welcome to Our Platform!"
-    message = (
-        "Hello,\n\n"
-        "Thank you for signing up! We're excited to have you on board.\n\n"
-        "Best regards,\n"
-        "Saasiskey LLC"
-    )
-    sender_email = getattr(settings, "DEFAULT_FROM_EMAIL", getattr(settings, "EMAIL_HOST_USER", None))
-    send_mail(subject, message, sender_email, [email], fail_silently=False)
 
 
 
 
 
 class CustomSignupView(SignupView):
-    form_class = CustomSignupForm
     template_name = "users/account/signup.html"
 
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(
             self.request,
-            "You have successfully signed up. Check your email for a confirmation link and welcome message."
+            "You have successfully signed up. Check your email for a confirmation link."
         )
         return response
 
-    def get_success_url(self):
-        return reverse_lazy("users:account_login")  #
+    def form_invalid(self, form):
+        # Stay on this template and show form errors
+        return self.render_to_response(self.get_context_data(form=form))
 
+    def get_success_url(self):
+        return reverse_lazy("shop:index")
+
+
+
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = "users/account/password_reset.html"
+    email_template_name = "users/account/password_reset_email.txt"   # plain text fallback
+    html_email_template_name = "users/account/password_reset_email.html"  # HTML version
+    subject_template_name = "users/account/password_reset_subject.txt"
+    success_url = reverse_lazy("users:password_reset_done")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Password reset link sent! Check your email.")
+        return super().form_valid(form)
+
+
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = "users/account/password_reset_done.html"
+
+
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "users/account/password_reset_confirm.html"
+    success_url = reverse_lazy("users:password_reset_complete")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Your password has been reset successfully!")
+        return super().form_valid(form)
+
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = "users/account/password_reset_complete.html"
 
 
 

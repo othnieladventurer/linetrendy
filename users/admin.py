@@ -15,10 +15,8 @@ try:
 except NotRegistered:
     pass
 
-
-
 @admin.register(CustomUser)
-class CustomUserAdmin(BaseUserAdmin):
+class CustomUserAdmin(ModelAdmin):  # Use Unfold's ModelAdmin
     model = CustomUser
     form = UserChangeForm
     add_form = UserCreationForm
@@ -35,7 +33,7 @@ class CustomUserAdmin(BaseUserAdmin):
             'classes': ('tab-login',),
         }),
         ('Personal Info', {
-            'fields': ('first_name', 'last_name', 'phone_number', 'company', 'profile_picture'),
+            'fields': ('first_name', 'last_name', 'phone_number', 'profile_picture'),
             'classes': ('tab-personal',),
         }),
         ('Permissions', {
@@ -61,6 +59,12 @@ class CustomUserAdmin(BaseUserAdmin):
             'fields': ('email', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
         }),
     )
+
+    # Optional: ensure password change is available via unfold
+    def get_fieldsets(self, request, obj=None):
+        return super().get_fieldsets(request, obj=obj)
+    
+
 
 
 

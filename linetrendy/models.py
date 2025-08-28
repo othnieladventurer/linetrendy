@@ -171,7 +171,7 @@ class CartItem(models.Model):
 
 
 
-  
+
 class Order(models.Model):
     STATUS_CHOICES = [
         ("placed", "Order Placed"),
