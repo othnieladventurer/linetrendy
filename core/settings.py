@@ -235,6 +235,8 @@ if ENVIRONMENT == "production" and (not RECAPTCHA_PUBLIC_KEY or not RECAPTCHA_PR
     raise RuntimeError("Production reCAPTCHA keys are missing!")
     #print("Running in development mode")
 
+
+
 # Example for service account file
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
 
