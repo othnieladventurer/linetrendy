@@ -208,25 +208,31 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Initialize
+# Initialise environment with defaults
 env = environ.Env(
-    # set casting and default values
     ENVIRONMENT=(str, 'development'),  # default to development
 )
 
 # Read .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Get environment
-ENVIRONMENT = env('ENVIRONMENT')  # will default to 'development' if not set
+# Get environment and normalize to lowercase
+ENVIRONMENT = env('ENVIRONMENT').lower()
+print(f"ENVIRONMENT={ENVIRONMENT}")
 
-# reCAPTCHA keys
+# Set reCAPTCHA keys
 if ENVIRONMENT == "production":
     RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_PROD')
     RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_PROD')
     print("Running in production mode")
 else:
-    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV')
-    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV')
+    RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV', default='')
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV', default='')
+    print("Running in development mode")
+
+# Optional: sanity check for production
+if ENVIRONMENT == "production" and (not RECAPTCHA_PUBLIC_KEY or not RECAPTCHA_PRIVATE_KEY):
+    raise RuntimeError("Production reCAPTCHA keys are missing!")
     #print("Running in development mode")
 
 # Example for service account file
