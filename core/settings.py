@@ -252,6 +252,6 @@ EMAIL_HOST = 'mail.privateemail.com'  # Private Mail's SMTP host
 EMAIL_PORT = 587                     # Typically 587 for TLS
 EMAIL_USE_TLS = True                 # Use TLS for secure communication
 EMAIL_HOST_USER = 'orders@saasiskey.com'  # Your professional email address
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')     # Your Private Mail email password
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')     # Your Private Mail email password
 DEFAULT_FROM_EMAIL = 'Orders <orders@saasiskey.com>'
 
