@@ -228,7 +228,7 @@ if ENVIRONMENT == "production":
 else:
     RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV', default='')
     RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV', default='')
-    print("Running in development mode")
+    print("Running in development")
 
 # Optional: sanity check for production
 if ENVIRONMENT == "production" and (not RECAPTCHA_PUBLIC_KEY or not RECAPTCHA_PRIVATE_KEY):
