@@ -248,9 +248,9 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 #Email setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.privateemail.com'  # Private Mail's SMTP host
-EMAIL_PORT = 587                     # Typically 587 for TLS
-EMAIL_USE_TLS = True                 # Use TLS for secure communication
+EMAIL_HOST = 'mail.privateemail.com' 
+EMAIL_PORT = 587                     
+EMAIL_USE_TLS = True                
 EMAIL_HOST_USER = 'orders@saasiskey.com'  # Your professional email address
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')     # Your Private Mail email password
 DEFAULT_FROM_EMAIL = 'Orders <orders@saasiskey.com>'
