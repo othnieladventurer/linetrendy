@@ -1,0 +1,122 @@
+{% extends 'linetrendy/base.html' %}
+
+
+{% load static %}
+
+{% block content %}
+<section class="bg-gray-100 min-h-screen py-10">
+  <div class="container mx-auto px-4">
+
+    <h1 class="text-3xl md:text-4xl font-bold text-red-600 mb-8 text-center">
+      Order Tracking
+    </h1>
+
+    <div class="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden">
+
+      <!-- Sidebar -->
+      <div class="md:w-1/4 bg-gray-50 border-r border-gray-200 p-6">
+        <ul class="space-y-4">
+          <li>
+            <a href="{% url 'shop:account_page' %}" class="w-full block text-left font-medium text-gray-700 hover:text-red-600 transition-colors">
+              Back to Account
+            </a>
+          </li>
+          <li>
+            <span class="font-bold text-red-600">Tracking</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="md:w-3/4 p-6">
+
+        <!-- Order Summary -->
+        <div class="mb-6 border-b pb-4">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-2">Order #{{ order.order_number }}</h2>
+          <p class="text-gray-600">Placed on: {{ order.created_at|date:"F d, Y" }}</p>
+          <p class="text-gray-600">Total: <span class="font-semibold text-gray-800">${{ order.total_amount|floatformat:2 }}</span></p>
+          <p class="mt-2 font-medium
+              {% if order.status == 'placed' %}text-yellow-600
+              {% elif order.status == 'shipped' %}text-blue-600
+              {% elif order.status == 'delivered' %}text-green-600
+              {% elif order.status == 'cancelled' or order.status == 'refunded' %}text-red-600
+              {% else %}text-gray-600{% endif %}">
+              Current Status: {{ order.status|capfirst }}
+          </p>
+        </div>
+
+        <!-- Dynamic Animated Progress Bar -->
+        <div class="relative mb-8 h-12">
+          <!-- Full line -->
+          <div class="absolute top-5 left-3 right-3 h-1 bg-gray-200 rounded"></div>
+
+          <!-- Filled line -->
+          <div id="progress-filled" class="absolute top-5 left-3 h-1 bg-green-600 rounded transition-all duration-1000" style="width:0;"></div>
+
+          <!-- Step dots -->
+          <div class="flex justify-between relative h-full items-center px-3">
+            {% for step in tracking_steps %}
+            <div class="flex flex-col items-center z-10">
+              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg {{ step.color }}"></div>
+              <p class="mt-2 text-sm text-gray-700 text-center">{{ step.label }}</p>
+              {% if step.date %}
+              <p class="text-xs text-gray-500">{{ step.date|date:"M d" }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="mb-8 border-t pt-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">Shipping Address</h3>
+
+          {% if order.shipping_address %}
+            <!-- Show saved shipping address -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-sm border">
+              <p class="font-medium text-gray-800">{{ order.shipping_address.full_name }}</p>
+              <p class="text-gray-600">{{ order.shipping_address.line1 }}</p>
+              {% if order.shipping_address.line2 %}
+                <p class="text-gray-600">{{ order.shipping_address.line2 }}</p>
+              {% endif %}
+              <p class="text-gray-600">
+                {{ order.shipping_address.city }}, {{ order.shipping_address.state }}
+                {{ order.shipping_address.postal_code }}
+              </p>
+              <p class="text-gray-600">{{ order.shipping_address.country }}</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Back Button -->
+        <div class="mt-6">
+          <a href="{% url 'shop:account_page' %}" class="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+            Back to Orders
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const progressBar = document.getElementById("progress-filled");
+    const currentStep = {{ current_step }};
+    const totalSteps = {{ total_steps }};
+
+    // calculate width relative to parent container
+    const parentWidth = progressBar.parentElement.offsetWidth;
+    const leftPadding = 24; // px (matching px-3 in parent)
+    const rightPadding = 24;
+    const usableWidth = parentWidth - leftPadding - rightPadding;
+    
+    const stepPercent = ((currentStep - 1) / (totalSteps - 1)) * usableWidth;
+    
+    setTimeout(() => {
+        progressBar.style.width = stepPercent + "px";
+    }, 100);
+});
+</script>
+{% endblock %}

@@ -193,3 +193,42 @@ $(document).ready(function(){
 
 
 
+// Account page Js
+function showTab(tab) {
+    const tabs = ['orders', 'address', 'profile'];
+    tabs.forEach(t => {
+      document.getElementById(`${t}-tab`).classList.add('hidden');
+      document.getElementById(`tab-${t}-btn`).classList.remove('text-red-600', 'font-bold');
+    });
+    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+    document.getElementById(`tab-${tab}-btn`).classList.add('text-red-600', 'font-bold');
+  }
+  showTab('orders'); // default tab
+
+  function toggleOrder(orderId) {
+    document.getElementById(`order-${orderId}`).classList.toggle('hidden');
+  }
+
+  // Cancel modal
+  function openCancelModal(orderNumber) {
+    const modal = document.getElementById('cancelModal');
+    document.getElementById('cancelOrderForm').action = `/cancel-order/${orderNumber}/`;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+  }
+  function closeCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    modal.classList.add('hidden'); modal.classList.remove('flex');
+  }
+
+  // Address modal
+  function openAddressModal() {
+    const modal = document.getElementById('addressModal');
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+  }
+  function closeAddressModal() {
+    const modal = document.getElementById('addressModal');
+    modal.classList.add('hidden'); modal.classList.remove('flex');
+  }
+
+
+

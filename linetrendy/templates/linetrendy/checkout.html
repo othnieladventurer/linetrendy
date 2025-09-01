@@ -4,7 +4,8 @@
   <div class="container mx-auto px-2 sm:px-4">
     <h1 class="text-3xl sm:text-4xl font-bold text-red-600 mb-8 text-center">Checkout</h1>
 
-    <div class="flex flex-col lg:flex-row gap-8">
+    <form method="POST" id="payment-form" class="flex flex-col lg:flex-row gap-8">
+      {% csrf_token %}
       <!-- Payment Form -->
       <div class="w-full lg:w-2/3 bg-white shadow-md rounded-lg p-6 space-y-6">
         <h2 class="text-xl font-semibold text-gray-800 border-b pb-4">Payment Details</h2>
@@ -24,25 +25,54 @@
 
         <hr>
 
-        <!-- Billing Address -->
+        <!-- Shipping Address -->
         <div class="space-y-4">
-          <h3>Shipping Address</h3>
-          <input id="shipping-line1" type="text" placeholder="Street Address" class="w-full px-4 py-2 border rounded-lg">
-          <input id="shipping-line2" type="text" placeholder="Apartment / Suite (Optional)" class="w-full px-4 py-2 border rounded-lg">
-          <div class="flex gap-4">
-              <input id="shipping-city" type="text" placeholder="City" class="w-1/2 px-4 py-2 border rounded-lg">
-              <input id="shipping-state" type="text" placeholder="State / Province" class="w-1/2 px-4 py-2 border rounded-lg">
-          </div>
-          <div class="flex gap-4">
-              <input id="shipping-zip" type="text" placeholder="ZIP / Postal Code" class="w-1/2 px-4 py-2 border rounded-lg">
-              <select id="shipping-country" class="w-1/2 px-4 py-2 border rounded-lg">
-                  <option value="US" selected>United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="GB">United Kingdom</option>
-                  <option value="AU">Australia</option>
+          <h3 class="font-semibold">Shipping Address</h3>
+
+          {% if saved_addresses %}
+            <label for="shipping_address">Choose an existing address:</label>
+            <select name="shipping_address" id="shipping_address" class="w-full px-4 py-2 border rounded-lg">
+              <option value="">-- Add a new address --</option>
+              {% for address in saved_addresses %}
+                <option value="{{ address.id }}">
+                  {{ address.full_name }}, {{ address.line1 }}, {{ address.city }}
+                </option>
+              {% endfor %}
+            </select>
+          {% endif %}
+
+          <!-- New Address Fields (only if adding new) -->
+          <div id="new-address-fields" class="space-y-4 mt-4">
+            <input name="full_name" type="text" placeholder="Full Name" 
+                  class="w-full px-4 py-2 border rounded-lg">
+
+            <input name="line1" type="text" placeholder="Street Address" 
+                  class="w-full px-4 py-2 border rounded-lg">
+
+            <input name="line2" type="text" placeholder="Apartment / Suite (Optional)" 
+                  class="w-full px-4 py-2 border rounded-lg">
+
+            <div class="flex gap-4">
+              <input name="city" type="text" placeholder="City" 
+                    class="w-1/2 px-4 py-2 border rounded-lg">
+              <input name="state" type="text" placeholder="State / Province" 
+                    class="w-1/2 px-4 py-2 border rounded-lg">
+            </div>
+
+            <div class="flex gap-4">
+              <input name="postal_code" type="text" placeholder="ZIP / Postal Code" 
+                    class="w-1/2 px-4 py-2 border rounded-lg">
+              <select name="country" 
+                      class="w-1/2 px-4 py-2 border rounded-lg">
+                <option value="US" selected>United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
               </select>
+            </div>
           </div>
-      </div>
+
+        </div>
 
         <div class="pt-4">
           <button id="pay-button" class="w-full bg-red-600 text-white py-3 rounded-lg">Pay Now</button>
@@ -76,55 +106,35 @@
         </div>
       </div>
 
-    </div>
+    </form>
   </div>
 </section>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 const stripe = Stripe("{{ stripe_public_key }}");
-console.log("Stripe initialized with public key:", "{{ stripe_public_key }}");
-
 const elements = stripe.elements();
 const cardElement = elements.create("card", { hidePostalCode: true });
 cardElement.mount("#card-element");
 
 const payButton = document.getElementById("pay-button");
-
 payButton.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("Pay button clicked.");
 
-    // Get shipping address values
-    const shippingCountry = document.getElementById("shipping-country").value;
-    if (!shippingCountry) {
-        alert("Please select a country");
-        return;
-    }
-
     try {
-        // Confirm the card payment with Stripe
         const { error, paymentIntent } = await stripe.confirmCardPayment(
             "{{ client_secret }}", {
                 payment_method: {
                     card: cardElement,
                     billing_details: {
                         name: document.getElementById("cardholder-name").value,
-                        address: {
-                            line1: document.getElementById("shipping-line1").value,
-                            line2: document.getElementById("shipping-line2").value,
-                            city: document.getElementById("shipping-city").value,
-                            state: document.getElementById("shipping-state").value,
-                            postal_code: document.getElementById("shipping-zip").value,
-                            country: shippingCountry,
-                        }
                     }
                 }
             }
         );
 
         if (error) {
-            console.error("Stripe Payment Error:", error);
             document.getElementById("card-errors").textContent = error.message;
             return;
         }
@@ -132,38 +142,22 @@ payButton.addEventListener("click", async (e) => {
         if (paymentIntent && paymentIntent.status === "succeeded") {
             console.log("Payment succeeded:", paymentIntent.id);
 
-            // Send PaymentIntent ID to Django to create Order & OrderItems
-            const response = await fetch("{% url 'shop:store_payment_intent' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({ payment_intent_id: paymentIntent.id })
-            });
-
-            if (!response.ok) {
-                console.error("Error storing payment intent in Django:", await response.text());
-                alert("Payment succeeded but failed to record order. Contact support.");
-                return;
-            }
-
-            // Redirect to success page
-            window.location.href = "{% url 'shop:checkout_success' %}";
-        } else {
-            console.warn("Unexpected PaymentIntent status:", paymentIntent);
+            // Submit form to server with shipping + payment info
+            document.getElementById("payment-form").submit();
         }
     } catch (err) {
-        console.error("JS Exception during payment:", err);
         document.getElementById("card-errors").textContent = "Unexpected error. Check console.";
     }
 });
+
+// Toggle new address fields visibility
+document.getElementById("shipping_address")?.addEventListener("change", function () {
+  const newAddressFields = document.getElementById("new-address-fields");
+  if (this.value) {
+    newAddressFields.style.display = "none";
+  } else {
+    newAddressFields.style.display = "block";
+  }
+});
 </script>
-
 {% endblock %}
-
-
-
-
-
-

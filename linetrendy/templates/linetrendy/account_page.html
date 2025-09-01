@@ -1,5 +1,8 @@
 {% extends 'linetrendy/base.html' %}
 
+
+{% load static %}
+
 {% block content %}
 <section class="bg-gray-100 min-h-screen py-10">
   <div class="container mx-auto px-4">
@@ -40,227 +43,353 @@
         <!-- Orders Tab -->
         <div id="orders-tab" class="tab-content">
           <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Orders</h2>
-            {% if orders %}
-                <div class="space-y-4">
-                    {% for order in orders %}
-                    <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50">
-                    
-                        <!-- Order Header (clickable to expand) -->
-                        <button type="button" 
-                                class="w-full flex justify-between items-center text-left"
-                                onclick="toggleOrder('{{ order.id }}')">
-                            <div>
-                              <span class="font-medium text-red-600">{{ order.product.name }}</span>
-                              <span class="font-medium text-red-600">Order #: {{ order.order_number }}</span>
-                            </div>
-                            <div>
-                              <span class="text-gray-700">{{ order.items.count }} item(s)</span>
-                              <span class="ml-4 font-semibold text-gray-800">${{ order.total_amount|floatformat:2 }}</span>
-                            </div>
-                        </button>
+          {% if orders %}
+            <div class="space-y-4">
+              {% for order in orders %}
+              <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50">
+                <button type="button" class="w-full flex justify-between items-center text-left"
+                        onclick="toggleOrder('{{ order.id }}')">
+                  <div>
+                    <span class="font-medium text-red-600">{{ order.product.name }}</span>
+                    {% if order.status == "cancelled" %}
+                      <span class="font-medium text-gray-600">Order #: {{ order.order_number }}</span>
+                    {% else %}
+                      <span class="font-medium text-red-600">Order #: {{ order.order_number }}</span>
+                    {% endif %}
+                  </div>
+                  <div>
+                    <span class="text-gray-700">{{ order.items.count }} item(s)</span>
+                    <span class="ml-4 font-semibold text-gray-800">${{ order.total_amount|floatformat:2 }}</span>
+                  </div>
+                </button>
 
-                        <!-- Expandable Order Items -->                        <!-- Expandable Order Items -->
-                        <div id="order-{{ order.id }}" class="hidden mt-4 border-t pt-3 space-y-4">
+                <div id="order-{{ order.id }}" class="hidden mt-4 border-t pt-3 space-y-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <p class="text-sm text-gray-500">Placed on: {{ order.created_at|date:"F d, Y" }}</p>
+                    <p class="text-sm font-medium
+                      {% if order.status == 'placed' %}text-yellow-600
+                      {% elif order.status == 'shipped' %}text-blue-600
+                      {% elif order.status == 'delivered' %}text-green-600
+                      {% elif order.status == 'cancelled' or order.status == 'refunded' %}text-red-600
+                      {% else %}text-gray-600{% endif %}">
+                      {{ order.status|capfirst }}
+                    </p>
+                  </div>
 
-                          <!-- Order date and status -->
-                          <div class="flex justify-between items-center mb-2">
-                              <p class="text-sm text-gray-500">Placed on: {{ order.created_at|date:"F d, Y" }}</p>
-                              <p class="text-sm font-medium
-                                  {% if order.status == 'placed' %}text-yellow-600
-                                  {% elif order.status == 'shipped' %}text-blue-600
-                                  {% elif order.status == 'delivered' %}text-green-600
-                                  {% elif order.status == 'cancelled' or order.status == 'refunded' %}text-red-600
-                                  {% else %}text-gray-600{% endif %}">
-                                  {{ order.status|capfirst }}
-                              </p>
-                          </div>
-
-                          {% for item in order.items.all %}
-                          <div class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
-
-                              <!-- Product Image -->
-                              <div class="w-16 h-16 mr-4">
-                                  {% with item.product.get_first_image as first_image %}
-                                      {% if first_image %}
-                                          <img src="{{ first_image.image.url }}" 
-                                              alt="{{ item.product.name }}" 
-                                              class="w-16 h-16 object-cover rounded-md">
-                                      {% else %}
-                                          <img class="w-16 h-16 object-cover rounded-md" 
-                                              src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1888&q=80" 
-                                              alt="No image available">
-                                      {% endif %}
-                                  {% endwith %}
-                              </div>
-
-                              <!-- Product Details -->
-                              <div class="flex-1">
-                                  <p class="font-medium text-gray-800">{{ item.product.name }}</p>
-                                  <p class="text-sm text-gray-600">Qty: {{ item.quantity }}</p>
-                              </div>
-
-                              <!-- Price -->
-                              <div class="font-semibold text-gray-800">
-                                  ${{ item.price|floatformat:2 }}
-                              </div>
-                          </div>
-                          {% endfor %}
-
-                          <!-- Action Buttons -->
-                          <div class="flex gap-2 mt-4">
-                              <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-sm shadow transition flex items-center justify-center">
-                                  Track
-                              </a>
-
-                              {% if order.status == "placed" %}
-                              <form method="post" action="">
-                                  {% csrf_token %}
-                                  <button type="submit" 
-                                      class="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-full text-sm shadow transition flex items-center justify-center">
-                                      Cancel
-                                  </button>
-                              </form>
-                              {% elif order.status == "delivered"  %}
-
-
-                              {% else %}
-                              <div class="relative group">
-                                <button 
-                                    class="bg-gray-300 text-gray-600 py-1 px-3 rounded-full text-sm cursor-not-allowed flex items-center justify-center" 
-                                    disabled>
-                                    Cancel
-                                </button>
-                                
-                                <!-- Tooltip -->
-                                <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 
-                                      opacity-0 group-hover:opacity-100 transition-opacity 
-                                      bg-blue-800 text-white text-xs rounded-md p-2 w-64 text-center shadow-lg pointer-events-none z-50">
-                                        Cancellation Not Available: This order has already been shipped and cannot be canceled. 
-                                        You may initiate a return after delivery according to our return policy.
-                                </div>
-                              </div>
-
-                              {% endif %}
-                          </div>
-
-                      </div>
-
+                  {% for item in order.items.all %}
+                  <div class="flex items-center justify-between bg-white p-3 rounded-lg shadow-sm">
+                    <div class="w-16 h-16 mr-4">
+                      {% if item.product %}
+                        {% with item.product.get_first_image as first_image %}
+                          {% if first_image %}
+                            <img src="{{ first_image.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-md">
+                          {% else %}
+                            <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1888&q=80" 
+                                alt="{{ item.product_name }}" class="w-16 h-16 object-cover rounded-md">
+                          {% endif %}
+                        {% endwith %}
+                      {% else %}
+                        <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1888&q=80" 
+                            alt="{{ item.product_name }}" class="w-16 h-16 object-cover rounded-md">
+                      {% endif %}
                     </div>
-                    {% endfor %}
+                    <div class="flex-1">
+                      <p class="font-medium text-gray-800">{{ item.product.name }}</p>
+                      <p class="text-sm text-gray-600">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <div class="font-semibold text-gray-800">
+                      ${{ item.price|floatformat:2 }}
+                    </div>
+                  </div>
+                  {% endfor %}
 
+                  <!-- Action Buttons -->
+                  <div class="flex gap-2 mt-4">
+                    {% if order.status != "cancelled" %}
+                      <a href="{% url 'shop:order_tracking' order.order_number %}" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-sm shadow transition flex items-center justify-center">
+                        Track
+                      </a>
+                    {% endif %}
 
-                     <!-- Pagination -->
-                        {% if orders.has_other_pages %}
-                        <div class="mt-6 flex justify-center space-x-2 flex-wrap">
-                            {% if orders.has_previous %}
-                                <a href="?page={{ orders.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
-                            {% endif %}
-                            {% for num in orders.paginator.page_range %}
-                                {% if orders.number == num %}
-                                    <span class="px-3 py-1 bg-red-600 text-white rounded">{{ num }}</span>
-                                {% else %}
-                                    <a href="?page={{ num }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">{{ num }}</a>
-                                {% endif %}
-                            {% endfor %}
-                            {% if orders.has_next %}
-                                <a href="?page={{ orders.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</a>
-                            {% endif %}
+                    {% if order.status == "placed" %}
+                      <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full text-sm"
+                              onclick="openCancelModal('{{ order.order_number }}')">
+                        Cancel
+                      </button>
+                    {% elif order.status != "cancelled" %}
+                      <div class="relative group">
+                        <button class="bg-gray-300 text-gray-600 py-1 px-3 rounded-full text-sm cursor-not-allowed flex items-center justify-center" disabled>Cancel</button>
+                        <div class="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-800 text-white text-xs rounded-md p-2 w-64 text-center shadow-lg pointer-events-none z-50">
+                          Cancellation Not Available: This order has already been shipped and cannot be canceled. 
+                          You may initiate a return after delivery according to our return policy.
                         </div>
-                        {% endif %}
-                </div>
-                {% else %}
-                <p class="text-gray-600">You have no orders yet.</p>
-                {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
 
+                  <!-- Shipping Address -->
+                  {% if order.shipping_address %}
+                  <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+                    <p class="font-semibold text-gray-800">Shipping Address:</p>
+                    <p class="text-gray-700">{{ order.shipping_address.full_name }}</p>
+                    <p class="text-gray-600">{{ order.shipping_address.line1 }}{% if order.shipping_address.line2 %}, {{ order.shipping_address.line2 }}{% endif %}</p>
+                    <p class="text-gray-600">{{ order.shipping_address.city }}, {{ order.shipping_address.state }} {{ order.shipping_address.postal_code }}</p>
+                    <p class="text-gray-600">{{ order.shipping_address.country }}</p>
+                  </div>
+                  {% endif %}
+
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if orders.has_other_pages %}
+            <div class="mt-6 flex justify-center space-x-2 flex-wrap">
+              {% if orders.has_previous %}
+                <a href="?page={{ orders.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
+              {% endif %}
+              {% for num in orders.paginator.page_range %}
+                {% if orders.number == num %}
+                  <span class="px-3 py-1 bg-red-600 text-white rounded">{{ num }}</span>
+                {% else %}
+                  <a href="?page={{ num }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">{{ num }}</a>
+                {% endif %}
+              {% endfor %}
+              {% if orders.has_next %}
+                <a href="?page={{ orders.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</a>
+              {% endif %}
+            </div>
+            {% endif %}
+          {% else %}
+            <p class="text-gray-600">You have no orders yet.</p>
+          {% endif %}
         </div>
 
         <!-- My Address Tab -->
-        <div id="address-tab" class="tab-content hidden">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Addresses</h2>
-          {% if addresses %}
-          <div class="space-y-4">
-            {% for address in addresses %}
-            <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50">
-              <p class="text-gray-700">{{ address.full_name }}</p>
-              <p class="text-gray-600">{{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.zip_code }}</p>
-              <p class="text-gray-600">{{ address.country }}</p>
-            </div>
-            {% endfor %}
+        {% include "linetrendy/partials/address_list.html" %}
+   
+
+        <!-- Add Address Modal -->
+        <div id="add-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
+            <h3 class="text-xl font-semibold mb-4">Add Address</h3>
+            <form method="POST" 
+              hx-post="{% url 'shop:update_address' %}" 
+              hx-target="#address-tab-wrapper" 
+              hx-swap="outerHTML"
+              hx-on::after-request="closeAddAddressModal()">
+              {% csrf_token %}
+              <input type="hidden" name="address_id" value="">
+              <input type="text" name="full_name" placeholder="Full Name" class="w-full mb-2 border rounded px-3 py-2">
+              <input type="text" name="line1" placeholder="Street Address" class="w-full mb-2 border rounded px-3 py-2">
+              <input type="text" name="line2" placeholder="Apartment / Suite (Optional)" class="w-full mb-2 border rounded px-3 py-2">
+              <div class="flex gap-3">
+                <input type="text" name="city" placeholder="City" class="w-1/2 mb-2 border rounded px-3 py-2">
+                <input type="text" name="state" placeholder="State" class="w-1/2 mb-2 border rounded px-3 py-2">
+              </div>
+              <div class="flex gap-3">
+                <input type="text" name="postal_code" placeholder="Postal Code" class="w-1/2 mb-2 border rounded px-3 py-2">
+                <input type="text" name="country" placeholder="Country" class="w-1/2 mb-2 border rounded px-3 py-2">
+              </div>
+              <input type="text" name="phone" placeholder="Phone Number" class="w-full mb-4 border rounded px-3 py-2">
+              <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeAddAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Save</button>
+              </div>
+            </form>
           </div>
-          {% else %}
-          <p class="text-gray-600">You haven't added any addresses yet.</p>
-          {% endif %}
-          <button class="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">Add New Address</button>
         </div>
+
+
+        <!-- Edit Address Modal -->
+       <div id="edit-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
+            <h3 class="text-xl font-semibold mb-4">Edit Address</h3>
+            <form id="edit-address-form" 
+                  method="POST" 
+                  hx-post="{% url 'shop:update_address' %}" 
+                  hx-target="#address-tab-wrapper" 
+                  hx-swap="outerHTML"
+                  hx-on::after-request="closeEditAddressModal()">
+              {% csrf_token %}
+              <input type="hidden" name="address_id" id="edit_address_id">
+              <input type="text" name="full_name" id="edit_full_name" class="w-full mb-2 border rounded px-3 py-2" placeholder="Full Name">
+              <input type="text" name="line1" id="edit_line1" class="w-full mb-2 border rounded px-3 py-2" placeholder="Street Address">
+              <input type="text" name="line2" id="edit_line2" class="w-full mb-2 border rounded px-3 py-2" placeholder="Apartment / Suite (Optional)">
+              
+              <div class="flex gap-3">
+                <input type="text" name="city" id="edit_city" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="">
+                <input type="text" name="state" id="edit_state" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="State">
+              </div>
+
+              <div class="flex gap-3">
+                <input type="text" name="postal_code" id="edit_postal_code" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Postal Code">
+                <input type="text" name="country" id="edit_country" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Country">
+              </div>
+
+              <input type="text" name="phone" id="edit_phone" class="w-full mb-4 border rounded px-3 py-2" placeholder="Phone Number">
+              
+              <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeEditAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <!-- Delete Confirmation Modal -->
+        <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+          <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4">Delete Address?</h3>
+            <p class="mb-4">Are you sure you want to delete this address? This action cannot be undone.</p>
+            <form id="delete-form" 
+              method="POST" 
+              hx-post="{% url 'shop:delete_address' %}" 
+              hx-target="#address-tab-wrapper" 
+              hx-swap="outerHTML"
+              hx-on::after-request="closeDeleteModal()">
+              {% csrf_token %}
+              <input type="hidden" name="delete_address_id" id="delete_address_id">
+              <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeDeleteModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+
+
 
         <!-- Profile Tab -->
         <div id="profile-tab" class="tab-content hidden">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Profile</h2>
             <form method="POST" class="space-y-4">
                 {% csrf_token %}
-                
-                <!-- First Name -->
+                <!-- First & Last Name -->
                 <div class="flex flex-col sm:flex-row sm:space-x-4">
-                    <!-- First Name -->
                     <div class="flex-1">
                         <label class="block text-gray-700 mb-1">First Name</label>
                         <input type="text" name="first_name" value="{{ user.first_name }}"
                               class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
                     </div>
-
-                    <!-- Last Name -->
                     <div class="flex-1 mt-4 sm:mt-0">
                         <label class="block text-gray-700 mb-1">Last Name</label>
                         <input type="text" name="last_name" value="{{ user.last_name }}"
                               class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
                     </div>
-                 </div>
-
-
-                <!-- Email -->
-                <div>
-                <label class="block text-gray-700 mb-1">Email</label>
-                <input type="email" name="email" value="{{ user.email }}" 
-                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
                 </div>
 
-                <!-- Phone -->
+                <!-- Email & Phone -->
                 <div>
-                <label class="block text-gray-700 mb-1">Phone</label>
-                <input type="text" name="phone" value="{{ user.profile.phone }}" 
-                        class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    <label class="block text-gray-700 mb-1">Email</label>
+                    <input type="email" name="email" value="{{ user.email }}" 
+                          class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 mb-1">Phone</label>
+                    <input type="text" name="phone" value="{{ user.profile.phone }}" 
+                          class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 focus:outline-none">
                 </div>
 
                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
-                Save Changes
+                    Save Changes
                 </button>
             </form>
-            </div>
+        </div>
+
 
       </div>
     </div>
   </div>
 </section>
 
+<!-- Cancel Order Modal -->
+<div id="cancelModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Cancel Order</h2>
+    <p class="text-gray-600 mb-6">Are you sure you want to cancel this order?</p>
+    <form id="cancelOrderForm" method="post">{% csrf_token %}
+      <div class="flex justify-end gap-3">
+        <button type="button" onclick="closeCancelModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">No, Keep Order</button>
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Yes, Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Address Modal -->
+<div id="addressModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Address</h2>
+    <form method="post" action="{% url 'shop:add_address' %}">
+      {% csrf_token %}
+      <div class="space-y-3">
+        <input name="full_name" type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg">
+        <input name="line1" type="text" placeholder="Street Address" class="w-full px-4 py-2 border rounded-lg">
+        <input name="line2" type="text" placeholder="Apartment / Suite (Optional)" class="w-full px-4 py-2 border rounded-lg">
+        <div class="flex gap-4">
+          <input name="city" type="text" placeholder="City" class="w-1/2 px-4 py-2 border rounded-lg">
+          <input name="state" type="text" placeholder="State / Province" class="w-1/2 px-4 py-2 border rounded-lg">
+        </div>
+        <div class="flex gap-4">
+          <input name="postal_code" type="text" placeholder="ZIP / Postal Code" class="w-1/2 px-4 py-2 border rounded-lg">
+          <select name="country" class="w-1/2 px-4 py-2 border rounded-lg">
+            <option value="US" selected>United States</option>
+            <option value="CA">Canada</option>
+            <option value="GB">United Kingdom</option>
+            <option value="AU">Australia</option>
+          </select>
+          <input name="phone" type="text" placeholder="Phone Number" class="w-full px-4 py-2 border rounded-lg">
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button type="button" onclick="closeAddressModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Save Address</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
 <script>
-  function showTab(tab) {
-    const tabs = ['orders', 'address', 'profile'];
-    tabs.forEach(t => {
-      document.getElementById(`${t}-tab`).classList.add('hidden');
-      document.getElementById(`tab-${t}-btn`).classList.remove('text-red-600', 'font-bold');
-    });
-    document.getElementById(`${tab}-tab`).classList.remove('hidden');
-    document.getElementById(`tab-${tab}-btn`).classList.add('text-red-600', 'font-bold');
+  function openAddAddressModal() {
+    document.getElementById('add-address-modal').classList.remove('hidden');
+  }
+  function closeAddAddressModal() {
+    document.getElementById('add-address-modal').classList.add('hidden');
   }
 
-  // Initialize default tab
-  showTab('orders');
+  function openEditAddressModal(addressId) {
+    const card = document.querySelector(`[data-id='${addressId}']`);
+    if (!card) return;
+    document.getElementById('edit_address_id').value = addressId;
+    document.getElementById('edit_full_name').value = card.dataset.full_name || '';
+    document.getElementById('edit_line1').value = card.dataset.line1 || '';
+    document.getElementById('edit_line2').value = card.dataset.line2 || '';
+    document.getElementById('edit_city').value = card.dataset.city || '';
+    document.getElementById('edit_state').value = card.dataset.state || '';
+    document.getElementById('edit_postal_code').value = card.dataset.postal_code || '';
+    document.getElementById('edit_country').value = card.dataset.country || '';
+    document.getElementById('edit_phone').value = card.dataset.phone || '';
+    document.getElementById('edit-address-modal').classList.remove('hidden');
+  }
+  function closeEditAddressModal() {
+    document.getElementById('edit-address-modal').classList.add('hidden');
+  }
 
-
-  //Viewing order details
-  function toggleOrder(orderId) {
-    const section = document.getElementById(`order-${orderId}`);
-    section.classList.toggle('hidden');
+  function openDeleteModal(addressId) {
+    document.getElementById('delete_address_id').value = addressId;
+    document.getElementById('delete-modal').classList.remove('hidden');
+  }
+  function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
   }
 </script>
+
 {% endblock %}

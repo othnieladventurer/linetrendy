@@ -218,17 +218,17 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Get environment and normalize to lowercase
 ENVIRONMENT = env('ENVIRONMENT').lower()
-print(f"ENVIRONMENT={ENVIRONMENT}")
+
 
 # Set reCAPTCHA keys
 if ENVIRONMENT == "production":
     RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_PROD')
     RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_PROD')
-    print("Running in production mode")
+  
 else:
     RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY_DEV', default='')
     RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY_DEV', default='')
-    print("Running in development")
+    
 
 # Optional: sanity check for production
 if ENVIRONMENT == "production" and (not RECAPTCHA_PUBLIC_KEY or not RECAPTCHA_PRIVATE_KEY):

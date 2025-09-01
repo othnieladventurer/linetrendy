@@ -91,7 +91,11 @@ def cart(request):
 
             # Compute totals
             subtotal = sum(item.product.price * item.quantity for item in cart_items)
-            shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
+
+            # Determine if shipping is required
+            require_shipping_address = subtotal <= 35
+
+            shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method and require_shipping_address else Decimal('0.00')
             discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
             final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
 
@@ -104,6 +108,7 @@ def cart(request):
                 'discount': discount,
                 'final_total': final_total,
                 'shipping_methods': ShippingMethod.objects.all(),
+                'require_shipping_address': require_shipping_address,
             }
             return render(request, 'linetrendy/partials/cart_totals.html', context)
 
@@ -127,7 +132,8 @@ def cart(request):
 
     # Normal GET request
     subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
+    require_shipping_address = subtotal <= 35
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method and require_shipping_address else Decimal('0.00')
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
     final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
 
@@ -140,12 +146,10 @@ def cart(request):
         'discount': discount,
         'final_total': final_total,
         'shipping_methods': ShippingMethod.objects.all(),
+        'require_shipping_address': require_shipping_address,
     }
 
     return render(request, 'linetrendy/cart.html', context)
-
-
-
 
 
 
@@ -179,8 +183,6 @@ def add_to_cart(request):
     return redirect("/")
 
 
-
-
 def update_cart_quantity(request, item_id):
     cart = get_cart(request)
     cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
@@ -196,10 +198,13 @@ def update_cart_quantity(request, item_id):
 
     # totals
     subtotal = sum(i.product.price * i.quantity for i in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
-    final_total = max(subtotal + shipping_fee - discount, 0)
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
+    final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
     cart_count = sum(i.quantity for i in cart_items)
+
+    # Determine if shipping is required (subtotal <= 35)
+    require_shipping_address = subtotal <= Decimal("35.00")
 
     context = {
         "cart_item": cart_item,
@@ -211,12 +216,11 @@ def update_cart_quantity(request, item_id):
         "discount": discount,
         "final_total": final_total,
         "cart_count": cart_count,
+        "require_shipping_address": require_shipping_address,  # ✅ add this
     }
 
     html = render_to_string("linetrendy/partials/cart_updated_htmx.html", context, request=request)
     return HttpResponse(html)
-
-
 
 
 
@@ -251,71 +255,106 @@ def remove_from_cart(request, item_id):
 
 
 
-
-
-
-
-
+@login_required
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product').all()
 
     if not cart_items:
-        return redirect("shop:cart")  # No items, redirect to cart
+        return redirect("shop:cart")
 
-    # Calculate totals
-    subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else 0
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else 0
-    final_total = max(subtotal + shipping_fee - discount, 0)
+    subtotal = sum((item.product.price if item.product else 0) * item.quantity for item in cart_items)
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
+    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
+    final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
+    intent = stripe.PaymentIntent.create(
+        amount=int(final_total * 100),
+        currency="usd",
+        automatic_payment_methods={"enabled": True},
+    )
 
-    try:
-        intent = stripe.PaymentIntent.create(
-            amount=int(final_total * 100),  # Stripe expects cents
-            currency="usd",
-            automatic_payment_methods={"enabled": True},
-        )
-        print("Created PaymentIntent:", intent.id, intent.status, intent.amount)
-    except Exception as e:
-        print("Stripe PaymentIntent error:", str(e))
-        return HttpResponse("Error creating payment intent. Check server logs.", status=500)
-
-    # Handle POST for creating order
     if request.method == "POST":
         payment_intent_id = intent.id
+        selected_address_id = request.POST.get("shipping_address")
+
+        # Logged-in user
         if request.user.is_authenticated:
             order = Order.objects.create(
                 user=request.user,
                 cart=cart,
                 total_amount=final_total,
-                payment_intent_id=payment_intent_id
+                payment_intent_id=payment_intent_id,
             )
+
+            # Use existing address if selected
+            if selected_address_id:
+                address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
+                address.order = order
+                address.save()
+            else:
+                # Create new shipping address from form
+                ShippingAddress.objects.create(
+                    user=request.user,
+                    order=order,
+                    full_name=request.POST.get("full_name"),
+                    line1=request.POST.get("line1"),
+                    line2=request.POST.get("line2"),
+                    city=request.POST.get("city"),
+                    state=request.POST.get("state"),
+                    postal_code=request.POST.get("postal_code"),
+                    country=request.POST.get("country"),
+                    phone_number=request.POST.get("phone_number"),
+                )
+
+        # Guest user
         else:
             guest_email = request.POST.get("email")
             if not guest_email:
                 return HttpResponse("Guest email is required", status=400)
+
             order = Order.objects.create(
                 guest_email=guest_email,
                 cart=cart,
                 total_amount=final_total,
-                payment_intent_id=payment_intent_id
+                payment_intent_id=payment_intent_id,
             )
 
-        # Copy cart items to order items
+            ShippingAddress.objects.create(
+                order=order,
+                full_name=request.POST.get("full_name"),
+                line1=request.POST.get("line1"),
+                line2=request.POST.get("line2"),
+                city=request.POST.get("city"),
+                state=request.POST.get("state"),
+                postal_code=request.POST.get("postal_code"),
+                country=request.POST.get("country"),
+                phone_number=request.POST.get("phone_number"),
+            )
+
+            request.session["guest_email"] = guest_email
+
+        # Create order items safely
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
-                product_name=item.product.name,
+                product=item.product if item.product else None,  # Preserve product if exists
+                product_name=item.product.name if item.product else item.product_name if hasattr(item, 'product_name') else "Unknown Product",
                 quantity=item.quantity,
-                price=item.product.price
+                price=item.product.price if item.product else item.price if hasattr(item, 'price') else 0,
             )
 
-        # Clear cart after order
+        # Clear cart
         cart.items.all().delete()
+        cart.shipping_method = None
+        cart.discount = None
+        cart.save()
 
-        return redirect("order_success_page")  # Replace with your success URL
+        # Save last payment intent in session for success page
+        request.session["last_payment_intent_id"] = payment_intent_id
+
+        return redirect("shop:checkout_success")
 
     context = {
         "cart": cart,
@@ -326,79 +365,47 @@ def checkout(request):
         "final_total": final_total,
         "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
         "client_secret": intent.client_secret,
+        "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
-
     return render(request, "linetrendy/checkout.html", context)
 
 
-
-
-
 def checkout_success(request):
-    # Get last payment intent
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
         return HttpResponse("No recent order found.", status=400)
 
-    # Get cart and items
-    cart = get_cart(request)
-    cart_items = list(cart.items.select_related('product').all())
-    if not cart_items:
-        return HttpResponse("Cart is empty.", status=400)
+    # Get the order linked to this payment_intent
+    try:
+        if request.user.is_authenticated:
+            order = Order.objects.get(user=request.user, payment_intent_id=last_order_intent)
+        else:
+            guest_email = request.session.get("guest_email")
+            order = Order.objects.get(guest_email=guest_email, payment_intent_id=last_order_intent)
+    except Order.DoesNotExist:
+        return HttpResponse("Order not found.", status=404)
 
-    # Calculate totals
-    subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
+    # Calculate totals from order items
+    order_items = order.items.select_related('product').all()
+    subtotal = sum(item.price * item.quantity for item in order_items)
+    shipping_fee = order.cart.shipping_method.get_fee(subtotal) if order.cart and order.cart.shipping_method else Decimal("0.00")
+    discount = order.cart.discount.get_discount(subtotal) if order.cart and order.cart.discount and order.cart.discount.active else Decimal("0.00")
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # Prepare order fields
-    order_data = {
-        "cart": cart,
-        "payment_intent_id": last_order_intent,
-        "total_amount": final_total,
-        # Status will default to "placed"
-    }
-
-    if request.user.is_authenticated:
-        order_data["user"] = request.user
-    else:
-        order_data["guest_email"] = request.session.get("guest_email")
-
-    # Create the order
-    order = Order.objects.create(**order_data)
-
-    # Create order items
-    for item in cart_items:
-        OrderItem.objects.create(
-            order=order,
-            product=item.product,
-            product_name=item.product.name,
-            quantity=item.quantity,
-            price=item.product.price,
-        )
-
-    # Clear the cart
-    cart.items.all().delete()
-    cart.shipping_method = None
-    cart.discount = None
-    cart.save()
-
-    # Clear session variables
+    # Clear session
     request.session.pop("last_payment_intent_id", None)
     request.session.pop("guest_email", None)
 
-    # Render confirmation
     context = {
         "order": order,
+        "order_items": order_items,
         "subtotal": subtotal,
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
     }
     return render(request, "linetrendy/checkout_success.html", context)
-
-
+    
 
 
 
@@ -429,21 +436,122 @@ def contact(request):
 
 
 
+
 @login_required
 def account_page(request):
     # Fetch orders for the logged-in user
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
 
-
     # Paginate: 10 orders per page
-    paginator = Paginator(orders, 10)  # 10 orders per page
-    page_number = request.GET.get('page')   # Get page number from query params
-    orders = paginator.get_page(page_number)  # This returns a Page object
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get('page')
+    orders = paginator.get_page(page_number)
+
+    # Fetch user's shipping addresses
+    addresses = ShippingAddress.objects.filter(user=request.user).order_by('-id')
+
+    # Handle profile update
+    if request.method == "POST" and 'profile_update' in request.POST:
+        user = request.user
+        user.first_name = request.POST.get("first_name", user.first_name)
+        user.last_name = request.POST.get("last_name", user.last_name)
+        user.email = request.POST.get("email", user.email)
+        user.phone_number = request.POST.get("phone_number", user.phone_number)
+        user.save()
+        messages.success(request, "Profile updated successfully.")
+        return redirect("shop:account_page")  # reload the page to reflect changes
+
+    # Handle adding/updating shipping address
+    if request.method == "POST" and 'address_form' in request.POST:
+        address_id = request.POST.get("address_id")
+        if address_id:  # Update existing
+            address = get_object_or_404(ShippingAddress, id=address_id, user=request.user)
+        else:  # Add new
+            address = ShippingAddress(user=request.user)
+
+        # Update fields
+        address.full_name = request.POST.get("full_name")
+        address.line1 = request.POST.get("line1")
+        address.line2 = request.POST.get("line2", "")
+        address.city = request.POST.get("city")
+        address.state = request.POST.get("state")
+        address.postal_code = request.POST.get("postal_code")
+        address.country = request.POST.get("country", "US")
+        address.phone = request.POST.get("phone", "")
+        address.save()
+        messages.success(request, "Address saved successfully.")
+        return redirect("shop:account_page")  # reload page
+
+    # Handle deleting shipping address
+    if request.method == "POST" and 'delete_address_id' in request.POST:
+        address = get_object_or_404(ShippingAddress, id=request.POST.get("delete_address_id"), user=request.user)
+        address.delete()
+        messages.success(request, "Address deleted successfully.")
+        return redirect("shop:account_page")
 
     context = {
-        'orders': orders,
+        "orders": orders,
+        "addresses": addresses,
+        "user": request.user,  # template can access user's fields
     }
-    return render(request, 'linetrendy/account_page.html', context)
+    return render(request, "linetrendy/account_page.html", context)
+
+
+
+
+
+@login_required
+def add_address(request):
+    if request.method == 'POST':
+        ShippingAddress.objects.create(
+            user=request.user,
+            full_name=request.POST.get('full_name'),
+            line1=request.POST.get('line1'),
+            line2=request.POST.get('line2'),
+            city=request.POST.get('city'),
+            state=request.POST.get('state'),
+            postal_code=request.POST.get('postal_code'),
+            country=request.POST.get('country'),
+            phone=request.POST.get('phone')  # <-- capture phone number
+        )
+    addresses = ShippingAddress.objects.filter(user=request.user)
+    return render(request, "linetrendy/partials/address_list.html", {"addresses": addresses})
+
+
+
+
+@login_required
+def update_address(request):
+    address_id = request.POST.get("address_id")
+    if address_id:
+        address = get_object_or_404(ShippingAddress, id=address_id, user=request.user)
+    else:
+        address = ShippingAddress(user=request.user)
+
+    address.full_name = request.POST.get("full_name")
+    address.line1 = request.POST.get("line1")
+    address.line2 = request.POST.get("line2")
+    address.city = request.POST.get("city")
+    address.state = request.POST.get("state")
+    address.postal_code = request.POST.get("postal_code")
+    address.country = request.POST.get("country")
+    address.phone = request.POST.get("phone")
+    address.save()
+
+    addresses = ShippingAddress.objects.filter(user=request.user)
+    return render(request, "linetrendy/partials/address_list.html", {"addresses": addresses})
+    
+
+
+@login_required
+def delete_address(request):
+    if request.method == "POST":
+        address_id = request.POST.get("delete_address_id")
+        ShippingAddress.objects.filter(id=address_id, user=request.user).delete()
+
+        # After deletion, return the full tab content
+        addresses = ShippingAddress.objects.filter(user=request.user)
+        return render(request, "linetrendy/partials/address_list.html", {"addresses": addresses})
 
 
 
@@ -451,4 +559,61 @@ def account_page(request):
 
 
 
+@login_required
+def order_tracking_view(request, order_number):
+    order_obj = get_object_or_404(Order, order_number=order_number, user=request.user)
 
+    # Define steps
+    steps = [
+        {"label": "Order Placed", "status": "completed", "date": order_obj.created_at},
+        {"label": "Shipped", "status": "pending"},
+        {"label": "Out for Delivery", "status": "pending"},
+        {"label": "Delivered", "status": "pending"},
+    ]
+
+    step_order = ["placed", "shipped", "out_for_delivery", "delivered"]
+    current_index = step_order.index(order_obj.status) if order_obj.status in step_order else 0
+
+    for i, step in enumerate(steps):
+        if i < current_index:
+            step["status"] = "completed"
+        elif i == current_index:
+            step["status"] = "current"
+        else:
+            step["status"] = "pending"
+
+        # Assign colors
+        if step["status"] == "completed":
+            step["color"] = "bg-green-600"
+        elif step["status"] == "current":
+            step["color"] = "bg-yellow-500 animate-pulse"
+        else:
+            step["color"] = "bg-gray-400"
+
+    context = {
+        "order": order_obj,
+        "tracking_steps": steps,
+        "current_step": current_index + 1,
+        "total_steps": len(steps),
+    }
+    return render(request, "linetrendy/order_tracking.html", context)
+
+
+
+
+
+
+
+@login_required
+def cancel_order(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+
+    # Only allow cancel if status is "placed"
+    if order.status == "placed":
+        order.status = "cancelled"
+        order.save()
+        messages.success(request, f"Order {order.order_number} has been cancelled successfully.")
+    else:
+        messages.error(request, "This order cannot be cancelled.")
+
+    return redirect("shop:account_page")

@@ -1,0 +1,50 @@
+<div id="address-tab-wrapper">
+  <div id="address-tab" class="tab-content">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Addresses</h2>
+
+    {% if addresses %}
+      <div id="address-list" class="space-y-4">
+        {% for address in addresses %}
+          <div 
+            class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50 flex justify-between items-start"
+            data-id="{{ address.id }}"
+            data-full_name="{{ address.full_name }}"
+            data-line1="{{ address.line1 }}"
+            data-line2="{{ address.line2 }}"
+            data-city="{{ address.city }}"
+            data-state="{{ address.state }}"
+            data-postal_code="{{ address.postal_code }}"
+            data-country="{{ address.country }}"
+            data-phone="{{ address.phone }}"
+          >
+            <div>
+              <p class="font-semibold text-gray-800">{{ address.full_name }}</p>
+              <p class="text-gray-600">{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</p>
+              <p class="text-gray-600">{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+              <p class="text-gray-600">{{ address.country }}</p>
+              <p class="text-gray-600">{{ address.phone }}</p>
+            </div>
+            <div class="flex flex-col gap-2 ml-4">
+              <button 
+                onclick="openEditAddressModal({{ address.id }})" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded transition">
+                Edit
+              </button>
+              <button 
+                onclick="openDeleteModal({{ address.id }})" 
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded transition">
+                Delete
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-600">You haven't added any addresses yet.</p>
+    {% endif %}
+
+    <button onclick="openAddAddressModal()" class="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+      Add New Address
+    </button>
+  </div>
+</div>

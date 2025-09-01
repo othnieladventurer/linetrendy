@@ -110,6 +110,9 @@ class ShippingMethod(models.Model):
         return self.name
 
 
+
+
+
 class Discount(models.Model):
     code = models.CharField(max_length=50, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -263,11 +266,23 @@ class BillingAddress(models.Model):
 
 
 
-
-
+ 
 
 class ShippingAddress(models.Model):
-    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='shipping_address')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="addresses",
+        null=True,
+        blank=True
+    )
+    order = models.OneToOneField(
+        'Order',
+        on_delete=models.SET_NULL,
+        related_name='shipping_address',
+        null=True,
+        blank=True
+    )
     full_name = models.CharField(max_length=255)
     line1 = models.CharField("Street Address", max_length=255)
     line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
@@ -275,9 +290,11 @@ class ShippingAddress(models.Model):
     state = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     country = CountryField(default='US')
+    phone = models.CharField(max_length=20, blank=True)  # <-- added field
 
     def __str__(self):
         return f"{self.full_name}, {self.line1}, {self.city}"
+
 
 
 

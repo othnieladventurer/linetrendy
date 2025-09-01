@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 
 
+
 class AdminEmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
         label="Email",
