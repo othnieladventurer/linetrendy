@@ -255,7 +255,8 @@ def remove_from_cart(request, item_id):
 
 
 
-@login_required
+
+
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product').all()
@@ -305,7 +306,7 @@ def checkout(request):
                     state=request.POST.get("state"),
                     postal_code=request.POST.get("postal_code"),
                     country=request.POST.get("country"),
-                    phone_number=request.POST.get("phone_number"),
+                    phone=request.POST.get("phone"),
                 )
 
         # Guest user
@@ -330,7 +331,7 @@ def checkout(request):
                 state=request.POST.get("state"),
                 postal_code=request.POST.get("postal_code"),
                 country=request.POST.get("country"),
-                phone_number=request.POST.get("phone_number"),
+                phone=request.POST.get("phone"),
             )
 
             request.session["guest_email"] = guest_email
@@ -456,7 +457,7 @@ def account_page(request):
         user.first_name = request.POST.get("first_name", user.first_name)
         user.last_name = request.POST.get("last_name", user.last_name)
         user.email = request.POST.get("email", user.email)
-        user.phone_number = request.POST.get("phone_number", user.phone_number)
+        user.phone = request.POST.get("phone", user.phone)
         user.save()
         messages.success(request, "Profile updated successfully.")
         return redirect("shop:account_page")  # reload the page to reflect changes

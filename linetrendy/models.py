@@ -290,7 +290,7 @@ class ShippingAddress(models.Model):
     state = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     country = CountryField(default='US')
-    phone = models.CharField(max_length=20, blank=True)  # <-- added field
+    phone = models.CharField(max_length=20, blank=True, null=True) 
 
     def __str__(self):
         return f"{self.full_name}, {self.line1}, {self.city}"
