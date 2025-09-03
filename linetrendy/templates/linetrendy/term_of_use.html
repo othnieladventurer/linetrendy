@@ -1,0 +1,74 @@
+{% extends 'linetrendy/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-gray-100 py-16 px-6 md:px-12 lg:px-24">
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8 md:p-12">
+    <h1 class="text-4xl font-bold text-red-600 mb-6 text-center">Terms of Service</h1>
+    <p class="text-sm text-gray-500 mb-8 text-center">Effective Date: 09/25/2025</p>
+
+    <p class="text-gray-700 mb-6">
+      Welcome to LINETRENDY. Please read these Terms of Service ("Terms", "Terms of Service") carefully before using our website and purchasing any products operated by Linetrendy.
+    </p>
+    <p class="text-gray-700 mb-6">
+      By accessing or using the website, you agree to be bound by these Terms. If you do not agree with any part of the Terms, please do not use our services.
+    </p>
+
+    <!-- Section 1 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">1. Use of Website</h2>
+    <p class="text-gray-700 mb-6">
+      You agree to use our website only for lawful purposes. You must not use it in any way that may damage the site or interfere with other users.
+    </p>
+
+    <!-- Section 2 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">2. Products and Services</h2>
+    <p class="text-gray-700 mb-6">
+      We offer hair care products for sale. All descriptions, images, and prices are subject to change at any time without notice. We reserve the right to discontinue or modify any product without prior notice.
+    </p>
+
+    <!-- Section 3 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">3. Orders and Payments</h2>
+    <p class="text-gray-700 mb-6">
+      When you place an order, you agree to provide accurate and complete information. All payments must be made at the time of purchase. We accept major credit cards and other listed payment methods.
+    </p>
+
+    <!-- Section 4 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">4. Shipping and Delivery</h2>
+    <p class="text-gray-700 mb-6">
+      We strive to ship products in a timely manner. However, delivery times may vary. We are not responsible for delays caused by carriers or incorrect shipping information provided by you.
+    </p>
+
+    <!-- Section 5 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">5. Returns and Refunds</h2>
+    <p class="text-gray-700 mb-6">
+      Please review our <a href="{% url 'shop:return_policy' %}" class="text-blue-600 hover:underline">Return Policy</a> for information about returns and refunds.
+    </p>
+
+    <!-- Section 6 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">6. Intellectual Property</h2>
+    <p class="text-gray-700 mb-6">
+      All content on this site, including images, logos, text, and designs, are the property of Linetrendy and are protected by copyright and trademark laws. You may not use our content without permission.
+    </p>
+
+    <!-- Section 7 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">7. Limitation of Liability</h2>
+    <p class="text-gray-700 mb-6">
+      We are not liable for any indirect, incidental, or consequential damages that may result from the use of our products or website.
+    </p>
+
+    <!-- Section 8 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">8. Changes to Terms</h2>
+    <p class="text-gray-700 mb-6">
+      We reserve the right to update or change these Terms at any time. Any changes will be effective immediately upon posting on this page.
+    </p>
+
+    <!-- Section 9 -->
+    <h2 class="text-2xl font-semibold text-blue-600 mb-3">9. Contact Us</h2>
+    <p class="text-gray-700 mb-2">If you have any questions about these Terms, please contact us at:</p>
+    <ul class="text-gray-700 space-y-1">
+      <li>📧 Email: <a href="mailto:linetrendyll@gmail.com" class="text-blue-600 hover:underline">linetrendyll@gmail.com</a></li>
+      <li>📞 Phone: <a href="tel:3177774252" class="text-blue-600 hover:underline">317-777-4252</a></li>
+    </ul>
+  </div>
+</section>
+{% endblock content %}

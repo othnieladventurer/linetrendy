@@ -1,0 +1,168 @@
+{% extends 'linetrendy/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-gray-100 py-16 px-6 md:px-12 lg:px-24">
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8 md:p-12">
+    <h1 class="text-4xl font-bold text-red-600 mb-6 text-center">Frequently Asked Questions</h1>
+    <p class="text-sm text-gray-500 mb-8 text-center">Got questions? We've got answers!</p>
+
+    <!-- FAQ Items -->
+    <div class="space-y-4">
+      
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          1. What makes your hair products different from others on the market?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Our products are made with natural, high-quality ingredients designed to nourish, strengthen, and grow healthy hair. No harsh chemicals, just real results.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          2. Are your products safe for all hair types?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Yes! Our formulas are designed to work on all hair types—natural, relaxed, curly, straight, locs, color-treated, and more.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          3. Do your products help with hair growth?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Absolutely! Our products are infused with powerful ingredients like castor oil, rosemary, and biotin to support hair growth and reduce breakage.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          4. How soon can I expect to see results?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Most users see noticeable changes within 2-4 weeks with consistent use. Results may vary depending on your hair type and routine.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          5. Are your products safe for children?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Yes, our products are gentle and safe for kids 2 years and older. Always do a patch test before full use.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          6. Are your products organic or cruelty-free?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Yes, we’re proud to use cruelty-free, paraben-free, and sulfate-free ingredients. Many of our formulas use organic oils and herbs.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          7. How should I use the product for best results?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Each product comes with specific usage instructions on the label. Consistency is key—follow the routine and give it time!
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          8. Can men use these products too?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            Of course! Our products work great for men and women looking to grow fuller, healthier hair or treat their scalp.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          9. Do you offer refunds or returns?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            We offer a 100% satisfaction guarantee. If you're not happy, reach out within 14 days of receiving your order and we’ll make it right.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-item border-b border-gray-200 pb-4">
+        <button class="faq-question w-full text-left text-blue-600 font-semibold text-lg flex justify-between items-center">
+          10. Where do you ship?
+          <span class="faq-icon text-red-600 text-xl">+</span>
+        </button>
+        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-500 ease-in-out text-gray-700 mt-2">
+          <p class="pt-2">
+            We ship nationwide (USA) and internationally. Shipping times and rates vary by location.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Smooth Expand/Collapse JS -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqButtons = document.querySelectorAll('.faq-question');
+
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.closest('.faq-item');
+        const answer = faqItem.querySelector('.faq-answer');
+        const icon = button.querySelector('.faq-icon');
+
+        // Collapse others (accordion style)
+        document.querySelectorAll('.faq-answer').forEach(ans => {
+          if (ans !== answer) {
+            ans.style.maxHeight = null;
+            ans.previousElementSibling.querySelector('.faq-icon').textContent = '+';
+          }
+        });
+
+        // Toggle clicked one
+        if (answer.style.maxHeight) {
+          answer.style.maxHeight = null;
+          icon.textContent = '+';
+        } else {
+          answer.style.maxHeight = answer.scrollHeight + "px";
+          icon.textContent = '-';
+        }
+      });
+    });
+  });
+</script>
+{% endblock content %}

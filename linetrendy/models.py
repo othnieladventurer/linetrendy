@@ -250,21 +250,6 @@ class OrderItem(models.Model):
 
 
 
-class BillingAddress(models.Model):
-    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='billing_address')
-    full_name = models.CharField(max_length=255)
-    line1 = models.CharField("Street Address", max_length=255)
-    line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
-    country = CountryField(default='US')
-
-    def __str__(self):
-        return f"{self.full_name}, {self.line1}, {self.city}"
-
-
-
 
  
 
@@ -276,13 +261,13 @@ class ShippingAddress(models.Model):
         null=True,
         blank=True
     )
-    order = models.OneToOneField(
+    order = models.ForeignKey(
         'Order',
-        on_delete=models.SET_NULL,
-        related_name='shipping_address',
+        on_delete=models.CASCADE,
+        related_name='shipping_addresses',
         null=True,
         blank=True
-    )
+)
     full_name = models.CharField(max_length=255)
     line1 = models.CharField("Street Address", max_length=255)
     line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
@@ -299,6 +284,23 @@ class ShippingAddress(models.Model):
 
 
 
+
+
+
+
+
+class BillingAddress(models.Model):
+    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='billing_address')
+    full_name = models.CharField(max_length=255)
+    line1 = models.CharField("Street Address", max_length=255)
+    line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country = CountryField(default='US')
+
+    def __str__(self):
+        return f"{self.full_name}, {self.line1}, {self.city}"
 
 
 

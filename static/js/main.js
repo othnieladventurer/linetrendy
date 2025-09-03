@@ -232,3 +232,33 @@ function showTab(tab) {
 
 
 
+
+// Faw expand collapse page 
+document.addEventListener('DOMContentLoaded', () => {
+    const faqButtons = document.querySelectorAll('.faq-question');
+
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.closest('.faq-item');
+        const answer = faqItem.querySelector('.faq-answer');
+        const icon = button.querySelector('.faq-icon');
+
+        // Collapse any open FAQ first (optional: make it accordion-style)
+        document.querySelectorAll('.faq-answer').forEach(ans => {
+          if (ans !== answer) {
+            ans.style.maxHeight = null;
+            ans.previousElementSibling.querySelector('.faq-icon').textContent = '+';
+          }
+        });
+
+        // Toggle clicked FAQ
+        if (answer.style.maxHeight) {
+          answer.style.maxHeight = null;
+          icon.textContent = '+';
+        } else {
+          answer.style.maxHeight = answer.scrollHeight + "px";
+          icon.textContent = '-';
+        }
+      });
+    });
+});

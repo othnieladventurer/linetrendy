@@ -21,10 +21,21 @@ def cart_count(request):
 
 
 
-
 def category_list(request):
     categories = Category.objects.all()
-    return {'categories': categories}
+    selected_category = request.GET.get('category')
+    search_query = request.GET.get('q', '')
+
+    try:
+        selected_category = int(selected_category) if selected_category else None
+    except (TypeError, ValueError):
+        selected_category = None
+
+    return {
+        'categories': categories,
+        'selected_category': selected_category,
+        'search_query': search_query,
+    }
 
 
 

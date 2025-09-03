@@ -1,4 +1,4 @@
-<!-- cart totals -->
+<!-- partials/cart_totals.html -->
 <div id="cart-totals" class="bg-white shadow-md rounded-lg p-4 sm:p-6">
     <h2 class="text-2xl font-semibold text-red-600 mb-4">Order Summary</h2>
 
@@ -24,22 +24,20 @@
             onchange="this.form.submit()"
             required
         >
-            <!-- Placeholder -->
             <option value="" disabled {% if not cart.shipping_method %}selected{% endif %}>
                 Select your shipping method
             </option>
 
-            <!-- Real methods -->
             {% for method in shipping_methods %}
-                <option value="{{ method.id }}" {% if cart.shipping_method and cart.shipping_method.id == method.id %}selected{% endif %}>
-                    {{ method.name }} - 
-                    {% if method.free_over and total_price >= method.free_over %}
-                        Free
-                    {% else %}
-                        ${{ method.fee|floatformat:2 }}
-                        {% if method.free_over %}(Free over ${{ method.free_over|floatformat:2 }}){% endif %}
-                    {% endif %}
-                </option>
+                {% if method.free_over and total_price >= method.free_over %}
+                    <option value="{{ method.id }}" selected>
+                        {{ method.name }} - Free
+                    </option>
+                {% else %}
+                    <option value="{{ method.id }}" {% if cart.shipping_method and cart.shipping_method.id == method.id %}selected{% endif %}>
+                        {{ method.name }} - ${{ method.fee|floatformat:2 }}
+                    </option>
+                {% endif %}
             {% empty %}
                 <option disabled>No shipping methods available</option>
             {% endfor %}

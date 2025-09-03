@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .utils import get_cart
 import json
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.db.models import Q
 
 # Create your views here.
 
@@ -46,18 +48,42 @@ def product_detail(request, slug):
 
 
 
-
 def shop(request):
-    product=Product.objects.all().order_by('-created_at')
-    category = Category.objects.all()
+    products = Product.objects.all().order_by('-created_at')
+    categories = Category.objects.all()
+
+    # Search
+    query = request.GET.get('q', '').strip()
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+    # Category filter
+    category_id = request.GET.get('category')
+    if category_id:  # only filter if category is present
+        try:
+            category_id = int(category_id)
+            products = products.filter(category__id=category_id)
+        except ValueError:
+            category_id = None  # fallback to all products
+    else:
+        category_id = None  # no category selected, show all
+
+    # Sorting
+    sort = request.GET.get('sort')
+    if sort == 'price_low':
+        products = products.order_by('price')
+    elif sort == 'price_high':
+        products = products.order_by('-price')
 
     context = {
-        'products': product[:8],
-        'categories': category,  
+        'products': products,
+        'categories': categories,
+        'selected_category': category_id,
+        'search_query': query,
+        'sort_option': sort,
     }
+
     return render(request, 'linetrendy/shop.html', context)
-
-
 
 
 
@@ -253,10 +279,6 @@ def remove_from_cart(request, item_id):
 
     return redirect("shop:cart")
 
-
-
-
-
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product').all()
@@ -280,7 +302,7 @@ def checkout(request):
         payment_intent_id = intent.id
         selected_address_id = request.POST.get("shipping_address")
 
-        # Logged-in user
+        # --- Order Creation ---
         if request.user.is_authenticated:
             order = Order.objects.create(
                 user=request.user,
@@ -295,7 +317,6 @@ def checkout(request):
                 address.order = order
                 address.save()
             else:
-                # Create new shipping address from form
                 ShippingAddress.objects.create(
                     user=request.user,
                     order=order,
@@ -309,8 +330,20 @@ def checkout(request):
                     phone=request.POST.get("phone"),
                 )
 
-        # Guest user
-        else:
+            # Prepare email for authenticated user
+            tracking_url = request.build_absolute_uri(
+                reverse('shop:order_tracking', args=[order.order_number])
+            )
+            email_subject = f"Order Confirmation - {order.order_number}"
+            email_message = (
+                f"Hi {request.user.first_name},\n\n"
+                f"Thank you for your order! Your order number is {order.order_number}.\n"
+                f"You can track your order here: {tracking_url}\n\n"
+                "Best regards,\nLinetrendy Team"
+            )
+            email_to = request.user.email
+
+        else:  # Guest user
             guest_email = request.POST.get("email")
             if not guest_email:
                 return HttpResponse("Guest email is required", status=400)
@@ -336,27 +369,53 @@ def checkout(request):
 
             request.session["guest_email"] = guest_email
 
-        # Create order items safely
+            # Prepare email for guest user
+            guest_tracking_url = request.build_absolute_uri(
+                f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+            )
+            email_subject = f"Order Confirmation - {order.order_number}"
+            email_message = (
+                f"Hi,\n\n"
+                f"Thank you for your order! Your order number is {order.order_number}.\n"
+                f"You can track your order here: {guest_tracking_url}\n\n"
+                "Best regards,\nYour Shop Team"
+            )
+            email_to = guest_email
+
+        # --- Create Order Items ---
         for item in cart_items:
             OrderItem.objects.create(
                 order=order,
-                product=item.product if item.product else None,  # Preserve product if exists
-                product_name=item.product.name if item.product else item.product_name if hasattr(item, 'product_name') else "Unknown Product",
+                product=item.product if item.product else None,
+                product_name=item.product.name if item.product else getattr(item, 'product_name', "Unknown Product"),
                 quantity=item.quantity,
-                price=item.product.price if item.product else item.price if hasattr(item, 'price') else 0,
+                price=item.product.price if item.product else getattr(item, 'price', 0),
             )
 
-        # Clear cart
+        # --- Clear Cart ---
         cart.items.all().delete()
         cart.shipping_method = None
         cart.discount = None
         cart.save()
 
-        # Save last payment intent in session for success page
+        # --- Send Confirmation Email ---
+        try:
+            send_mail(
+                subject=email_subject,
+                message=email_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email_to],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Error sending email: {e}")
+
+        # --- Save payment intent in session ---
         request.session["last_payment_intent_id"] = payment_intent_id
 
         return redirect("shop:checkout_success")
 
+    # --- Context for GET request ---
     context = {
         "cart": cart,
         "cart_items": cart_items,
@@ -369,6 +428,18 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def checkout_success(request):
@@ -393,6 +464,17 @@ def checkout_success(request):
     discount = order.cart.discount.get_discount(subtotal) if order.cart and order.cart.discount and order.cart.discount.active else Decimal("0.00")
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
+    # --- Prepare tracking URLs ---
+    if request.user.is_authenticated:
+        tracking_url = request.build_absolute_uri(
+            reverse('shop:order_tracking', args=[order.order_number])
+        )
+    else:
+        # Use query parameter for guest
+        tracking_url = request.build_absolute_uri(
+            f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+        )
+
     # Clear session
     request.session.pop("last_payment_intent_id", None)
     request.session.pop("guest_email", None)
@@ -404,10 +486,9 @@ def checkout_success(request):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
+        "tracking_url": tracking_url,  # Pass tracking URL to template
     }
     return render(request, "linetrendy/checkout_success.html", context)
-    
-
 
 
 @csrf_exempt
@@ -424,14 +505,6 @@ def store_payment_intent(request):
 
 
     
-
-def about(request):
-    return render(request, 'linetrendy/about.html')
-
-
-def contact(request):
-    return render(request, 'linetrendy/contact.html')
-
 
 
 
@@ -544,6 +617,9 @@ def update_address(request):
     
 
 
+
+
+
 @login_required
 def delete_address(request):
     if request.method == "POST":
@@ -560,11 +636,20 @@ def delete_address(request):
 
 
 
-@login_required
 def order_tracking_view(request, order_number):
-    order_obj = get_object_or_404(Order, order_number=order_number, user=request.user)
+    """
+    Allow:
+      - Logged-in users: track only their own orders
+      - Guests: track order by order_number only
+    """
+    if request.user.is_authenticated:
+        # Logged-in user: must belong to them
+        order_obj = get_object_or_404(Order, order_number=order_number, user=request.user)
+    else:
+        # Guest: allow lookup only by order_number
+        order_obj = get_object_or_404(Order, order_number=order_number)
 
-    # Define steps
+    # Steps definition
     steps = [
         {"label": "Order Placed", "status": "completed", "date": order_obj.created_at},
         {"label": "Shipped", "status": "pending"},
@@ -583,13 +668,11 @@ def order_tracking_view(request, order_number):
         else:
             step["status"] = "pending"
 
-        # Assign colors
-        if step["status"] == "completed":
-            step["color"] = "bg-green-600"
-        elif step["status"] == "current":
-            step["color"] = "bg-yellow-500 animate-pulse"
-        else:
-            step["color"] = "bg-gray-400"
+        step["color"] = (
+            "bg-green-600" if step["status"] == "completed"
+            else "bg-yellow-500 animate-pulse" if step["status"] == "current"
+            else "bg-gray-400"
+        )
 
     context = {
         "order": order_obj,
@@ -598,7 +681,6 @@ def order_tracking_view(request, order_number):
         "total_steps": len(steps),
     }
     return render(request, "linetrendy/order_tracking.html", context)
-
 
 
 
@@ -618,3 +700,86 @@ def cancel_order(request, order_number):
         messages.error(request, "This order cannot be cancelled.")
 
     return redirect("shop:account_page")
+
+
+
+
+
+
+
+def guest_order_tracking(request):
+    order = None
+    order_number = request.GET.get("order_number")
+
+    if order_number:
+        try:
+            order = Order.objects.get(order_number=order_number)
+        except Order.DoesNotExist:
+            order = None
+
+    # Define tracking steps (same as for authenticated users)
+    tracking_steps = []
+    if order:
+        tracking_steps = [
+            {"label": "Placed", "color": "bg-yellow-500" if order.status in ["placed", "shipped", "delivered"] else "bg-gray-300", "date": order.created_at},
+            {"label": "Shipped", "color": "bg-blue-500" if order.status in ["shipped", "delivered"] else "bg-gray-300", "date": order.shipped_at if hasattr(order, "shipped_at") else None},
+            {"label": "Delivered", "color": "bg-green-500" if order.status == "delivered" else "bg-gray-300", "date": order.delivered_at if hasattr(order, "delivered_at") else None},
+        ]
+
+    context = {
+        "order": order,
+        "tracking_steps": tracking_steps,
+        "current_step": len([s for s in tracking_steps if "bg-" in s["color"] and s["color"] != "bg-gray-300"]),
+        "total_steps": len(tracking_steps),
+    }
+    return render(request, "linetrendy/order_tracking.html", context)
+
+
+
+
+
+
+
+def about(request):
+    return render(request, 'linetrendy/about.html')
+
+
+def contact(request):
+    return render(request, 'linetrendy/contact.html')
+
+
+
+
+def privacy_policy(request):
+    return render(request, 'linetrendy/privacy_policy.html')
+
+
+def term_of_service(request):
+    return render(request, 'linetrendy/term_of_use.html')
+
+
+
+
+
+def return_policy(request):
+    return render(request, 'linetrendy/return_policy.html')
+
+
+
+
+def faq(request):
+    return render(request, 'linetrendy/faq.html')
+
+
+
+
+
+def disclaimer(request):
+    return render(request, 'linetrendy/disclaimer.html')
+
+
+
+
+
+
+

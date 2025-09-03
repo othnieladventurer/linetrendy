@@ -1,12 +1,8 @@
 {% extends 'linetrendy/base.html' %}
-
-
-
 {% load static %}
 
-
-
 {% block content %}
+<!-- Hero Section -->
 <section class="hero-image flex items-center justify-center text-center text-white px-4 animate-fade-in relative
     h-[70vh] md:h-screen"
     style="
@@ -20,18 +16,53 @@
     <!-- Content -->
     <div class="relative max-w-4xl mx-auto z-10">
         <h1 class="text-4xl md:text-6xl text-red-500 font-heading font-bold mb-6 animate-slide-up">
-            About us
+            About Us
         </h1>
         <p class="text-xl md:text-2xl mb-8 animate-slide-up">
-            Remember: consistency is key! Hair product for all hair types.
+            Remember: consistency is key! Hair products for all hair types.
         </p>
-        <a href="{% url 'shop:shop' %}" class="bg-blue-600 hover:bg-blue-800 text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
+        <a href="{% url 'shop:shop' %}" 
+           class="bg-blue-600 hover:bg-blue-800 text-white px-8 py-3 rounded-full font-medium transition duration-300 transform hover:scale-105 animate-slide-up">
             Shop Now
         </a>
     </div>
 </section>
 
+<!-- Our Story -->
+<section class="bg-gray-100 py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold text-red-600 mb-6">Our Story</h2>
+    <p class="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at dictum turpis. 
+      Donec venenatis, nunc ac porta ullamcorper, lacus justo posuere elit, vitae varius sem neque sit amet lorem. 
+      Aenean nec turpis sit amet sem tempor suscipit. Sed at luctus erat, et pretium mi. 
+      Suspendisse potenti. Integer pulvinar, lectus ac viverra sollicitudin, justo erat viverra nisl, 
+      eget suscipit urna lorem at purus.
+    </p>
+  </div>
+</section>
 
-
-
+<!-- Mission / Vision / Values -->
+<section class="py-16">
+  <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div class="bg-white p-6 rounded-2xl shadow text-center">
+      <h3 class="text-xl font-bold text-red-600 mb-3">Our Mission</h3>
+      <p class="text-gray-600">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut lorem in orci egestas sodales.
+      </p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow text-center">
+      <h3 class="text-xl font-bold text-red-600 mb-3">Our Vision</h3>
+      <p class="text-gray-600">
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+      </p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow text-center">
+      <h3 class="text-xl font-bold text-red-600 mb-3">Our Values</h3>
+      <p class="text-gray-600">
+        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+      </p>
+    </div>
+  </div>
+</section>
 {% endblock content %}

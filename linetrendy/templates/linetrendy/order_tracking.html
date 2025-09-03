@@ -1,6 +1,4 @@
 {% extends 'linetrendy/base.html' %}
-
-
 {% load static %}
 
 {% block content %}
@@ -16,11 +14,13 @@
       <!-- Sidebar -->
       <div class="md:w-1/4 bg-gray-50 border-r border-gray-200 p-6">
         <ul class="space-y-4">
+          {% if user.is_authenticated %}
           <li>
             <a href="{% url 'shop:account_page' %}" class="w-full block text-left font-medium text-gray-700 hover:text-red-600 transition-colors">
               Back to Account
             </a>
           </li>
+          {% endif %}
           <li>
             <span class="font-bold text-red-600">Tracking</span>
           </li>
@@ -30,6 +30,22 @@
       <!-- Main Content -->
       <div class="md:w-3/4 p-6">
 
+        {% if not user.is_authenticated %}
+        <!-- Guest Tracking Form -->
+        <div class="mb-8 border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Track Your Order</h2>
+          <form method="get" action="{% url 'shop:guest_order_tracking' %}" class="flex gap-2">
+            <input type="text" name="order_number" placeholder="Enter your order number"
+                   class="flex-grow border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   required>
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+              Track
+            </button>
+          </form>
+        </div>
+        {% endif %}
+
+        {% if order %}
         <!-- Order Summary -->
         <div class="mb-6 border-b pb-4">
           <h2 class="text-2xl font-semibold text-gray-800 mb-2">Order #{{ order.order_number }}</h2>
@@ -45,15 +61,10 @@
           </p>
         </div>
 
-        <!-- Dynamic Animated Progress Bar -->
+        <!-- Progress Bar -->
         <div class="relative mb-8 h-12">
-          <!-- Full line -->
           <div class="absolute top-5 left-3 right-3 h-1 bg-gray-200 rounded"></div>
-
-          <!-- Filled line -->
           <div id="progress-filled" class="absolute top-5 left-3 h-1 bg-green-600 rounded transition-all duration-1000" style="width:0;"></div>
-
-          <!-- Step dots -->
           <div class="flex justify-between relative h-full items-center px-3">
             {% for step in tracking_steps %}
             <div class="flex flex-col items-center z-10">
@@ -70,53 +81,62 @@
         <!-- Shipping Address -->
         <div class="mb-8 border-t pt-6">
           <h3 class="text-xl font-semibold text-gray-800 mb-4">Shipping Address</h3>
+          {% if order.shipping_addresses.all %}
+            {% for address in order.shipping_addresses.all %}
+                <p class="font-semibold text-gray-800">Shipping Address:</p>
+              {% if user.is_authenticated %}
+                <p class="font-medium text-gray-800">{{ user.email }}</p>
+              {% else %}
 
-          {% if order.shipping_address %}
-            <!-- Show saved shipping address -->
-            <div class="bg-gray-50 p-4 rounded-lg shadow-sm border">
-              <p class="font-medium text-gray-800">{{ order.shipping_address.full_name }}</p>
-              <p class="text-gray-600">{{ order.shipping_address.line1 }}</p>
-              {% if order.shipping_address.line2 %}
-                <p class="text-gray-600">{{ order.shipping_address.line2 }}</p>
               {% endif %}
-              <p class="text-gray-600">
-                {{ order.shipping_address.city }}, {{ order.shipping_address.state }}
-                {{ order.shipping_address.postal_code }}
-              </p>
-              <p class="text-gray-600">{{ order.shipping_address.country }}</p>
+              <p class="text-gray-700">{{ address.full_name }}</p>
+              <p class="text-gray-600">{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</p>
+              <p class="text-gray-600">{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+              <p class="text-gray-600">{{ address.country }}</p>
+              {% if address.phone %}
+              <p class="text-gray-600">{{ address.phone }}</p>
+              {% endif %}
+
             </div>
+            {% endfor %}
           {% endif %}
         </div>
 
-        <!-- Back Button -->
+        {% if user.is_authenticated %}
+        <!-- Back Button for logged-in users -->
         <div class="mt-6">
           <a href="{% url 'shop:account_page' %}" class="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
             Back to Orders
           </a>
         </div>
+        {% endif %}
+        {% elif not user.is_authenticated and request.GET.order_number %}
+        <!-- Invalid order number -->
+        <div class="text-center py-10">
+          <p class="text-gray-600">No order found with that number. Please check and try again.</p>
+        </div>
+        {% endif %}
 
       </div>
     </div>
   </div>
 </section>
 
+{% if order %}
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.getElementById("progress-filled");
     const currentStep = {{ current_step }};
     const totalSteps = {{ total_steps }};
-
-    // calculate width relative to parent container
     const parentWidth = progressBar.parentElement.offsetWidth;
-    const leftPadding = 24; // px (matching px-3 in parent)
+    const leftPadding = 24;
     const rightPadding = 24;
     const usableWidth = parentWidth - leftPadding - rightPadding;
-    
     const stepPercent = ((currentStep - 1) / (totalSteps - 1)) * usableWidth;
-    
     setTimeout(() => {
         progressBar.style.width = stepPercent + "px";
     }, 100);
 });
 </script>
+{% endif %}
 {% endblock %}

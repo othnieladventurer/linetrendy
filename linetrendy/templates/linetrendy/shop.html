@@ -52,8 +52,10 @@
       <aside class="lg:col-span-1 space-y-6">
           <!-- Search -->
           <div>
-            <input type="text" name="q" placeholder="Search products..."
-              class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-purple-500" />
+            <form method="get" action="#products">
+                <input type="text" name="q" placeholder="Search products..." value="{{ search_query }}"
+                      class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-purple-500" />
+            </form>
           </div>
 
         
@@ -61,10 +63,25 @@
           <div>
             <h2 class="text-red-600 font-semibold mb-5 text-2xl">Categories</h2>
             <ul class="space-y-4 text-blue-600">
-                {% for category in categories %}
-                <li><a href="#" class="hover:underline">{{ category.name }}</a></li><hr>
-                {% endfor %}
-            </ul>
+              <!-- All option -->
+              <li>
+                  <a href="{% url 'shop:shop' %}#products" 
+                    class="{% if not selected_category %}font-bold{% endif %}">
+                      All
+                  </a>
+              </li>
+
+              <!-- Individual categories -->
+              {% for category in categories %}
+              <li>
+                  <a href="?category={{ category.id }}{% if search_query %}&q={{ search_query }}{% endif %}#products" 
+                    class="{% if selected_category == category.id %}font-bold{% endif %}">
+                      {{ category.name }}
+                  </a>
+              </li>
+              {% endfor %}
+          </ul>
+
         </div>
       </aside>
 
@@ -72,14 +89,24 @@
       <div class="lg:col-span-3 space-y-6">
         <!-- Header: Title + Sorting -->
         <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-red-600">Tshirts</h2>
+          <h2 class="text-2xl font-bold text-red-600">Product line</h2>
           <div class="flex items-center space-x-4 mt-2 sm:mt-0">
             <label for="sort" class="text-gray-600">Sort by:</label>
-            <select id="sort" class="border border-gray-300 rounded p-1">
-              <option>Default sorting</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-            </select>
+            <form method="get" class="flex items-center space-x-2">
+              {% if selected_category %}
+                  <input type="hidden" name="category" value="{{ selected_category }}">
+              {% endif %}
+              {% if search_query %}
+                  <input type="hidden" name="q" value="{{ search_query }}">
+              {% endif %}
+              <label for="sort">Sort by:</label>
+              <select name="sort" id="sort" onchange="this.form.submit()">
+                  <option value="">Default sorting</option>
+                  <option value="price_low" {% if sort_option == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                  <option value="price_high" {% if sort_option == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+              </select>
+            </form>
+
             <span class="text-gray-500">Showing 1–16 of 26 results</span>
           </div>
         </div>

@@ -143,27 +143,30 @@
       Shop By Category
     </h2>
 
-    <div class="owl-carousel owl-theme">
+      <div class="owl-carousel owl-theme">
       {% for category in categories %}
       <div class="category-card relative rounded-lg overflow-hidden shadow-md group mx-2">
-        <!-- Taller Image -->
-        <img src="{{ category.thumbnail.url }}" 
-             alt="{{ category.name }}" 
-             class="w-full h-96 sm:h-[28rem] md:h-80 lg:h-72 object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
-             loading="lazy">
+          <!-- Taller Image -->
+          <img src="{{ category.thumbnail.url }}" 
+              alt="{{ category.name }}" 
+              class="w-full h-96 sm:h-[28rem] md:h-80 lg:h-72 object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
+              loading="lazy">
 
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center px-4 text-center transition-all duration-300 group-hover:bg-opacity-40">
-          <h3 class="text-white text-xl sm:text-2xl font-heading font-bold leading-tight group-hover:text-red-600">
-            {{ category.name }}
-          </h3>
-        </div>
+          <!-- Overlay -->
+          <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center px-4 text-center transition-all duration-300 group-hover:bg-opacity-40">
+              <h3 class="text-white text-xl sm:text-2xl font-heading font-bold leading-tight group-hover:text-red-600">
+                  {{ category.name }}
+              </h3>
+          </div>
 
-        <!-- Clickable overlay -->
-        <a href="#" class="absolute inset-0" aria-label="Shop {{ category.name }}"></a>
+          <!-- Clickable overlay linking to shop page -->
+          <a href="{% url 'shop:shop' %}?category={{ category.id }}#products" 
+            class="absolute inset-0" 
+            aria-label="Shop {{ category.name }}"></a>
       </div>
       {% endfor %}
-    </div>
+  </div>
+
   </div>
 </section>
 

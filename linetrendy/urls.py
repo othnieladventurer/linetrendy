@@ -31,6 +31,16 @@ urlpatterns = [
     path('delete-address/', views.delete_address, name='delete_address'),
     path("track/<str:order_number>/", views.order_tracking_view, name="order_tracking"),
     path("cancel-order/<str:order_number>/", views.cancel_order, name="cancel_order"),
+    path("track/", views.guest_order_tracking, name="guest_order_tracking"),
+
+
+    #terms of use 
+    path('disclaimer/', views.disclaimer, name='disclaimer'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.term_of_service, name='term_of_service'),
+    path('return-policy/', views.return_policy, name='return_policy'),
+    path('faq/', views.faq, name='faq'),
+
 
     
 

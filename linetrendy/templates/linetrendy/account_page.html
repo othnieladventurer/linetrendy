@@ -1,6 +1,4 @@
 {% extends 'linetrendy/base.html' %}
-
-
 {% load static %}
 
 {% block content %}
@@ -116,6 +114,7 @@
                               onclick="openCancelModal('{{ order.order_number }}')">
                         Cancel
                       </button>
+
                     {% elif order.status != "cancelled" %}
                       <div class="relative group">
                         <button class="bg-gray-300 text-gray-600 py-1 px-3 rounded-full text-sm cursor-not-allowed flex items-center justify-center" disabled>Cancel</button>
@@ -124,20 +123,27 @@
                           You may initiate a return after delivery according to our return policy.
                         </div>
                       </div>
+
+                    
                     {% endif %}
                   </div>
 
                   <!-- Shipping Address -->
-                  {% if order.shipping_address %}
-                  <div class="mt-4 p-3 bg-gray-100 rounded-lg">
-                    <p class="font-semibold text-gray-800">Shipping Address:</p>
-                    <p class="text-gray-700">{{ order.shipping_address.full_name }}</p>
-                    <p class="text-gray-600">{{ order.shipping_address.line1 }}{% if order.shipping_address.line2 %}, {{ order.shipping_address.line2 }}{% endif %}</p>
-                    <p class="text-gray-600">{{ order.shipping_address.city }}, {{ order.shipping_address.state }} {{ order.shipping_address.postal_code }}</p>
-                    <p class="text-gray-600">{{ order.shipping_address.country }}</p>
-                  </div>
+                  {% if order.shipping_addresses.all %}
+                      {% for address in order.shipping_addresses.all %}
+                        <p class="font-semibold text-gray-800">Shipping Address:</p>
+                      {% if user.is_authenticated %}
+                        <p class="font-medium text-gray-800">{{ user.email }}</p>
+                      {% endif %}
+                      <p class="text-gray-700">{{ address.full_name }}</p>
+                      <p class="text-gray-600">{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</p>
+                      <p class="text-gray-600">{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+                      <p class="text-gray-600">{{ address.country }}</p>
+                      {% if address.phone %}
+                      <p class="text-gray-600">{{ address.phone }}</p>
+                      {% endif %}
+                    {% endfor %}
                   {% endif %}
-
                 </div>
               </div>
               {% endfor %}
@@ -166,103 +172,50 @@
           {% endif %}
         </div>
 
-        <!-- My Address Tab -->
-        {% include "linetrendy/partials/address_list.html" %}
-   
+        <!-- My Address Tab (fixed layout) -->
+        <div id="address-tab" class="tab-content hidden">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">My Addresses</h2>
+          <div id="address-tab-wrapper">
+            {% if addresses %}
+              <div id="address-list" class="space-y-4">
+                {% for address in addresses %}
+                  <div 
+                    class="border rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50 flex justify-between items-start"
+                    data-id="{{ address.id }}"
+                    data-full_name="{{ address.full_name }}"
+                    data-line1="{{ address.line1 }}"
+                    data-line2="{{ address.line2 }}"
+                    data-city="{{ address.city }}"
+                    data-state="{{ address.state }}"
+                    data-postal_code="{{ address.postal_code }}"
+                    data-country="{{ address.country }}"
+                    data-phone="{{ address.phone }}"
+                  >
+                    <div>
+                      <p class="font-semibold text-gray-800">{{ address.full_name }}</p>
+                      <p class="text-gray-600">{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</p>
+                      <p class="text-gray-600">{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+                      <p class="text-gray-600">{{ address.country }}</p>
+                      <p class="text-gray-600">{{ address.phone }}</p>
+                    </div>
+                    <div class="flex flex-col gap-2 ml-4">
+                      <button onclick="openEditAddressModal({{ address.id }})" 
+                              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded transition">Edit</button>
+                      <button onclick="openDeleteModal({{ address.id }})" 
+                              class="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded transition">Delete</button>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="text-gray-600">You haven't added any addresses yet.</p>
+            {% endif %}
 
-        <!-- Add Address Modal -->
-        <div id="add-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-          <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
-            <h3 class="text-xl font-semibold mb-4">Add Address</h3>
-            <form method="POST" 
-              hx-post="{% url 'shop:update_address' %}" 
-              hx-target="#address-tab-wrapper" 
-              hx-swap="outerHTML"
-              hx-on::after-request="closeAddAddressModal()">
-              {% csrf_token %}
-              <input type="hidden" name="address_id" value="">
-              <input type="text" name="full_name" placeholder="Full Name" class="w-full mb-2 border rounded px-3 py-2">
-              <input type="text" name="line1" placeholder="Street Address" class="w-full mb-2 border rounded px-3 py-2">
-              <input type="text" name="line2" placeholder="Apartment / Suite (Optional)" class="w-full mb-2 border rounded px-3 py-2">
-              <div class="flex gap-3">
-                <input type="text" name="city" placeholder="City" class="w-1/2 mb-2 border rounded px-3 py-2">
-                <input type="text" name="state" placeholder="State" class="w-1/2 mb-2 border rounded px-3 py-2">
-              </div>
-              <div class="flex gap-3">
-                <input type="text" name="postal_code" placeholder="Postal Code" class="w-1/2 mb-2 border rounded px-3 py-2">
-                <input type="text" name="country" placeholder="Country" class="w-1/2 mb-2 border rounded px-3 py-2">
-              </div>
-              <input type="text" name="phone" placeholder="Phone Number" class="w-full mb-4 border rounded px-3 py-2">
-              <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeAddAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Save</button>
-              </div>
-            </form>
+            <button onclick="openAddAddressModal()" class="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+              Add New Address
+            </button>
           </div>
         </div>
-
-
-        <!-- Edit Address Modal -->
-       <div id="edit-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-          <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
-            <h3 class="text-xl font-semibold mb-4">Edit Address</h3>
-            <form id="edit-address-form" 
-                  method="POST" 
-                  hx-post="{% url 'shop:update_address' %}" 
-                  hx-target="#address-tab-wrapper" 
-                  hx-swap="outerHTML"
-                  hx-on::after-request="closeEditAddressModal()">
-              {% csrf_token %}
-              <input type="hidden" name="address_id" id="edit_address_id">
-              <input type="text" name="full_name" id="edit_full_name" class="w-full mb-2 border rounded px-3 py-2" placeholder="Full Name">
-              <input type="text" name="line1" id="edit_line1" class="w-full mb-2 border rounded px-3 py-2" placeholder="Street Address">
-              <input type="text" name="line2" id="edit_line2" class="w-full mb-2 border rounded px-3 py-2" placeholder="Apartment / Suite (Optional)">
-              
-              <div class="flex gap-3">
-                <input type="text" name="city" id="edit_city" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="">
-                <input type="text" name="state" id="edit_state" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="State">
-              </div>
-
-              <div class="flex gap-3">
-                <input type="text" name="postal_code" id="edit_postal_code" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Postal Code">
-                <input type="text" name="country" id="edit_country" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Country">
-              </div>
-
-              <input type="text" name="phone" id="edit_phone" class="w-full mb-4 border rounded px-3 py-2" placeholder="Phone Number">
-              
-              <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeEditAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Update</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-
-        <!-- Delete Confirmation Modal -->
-        <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-          <div class="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 class="text-xl font-semibold mb-4">Delete Address?</h3>
-            <p class="mb-4">Are you sure you want to delete this address? This action cannot be undone.</p>
-            <form id="delete-form" 
-              method="POST" 
-              hx-post="{% url 'shop:delete_address' %}" 
-              hx-target="#address-tab-wrapper" 
-              hx-swap="outerHTML"
-              hx-on::after-request="closeDeleteModal()">
-              {% csrf_token %}
-              <input type="hidden" name="delete_address_id" id="delete_address_id">
-              <div class="flex justify-end gap-2">
-                <button type="button" onclick="closeDeleteModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Delete</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-
-
-
 
         <!-- Profile Tab -->
         <div id="profile-tab" class="tab-content hidden">
@@ -302,12 +255,12 @@
             </form>
         </div>
 
-
       </div>
     </div>
   </div>
 </section>
 
+<!-- Modals (unchanged) -->
 <!-- Cancel Order Modal -->
 <div id="cancelModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
@@ -322,48 +275,103 @@
   </div>
 </div>
 
+<!-- Add/Edit/Delete Address Modals (unchanged) -->
 <!-- Add Address Modal -->
-<div id="addressModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-  <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Address</h2>
-    <form method="post" action="{% url 'shop:add_address' %}">
+<div id="add-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
+    <h3 class="text-xl font-semibold mb-4">Add Address</h3>
+    <form method="POST" 
+      hx-post="{% url 'shop:update_address' %}" 
+      hx-target="#address-tab-wrapper" 
+      hx-swap="outerHTML"
+      hx-on::after-request="closeAddAddressModal()">
       {% csrf_token %}
-      <div class="space-y-3">
-        <input name="full_name" type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg">
-        <input name="line1" type="text" placeholder="Street Address" class="w-full px-4 py-2 border rounded-lg">
-        <input name="line2" type="text" placeholder="Apartment / Suite (Optional)" class="w-full px-4 py-2 border rounded-lg">
-        <div class="flex gap-4">
-          <input name="city" type="text" placeholder="City" class="w-1/2 px-4 py-2 border rounded-lg">
-          <input name="state" type="text" placeholder="State / Province" class="w-1/2 px-4 py-2 border rounded-lg">
-        </div>
-        <div class="flex gap-4">
-          <input name="postal_code" type="text" placeholder="ZIP / Postal Code" class="w-1/2 px-4 py-2 border rounded-lg">
-          <select name="country" class="w-1/2 px-4 py-2 border rounded-lg">
-            <option value="US" selected>United States</option>
-            <option value="CA">Canada</option>
-            <option value="GB">United Kingdom</option>
-            <option value="AU">Australia</option>
-          </select>
-          <input name="phone" type="text" placeholder="Phone Number" class="w-full px-4 py-2 border rounded-lg">
-        </div>
+      <input type="hidden" name="address_id" value="">
+      <input type="text" name="full_name" placeholder="Full Name" class="w-full mb-2 border rounded px-3 py-2">
+      <input type="text" name="line1" placeholder="Street Address" class="w-full mb-2 border rounded px-3 py-2">
+      <input type="text" name="line2" placeholder="Apartment / Suite (Optional)" class="w-full mb-2 border rounded px-3 py-2">
+      <div class="flex gap-3">
+        <input type="text" name="city" placeholder="City" class="w-1/2 mb-2 border rounded px-3 py-2">
+        <input type="text" name="state" placeholder="State" class="w-1/2 mb-2 border rounded px-3 py-2">
       </div>
-      <div class="flex justify-end gap-3 mt-6">
-        <button type="button" onclick="closeAddressModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">Cancel</button>
-        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Save Address</button>
+      <div class="flex gap-3">
+        <input type="text" name="postal_code" placeholder="Postal Code" class="w-1/2 mb-2 border rounded px-3 py-2">
+        <input type="text" name="country" placeholder="Country" class="w-1/2 mb-2 border rounded px-3 py-2">
+      </div>
+      <input type="text" name="phone" placeholder="Phone Number" class="w-full mb-4 border rounded px-3 py-2">
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeAddAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Save</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Edit Address Modal -->
+<div id="edit-address-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-lg relative">
+    <h3 class="text-xl font-semibold mb-4">Edit Address</h3>
+    <form id="edit-address-form" 
+          method="POST" 
+          hx-post="{% url 'shop:update_address' %}" 
+          hx-target="#address-tab-wrapper" 
+          hx-swap="outerHTML"
+          hx-on::after-request="closeEditAddressModal()">
+      {% csrf_token %}
+      <input type="hidden" name="address_id" id="edit_address_id">
+      <input type="text" name="full_name" id="edit_full_name" class="w-full mb-2 border rounded px-3 py-2" placeholder="Full Name">
+      <input type="text" name="line1" id="edit_line1" class="w-full mb-2 border rounded px-3 py-2" placeholder="Street Address">
+      <input type="text" name="line2" id="edit_line2" class="w-full mb-2 border rounded px-3 py-2" placeholder="Apartment / Suite (Optional)">
+      
+      <div class="flex gap-3">
+        <input type="text" name="city" id="edit_city" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="">
+        <input type="text" name="state" id="edit_state" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="State">
+      </div>
 
+      <div class="flex gap-3">
+        <input type="text" name="postal_code" id="edit_postal_code" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Postal Code">
+        <input type="text" name="country" id="edit_country" class="w-1/2 mb-2 border rounded px-3 py-2" placeholder="Country">
+      </div>
+
+      <input type="text" name="phone" id="edit_phone" class="w-full mb-4 border rounded px-3 py-2" placeholder="Phone Number">
+      
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeEditAddressModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md">
+    <h3 class="text-xl font-semibold mb-4">Delete Address?</h3>
+    <p class="mb-4">Are you sure you want to delete this address? This action cannot be undone.</p>
+    <form id="delete-form" 
+      method="POST" 
+      hx-post="{% url 'shop:delete_address' %}" 
+      hx-target="#address-tab-wrapper" 
+      hx-swap="outerHTML"
+      hx-on::after-request="closeDeleteModal()">
+      {% csrf_token %}
+      <input type="hidden" name="delete_address_id" id="delete_address_id">
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeDeleteModal()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
-  function openAddAddressModal() {
-    document.getElementById('add-address-modal').classList.remove('hidden');
+  function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.getElementById(tab + '-tab').classList.remove('hidden');
   }
-  function closeAddAddressModal() {
-    document.getElementById('add-address-modal').classList.add('hidden');
-  }
+
+  function openAddAddressModal() { document.getElementById('add-address-modal').classList.remove('hidden'); }
+  function closeAddAddressModal() { document.getElementById('add-address-modal').classList.add('hidden'); }
 
   function openEditAddressModal(addressId) {
     const card = document.querySelector(`[data-id='${addressId}']`);
@@ -379,16 +387,22 @@
     document.getElementById('edit_phone').value = card.dataset.phone || '';
     document.getElementById('edit-address-modal').classList.remove('hidden');
   }
-  function closeEditAddressModal() {
-    document.getElementById('edit-address-modal').classList.add('hidden');
-  }
+  function closeEditAddressModal() { document.getElementById('edit-address-modal').classList.add('hidden'); }
 
   function openDeleteModal(addressId) {
     document.getElementById('delete_address_id').value = addressId;
     document.getElementById('delete-modal').classList.remove('hidden');
   }
-  function closeDeleteModal() {
-    document.getElementById('delete-modal').classList.add('hidden');
+  function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); }
+
+  function openCancelModal(orderNumber) {
+    document.getElementById('cancelOrderForm').action = `/cancel-order/${orderNumber}/`;
+    document.getElementById('cancelModal').classList.remove('hidden');
+  }
+  function closeCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
+
+  function toggleOrder(orderId) {
+    document.getElementById('order-' + orderId).classList.toggle('hidden');
   }
 </script>
 

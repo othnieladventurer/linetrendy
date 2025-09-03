@@ -55,9 +55,16 @@
     </p>
     
     <!-- Continue Shopping Button -->
+     {% if user.is_authenticated %}
     <a href="{% url 'shop:order_tracking' order.order_number %}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
       Track My Package
     </a>
+    {% else %}
+    <a href="{{ tracking_url }}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
+      Track My Package
+    </a>
+
+    {% endif %}
   </div>
 </section>
 {% endblock %}

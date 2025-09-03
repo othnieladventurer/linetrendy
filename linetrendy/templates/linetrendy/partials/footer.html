@@ -20,7 +20,12 @@
                 <h4 class="font-bold mb-4">Shop by category</h4>
                 <ul class="space-y-2">
                     {% for category in categories %}
-                        <li><a href="" class="hover:text-accent transition">{{ category.name }}</a></li>
+                    <li>
+                        <a href="?category={{ category.id }}{% if search_query %}&q={{ search_query }}{% endif %}#products" 
+                        class="{% if selected_category == category.id %}font-bold{% endif %}">
+                        {{ category.name }}
+                        </a>
+                    </li>
                     {% endfor %}
                     
                 </ul>
@@ -30,9 +35,18 @@
             <div>
                 <h4 class="font-bold mb-4">Information</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-accent transition">About Us</a></li>
-                    <li><a href="#" class="hover:text-accent transition">Contact Us</a></li>
-                    <li><a href="#" class="hover:text-accent transition">FAQs</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'shop:account_page' %}"
+                         class="hover:text-accent transition">Order Tracking</a></li>
+
+                    {% else %}
+                    <li><a href="{% url 'shop:guest_order_tracking' %}"
+                         class="hover:text-accent transition">Order Tracking</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'shop:about' %}" class="hover:text-accent transition">About Us</a></li>
+                    <li><a href="{% url 'shop:contact' %}" class="hover:text-accent transition">Contact Us</a></li>
+                    <li><a href="{% url 'shop:faq' %}" class="hover:text-accent transition">Faqs</a></li>
+                    
                 </ul>
             </div>
             
@@ -40,9 +54,10 @@
             <div>
                 <h4 class="font-bold mb-4">Legal</h4>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-accent transition">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-accent transition">Terms of Service</a></li>
-                    <li><a href="#" class="hover:text-accent transition">Shipping & Returns</a></li>
+                    <li><a href="{% url 'shop:disclaimer' %}" class="hover:text-accent transition">Disclaimer</a></li>
+                    <li><a href="{% url 'shop:privacy_policy' %}" class="hover:text-accent transition">Privacy Policy</a></li>
+                    <li><a href="{% url 'shop:term_of_service' %}" class="hover:text-accent transition">Terms of Service</a></li>
+                    <li><a href="{% url 'shop:return_policy' %}" class="hover:text-accent transition">Shipping & Returns</a></li>
                 </ul>
             </div>
         </div>
