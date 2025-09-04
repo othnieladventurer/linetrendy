@@ -1,4 +1,7 @@
 import stripe
+import json
+import threading
+import logging
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from .models import *
@@ -9,11 +12,10 @@ from django.contrib import messages
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from .utils import get_cart
-import json
+
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.db.models import Q
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -286,34 +288,50 @@ def remove_from_cart(request, item_id):
 
 
 
+
+logger = logging.getLogger(__name__)
+
+def send_email_async(subject, message, from_email, recipient_list):
+    """Send email in a separate thread to avoid blocking Gunicorn."""
+    try:
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+    except Exception as e:
+        logger.error(f"Email sending failed: {e}")
+
+
+
+
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product')
-    
+
     if not cart_items.exists():
         return redirect("shop:cart")
 
-    # --- Calculate totals ---
     subtotal = sum((item.product.price if item.product else 0) * item.quantity for item in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # --- Stripe PaymentIntent ---
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    intent = stripe.PaymentIntent.create(
-        amount=int((final_total.quantize(Decimal("0.01"))) * 100),
-        currency="usd",
-        automatic_payment_methods={"enabled": True},
-    )
+
+    # Stripe PaymentIntent with try-except
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=int((final_total.quantize(Decimal("0.01"))) * 100),
+            currency="usd",
+            automatic_payment_methods={"enabled": True},
+        )
+    except Exception as e:
+        logger.error(f"Stripe PaymentIntent creation failed: {e}")
+        return HttpResponse("Payment service error. Please try again.", status=500)
 
     if request.method == "POST":
         payment_intent_id = intent.id
         selected_address_id = request.POST.get("shipping_address")
 
         try:
-            with transaction.atomic():  # Ensure all DB operations are atomic
-                # --- Order Creation ---
+            with transaction.atomic():
                 if request.user.is_authenticated:
                     order = Order.objects.create(
                         user=request.user,
@@ -322,7 +340,6 @@ def checkout(request):
                         payment_intent_id=payment_intent_id,
                     )
 
-                    # Use existing address if selected
                     if selected_address_id:
                         address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
                         address.order = order
@@ -384,7 +401,7 @@ def checkout(request):
                     "Best regards,\nLinetrendy Team"
                 )
 
-                # --- Create Order Items ---
+                # Create order items
                 for item in cart_items:
                     OrderItem.objects.create(
                         order=order,
@@ -394,25 +411,19 @@ def checkout(request):
                         price=item.product.price if item.product else getattr(item, 'price', 0),
                     )
 
-                # --- Clear Cart ---
+                # Clear cart
                 cart.items.all().delete()
                 cart.shipping_method = None
                 cart.discount = None
                 cart.save()
 
-                # --- Send Confirmation Email (Safe) ---
-                try:
-                    send_mail(
-                        subject=email_subject,
-                        message=email_message,
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=[email_to],
-                        fail_silently=False,
-                    )
-                except Exception as e:
-                    logger.error(f"Failed to send order email for order {order.order_number}: {e}")
+                # Send email asynchronously
+                threading.Thread(
+                    target=send_email_async,
+                    args=(email_subject, email_message, settings.DEFAULT_FROM_EMAIL, [email_to])
+                ).start()
 
-                # --- Save payment intent in session ---
+                # Save payment intent in session
                 request.session["last_payment_intent_id"] = payment_intent_id
 
                 return redirect("shop:checkout_success")
@@ -421,7 +432,6 @@ def checkout(request):
             logger.error(f"Checkout failed: {e}")
             return HttpResponse("Internal Server Error. Please contact support.", status=500)
 
-    # --- GET Request Context ---
     context = {
         "cart": cart,
         "cart_items": cart_items,
@@ -434,11 +444,6 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
-
-
-
-
-
 
 
 
@@ -496,18 +501,24 @@ def checkout_success(request):
     return render(request, "linetrendy/checkout_success.html", context)
 
 
+
+
+
 @csrf_exempt
 def store_payment_intent(request):
+    """Store payment intent ID and guest email in session."""
     if request.method == "POST":
-        data = json.loads(request.body)
-        request.session["last_payment_intent_id"] = data.get("payment_intent_id")
-        # also store guest email if present
-        if "guest_email" in data:
-            request.session["guest_email"] = data["guest_email"]
-        return HttpResponse("OK")
+        try:
+            data = json.loads(request.body)
+            if "payment_intent_id" in data:
+                request.session["last_payment_intent_id"] = data["payment_intent_id"]
+            if "guest_email" in data:
+                request.session["guest_email"] = data["guest_email"]
+            return HttpResponse("OK")
+        except Exception as e:
+            logger.error(f"Failed to store payment intent: {e}")
+            return HttpResponse("Error storing payment intent", status=500)
     return HttpResponse("Method not allowed", status=405)
-
-
 
     
 
