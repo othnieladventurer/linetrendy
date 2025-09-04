@@ -147,6 +147,9 @@ SOCIALACCOUNT_PROVIDERS = {
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
+
+SITE_DOMAIN = "https://linetrendy.saasiskey.com"
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 

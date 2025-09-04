@@ -359,9 +359,6 @@ def checkout(request):
                         )
 
                     email_to = request.user.email
-                    tracking_url = request.build_absolute_uri(
-                        reverse('shop:order_tracking', args=[order.order_number])
-                    )
 
                 else:  # Guest user
                     guest_email = request.POST.get("email")
@@ -389,9 +386,12 @@ def checkout(request):
 
                     request.session["guest_email"] = guest_email
                     email_to = guest_email
-                    tracking_url = request.build_absolute_uri(
-                        f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
-                    )
+
+                # --- Build tracking URL based on environment ---
+                if settings.DEBUG:
+                    tracking_url = f"http://localhost:8000{reverse('shop:order_tracking', args=[order.order_number])}"
+                else:
+                    tracking_url = f"{settings.SITE_DOMAIN}{reverse('shop:order_tracking', args=[order.order_number])}"
 
                 email_subject = f"Order Confirmation - {order.order_number}"
                 email_message = (
