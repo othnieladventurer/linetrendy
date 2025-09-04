@@ -267,7 +267,7 @@ class ShippingAddress(models.Model):
         related_name='shipping_addresses',
         null=True,
         blank=True
-)
+    )
     full_name = models.CharField(max_length=255)
     line1 = models.CharField("Street Address", max_length=255)
     line2 = models.CharField("Apartment/Suite (Optional)", max_length=255, blank=True)

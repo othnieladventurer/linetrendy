@@ -13,6 +13,9 @@ import json
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.db.models import Q
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -279,6 +282,10 @@ def remove_from_cart(request, item_id):
 
     return redirect("shop:cart")
 
+
+
+
+
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product').all()
@@ -408,7 +415,8 @@ def checkout(request):
                 fail_silently=False,
             )
         except Exception as e:
-            print(f"Error sending email: {e}")
+            # Log the error instead of crashing
+            logger.error(f"Failed to send order email for order {order.order_number}: {e}")
 
         # --- Save payment intent in session ---
         request.session["last_payment_intent_id"] = payment_intent_id
