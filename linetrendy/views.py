@@ -288,19 +288,21 @@ def remove_from_cart(request, item_id):
 
 def checkout(request):
     cart = get_cart(request)
-    cart_items = cart.items.select_related('product').all()
-
-    if not cart_items:
+    cart_items = cart.items.select_related('product')
+    
+    if not cart_items.exists():
         return redirect("shop:cart")
 
+    # --- Calculate totals ---
     subtotal = sum((item.product.price if item.product else 0) * item.quantity for item in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
+    # --- Stripe PaymentIntent ---
     stripe.api_key = settings.STRIPE_SECRET_KEY
     intent = stripe.PaymentIntent.create(
-        amount=int(final_total * 100),
+        amount=int((final_total.quantize(Decimal("0.01"))) * 100),
         currency="usd",
         automatic_payment_methods={"enabled": True},
     )
@@ -309,121 +311,117 @@ def checkout(request):
         payment_intent_id = intent.id
         selected_address_id = request.POST.get("shipping_address")
 
-        # --- Order Creation ---
-        if request.user.is_authenticated:
-            order = Order.objects.create(
-                user=request.user,
-                cart=cart,
-                total_amount=final_total,
-                payment_intent_id=payment_intent_id,
-            )
+        try:
+            with transaction.atomic():  # Ensure all DB operations are atomic
+                # --- Order Creation ---
+                if request.user.is_authenticated:
+                    order = Order.objects.create(
+                        user=request.user,
+                        cart=cart,
+                        total_amount=final_total,
+                        payment_intent_id=payment_intent_id,
+                    )
 
-            # Use existing address if selected
-            if selected_address_id:
-                address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
-                address.order = order
-                address.save()
-            else:
-                ShippingAddress.objects.create(
-                    user=request.user,
-                    order=order,
-                    full_name=request.POST.get("full_name"),
-                    line1=request.POST.get("line1"),
-                    line2=request.POST.get("line2"),
-                    city=request.POST.get("city"),
-                    state=request.POST.get("state"),
-                    postal_code=request.POST.get("postal_code"),
-                    country=request.POST.get("country"),
-                    phone=request.POST.get("phone"),
+                    # Use existing address if selected
+                    if selected_address_id:
+                        address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
+                        address.order = order
+                        address.save()
+                    else:
+                        ShippingAddress.objects.create(
+                            user=request.user,
+                            order=order,
+                            full_name=request.POST.get("full_name"),
+                            line1=request.POST.get("line1"),
+                            line2=request.POST.get("line2"),
+                            city=request.POST.get("city"),
+                            state=request.POST.get("state"),
+                            postal_code=request.POST.get("postal_code"),
+                            country=request.POST.get("country"),
+                            phone=request.POST.get("phone"),
+                        )
+
+                    email_to = request.user.email
+                    tracking_url = request.build_absolute_uri(
+                        reverse('shop:order_tracking', args=[order.order_number])
+                    )
+
+                else:  # Guest user
+                    guest_email = request.POST.get("email")
+                    if not guest_email:
+                        return HttpResponse("Guest email is required", status=400)
+
+                    order = Order.objects.create(
+                        guest_email=guest_email,
+                        cart=cart,
+                        total_amount=final_total,
+                        payment_intent_id=payment_intent_id,
+                    )
+
+                    ShippingAddress.objects.create(
+                        order=order,
+                        full_name=request.POST.get("full_name"),
+                        line1=request.POST.get("line1"),
+                        line2=request.POST.get("line2"),
+                        city=request.POST.get("city"),
+                        state=request.POST.get("state"),
+                        postal_code=request.POST.get("postal_code"),
+                        country=request.POST.get("country"),
+                        phone=request.POST.get("phone"),
+                    )
+
+                    request.session["guest_email"] = guest_email
+                    email_to = guest_email
+                    tracking_url = request.build_absolute_uri(
+                        f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+                    )
+
+                email_subject = f"Order Confirmation - {order.order_number}"
+                email_message = (
+                    f"Hi,\n\n"
+                    f"Thank you for your order! Your order number is {order.order_number}.\n"
+                    f"You can track your order here: {tracking_url}\n\n"
+                    "Best regards,\nLinetrendy Team"
                 )
 
-            # Prepare email for authenticated user
-            tracking_url = request.build_absolute_uri(
-                reverse('shop:order_tracking', args=[order.order_number])
-            )
-            email_subject = f"Order Confirmation - {order.order_number}"
-            email_message = (
-                f"Hi {request.user.first_name},\n\n"
-                f"Thank you for your order! Your order number is {order.order_number}.\n"
-                f"You can track your order here: {tracking_url}\n\n"
-                "Best regards,\nLinetrendy Team"
-            )
-            email_to = request.user.email
+                # --- Create Order Items ---
+                for item in cart_items:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item.product if item.product else None,
+                        product_name=item.product.name if item.product else getattr(item, 'product_name', "Unknown Product"),
+                        quantity=item.quantity,
+                        price=item.product.price if item.product else getattr(item, 'price', 0),
+                    )
 
-        else:  # Guest user
-            guest_email = request.POST.get("email")
-            if not guest_email:
-                return HttpResponse("Guest email is required", status=400)
+                # --- Clear Cart ---
+                cart.items.all().delete()
+                cart.shipping_method = None
+                cart.discount = None
+                cart.save()
 
-            order = Order.objects.create(
-                guest_email=guest_email,
-                cart=cart,
-                total_amount=final_total,
-                payment_intent_id=payment_intent_id,
-            )
+                # --- Send Confirmation Email (Safe) ---
+                try:
+                    send_mail(
+                        subject=email_subject,
+                        message=email_message,
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[email_to],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to send order email for order {order.order_number}: {e}")
 
-            ShippingAddress.objects.create(
-                order=order,
-                full_name=request.POST.get("full_name"),
-                line1=request.POST.get("line1"),
-                line2=request.POST.get("line2"),
-                city=request.POST.get("city"),
-                state=request.POST.get("state"),
-                postal_code=request.POST.get("postal_code"),
-                country=request.POST.get("country"),
-                phone=request.POST.get("phone"),
-            )
+                # --- Save payment intent in session ---
+                request.session["last_payment_intent_id"] = payment_intent_id
 
-            request.session["guest_email"] = guest_email
+                return redirect("shop:checkout_success")
 
-            # Prepare email for guest user
-            guest_tracking_url = request.build_absolute_uri(
-                f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
-            )
-            email_subject = f"Order Confirmation - {order.order_number}"
-            email_message = (
-                f"Hi,\n\n"
-                f"Thank you for your order! Your order number is {order.order_number}.\n"
-                f"You can track your order here: {guest_tracking_url}\n\n"
-                "Best regards,\nYour Shop Team"
-            )
-            email_to = guest_email
-
-        # --- Create Order Items ---
-        for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product=item.product if item.product else None,
-                product_name=item.product.name if item.product else getattr(item, 'product_name', "Unknown Product"),
-                quantity=item.quantity,
-                price=item.product.price if item.product else getattr(item, 'price', 0),
-            )
-
-        # --- Clear Cart ---
-        cart.items.all().delete()
-        cart.shipping_method = None
-        cart.discount = None
-        cart.save()
-
-        # --- Send Confirmation Email ---
-        try:
-            send_mail(
-                subject=email_subject,
-                message=email_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email_to],
-                fail_silently=False,
-            )
         except Exception as e:
-            # Log the error instead of crashing
-            logger.error(f"Failed to send order email for order {order.order_number}: {e}")
+            logger.error(f"Checkout failed: {e}")
+            return HttpResponse("Internal Server Error. Please contact support.", status=500)
 
-        # --- Save payment intent in session ---
-        request.session["last_payment_intent_id"] = payment_intent_id
-
-        return redirect("shop:checkout_success")
-
-    # --- Context for GET request ---
+    # --- GET Request Context ---
     context = {
         "cart": cart,
         "cart_items": cart_items,
@@ -436,7 +434,6 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
-
 
 
 
