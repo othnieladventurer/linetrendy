@@ -418,10 +418,10 @@ def checkout(request):
                 cart.save()
 
                 # Send email asynchronously
-                threading.Thread(
-                    target=send_email_async,
-                    args=(email_subject, email_message, settings.DEFAULT_FROM_EMAIL, [email_to])
-                ).start()
+                try:
+                    send_mail(email_subject, email_message, settings.DEFAULT_FROM_EMAIL, [email_to], fail_silently=False)
+                except Exception as e:
+                    logger.error(f"Email sending failed: {e}")
 
                 # Save payment intent in session
                 request.session["last_payment_intent_id"] = payment_intent_id
