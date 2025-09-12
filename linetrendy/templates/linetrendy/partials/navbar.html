@@ -10,10 +10,10 @@
             
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="/" class="text-black hover:text-accent transition">Home</a>
-                <a href="{% url 'shop:shop' %}" class="text-black hover:text-accent transition">Shop</a>
-                <a href="{% url 'shop:about' %}" class="text-black hover:text-accent transition">About Us</a>
-                <a href="{% url 'shop:contact' %}" class="text-black hover:text-accent transition">Contact</a>
+                <a href="/" class="text-blue-500 hover:text-accent transition">Home</a>
+                <a href="{% url 'shop:shop' %}" class="text-blue-500 hover:text-accent transition">Shop</a>
+                <a href="{% url 'shop:about' %}" class="text-blue-500 hover:text-accent transition">About Us</a>
+                <a href="{% url 'shop:contact' %}" class="text-blue-500 hover:text-accent transition">Contact</a>
             </nav>
             
             <!-- Icons -->
@@ -22,10 +22,10 @@
                 <div class="relative inline-block text-left" id="userDropdownContainer">
                     <!-- Trigger Button -->
                     <button id="userDropdownBtn"
-                        class="flex items-center text-dark hover:text-accent transition focus:outline-none">
+                        class="flex items-center text-red-600 hover:text-accent transition focus:outline-none">
                         <i class="fas fa-user mr-1"></i>
                         Hello ({{ user.email|slice:":5" }}...)
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 ml-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 9l-7 7-7-7" />
                         </svg>
@@ -35,22 +35,22 @@
                     <div id="userDropdownMenu"
                         class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50">
                         <a href="{% url 'shop:account_page' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        class="block px-4 py-2 text-sm  text-blue-600 hover:bg-gray-100">
                         Account
                         </a>
                         <a href="{% url 'users:custom_logout' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        class="block px-4 py-2 text-sm  text-blue-600 hover:bg-gray-100">
                         Logout
                         </a>
                     </div>
                     </div>
                     {% else %}
-                    <a href="{% url 'users:account_login' %}" class="text-dark hover:text-accent transition" aria-label="Account">
+                    <a href="{% url 'users:account_login' %}" class="text-red-600 hover:text-accent transition" aria-label="Account">
                     <i class="fas fa-user"></i>
                     </a>
                 {% endif %}
                     
-                <a href="{% url 'shop:cart' %}" class="relative text-dark hover:text-accent transition" aria-label="Cart">
+                <a href="{% url 'shop:cart' %}" class="relative text-red-600 hover:text-accent transition" aria-label="Cart">
                     <i class="fas fa-shopping-bag text-lg md:text-xl"></i>
                     {% include "linetrendy/partials/cart_count.html" %}
                 </a>
@@ -68,11 +68,11 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu md:hidden bg-white hidden" id="mobile-menu">
             <div class="flex flex-col space-y-4 py-4">
-                <a href="/" class="text-black hover:text-accent transition px-4 py-2">Home</a>
-                <a href="{% url 'shop:shop' %}" class="text-black hover:text-accent transition px-4 py-2">Shop</a>
-                <a href="#" class="text-black hover:text-accent transition px-4 py-2">Categories</a>
-                <a href="{% url 'shop:about' %}" class="text-black hover:text-accent transition px-4 py-2">About Us</a>
-                <a href="{% url 'shop:contact' %}" class="text-black hover:text-accent transition px-4 py-2">Contact</a>
+                <a href="/" class="text-blue-500 hover:text-accent transition px-4 py-2">Home</a>
+                <a href="{% url 'shop:shop' %}" class="text-blue-500 hover:text-accent transition px-4 py-2">Shop</a>
+                <a href="#" class="text-blue-500 hover:text-accent transition px-4 py-2">Categories</a>
+                <a href="{% url 'shop:about' %}" class="text-blue-500 hover:text-accent transition px-4 py-2">About Us</a>
+                <a href="{% url 'shop:contact' %}" class="text-blue-500 hover:text-accent transition px-4 py-2">Contact</a>
 
                 <!-- Mobile User Dropdown -->
                 {% if user.is_authenticated %}
@@ -92,7 +92,7 @@
                     </div>
                 </div>
                 {% else %}
-                <a href="{% url 'users:account_login' %}" class="flex items-center px-4 py-2 text-dark hover:text-accent transition">
+                <a href="{% url 'users:account_login' %}" class="flex items-center px-4 py-2 text-red-600 hover:text-accent transition">
                     <i class="fas fa-user mr-2"></i> Login
                 </a>
                 {% endif %}
