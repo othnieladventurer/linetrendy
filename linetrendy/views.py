@@ -437,9 +437,8 @@ def checkout(request):
                         [email_to],
                         fail_silently=False
                     )
-                except (Exception, SystemExit) as e:
-                    # Catch SystemExit from smtplib and any other exception
-                    logger.error(f"Email sending failed (checkout will continue): {e}")
+                except Exception as e:
+                    logger.error(f"Email sending failed: {e}", exc_info=True)
 
                 # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
