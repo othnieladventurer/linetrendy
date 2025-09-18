@@ -174,7 +174,6 @@ class CartItem(models.Model):
 
 
 
-
 class Order(models.Model):
     STATUS_CHOICES = [
         ("placed", "Order Placed"),
@@ -189,6 +188,8 @@ class Order(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     payment_intent_id = models.CharField(max_length=255)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_fee = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))   # ✅ new
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00")) # ✅ new
     created_at = models.DateTimeField(auto_now_add=True)
 
     status = models.CharField(
@@ -224,8 +225,6 @@ class Order(models.Model):
             return f"Order {self.order_number} by Guest ({self.guest_email}) - {display_status} (${self.total_amount})"
         else:
             return f"Order {self.order_number} by Guest #{self.id} - {display_status} (${self.total_amount})"
-
-
 
 
 

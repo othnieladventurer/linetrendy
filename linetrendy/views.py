@@ -332,46 +332,32 @@ def checkout(request):
 
         try:
             with transaction.atomic():
+                # --- CREATE ORDER (authenticated or guest) ---
                 if request.user.is_authenticated:
-                    order = Order.objects.create(
-                        user=request.user,
-                        cart=cart,
-                        total_amount=final_total,
-                        payment_intent_id=payment_intent_id,
-                    )
-
-                    if selected_address_id:
-                        address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
-                        address.order = order
-                        address.save()
-                    else:
-                        ShippingAddress.objects.create(
-                            user=request.user,
-                            order=order,
-                            full_name=request.POST.get("full_name"),
-                            line1=request.POST.get("line1"),
-                            line2=request.POST.get("line2"),
-                            city=request.POST.get("city"),
-                            state=request.POST.get("state"),
-                            postal_code=request.POST.get("postal_code"),
-                            country=request.POST.get("country"),
-                            phone=request.POST.get("phone"),
-                        )
-
                     email_to = request.user.email
-
-                else:  # Guest user
+                    guest_email = None
+                else:
                     guest_email = request.POST.get("email")
                     if not guest_email:
                         return HttpResponse("Guest email is required", status=400)
+                    email_to = guest_email
 
-                    order = Order.objects.create(
-                        guest_email=guest_email,
-                        cart=cart,
-                        total_amount=final_total,
-                        payment_intent_id=payment_intent_id,
-                    )
+                order = Order.objects.create(
+                    user=request.user if request.user.is_authenticated else None,
+                    guest_email=guest_email,
+                    cart=cart,
+                    total_amount=final_total,
+                    payment_intent_id=payment_intent_id,
+                    shipping_fee=shipping_fee,   # ✅ include for all orders
+                    discount_amount=discount,    # ✅ include for all orders
+                )
 
+                # --- SHIPPING ADDRESS ---
+                if request.user.is_authenticated and selected_address_id:
+                    address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
+                    address.order = order
+                    address.save()
+                else:
                     ShippingAddress.objects.create(
                         order=order,
                         full_name=request.POST.get("full_name"),
@@ -382,17 +368,21 @@ def checkout(request):
                         postal_code=request.POST.get("postal_code"),
                         country=request.POST.get("country"),
                         phone=request.POST.get("phone"),
+                        user=request.user if request.user.is_authenticated else None,
                     )
 
-                    request.session["guest_email"] = guest_email
-                    email_to = guest_email
+                # --- Build tracking URL safely ---
+                try:
+                    domain = getattr(settings, "SITE_DOMAIN", None)
+                    if request.user.is_authenticated:
+                        tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}" if domain else request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+                    else:
+                        tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}" if domain else request.build_absolute_uri(f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}")
+                except Exception as e:
+                    logger.error(f"Failed to build tracking URL: {e}")
+                    tracking_url = request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
 
-                # --- Build tracking URL based on environment ---
-                if settings.DEBUG:
-                    tracking_url = f"http://localhost:8000{reverse('shop:order_tracking', args=[order.order_number])}"
-                else:
-                    tracking_url = f"{settings.SITE_DOMAIN}{reverse('shop:order_tracking', args=[order.order_number])}"
-
+                # --- Email ---
                 email_subject = f"Order Confirmation - {order.order_number}"
                 email_message = (
                     f"Hi,\n\n"
@@ -401,7 +391,7 @@ def checkout(request):
                     "Best regards,\nLinetrendy Team"
                 )
 
-                # Create order items
+                # --- Create order items ---
                 for item in cart_items:
                     OrderItem.objects.create(
                         order=order,
@@ -411,20 +401,22 @@ def checkout(request):
                         price=item.product.price if item.product else getattr(item, 'price', 0),
                     )
 
-                # Clear cart
+                # --- Clear cart ---
                 cart.items.all().delete()
                 cart.shipping_method = None
                 cart.discount = None
                 cart.save()
 
-                # Send email asynchronously
+                # --- Send email ---
                 try:
                     send_mail(email_subject, email_message, settings.DEFAULT_FROM_EMAIL, [email_to], fail_silently=False)
                 except Exception as e:
                     logger.error(f"Email sending failed: {e}")
 
-                # Save payment intent in session
+                # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
+                if guest_email:
+                    request.session["guest_email"] = guest_email
 
                 return redirect("shop:checkout_success")
 
@@ -451,7 +443,6 @@ def checkout(request):
 
 
 
-
 def checkout_success(request):
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
@@ -470,21 +461,36 @@ def checkout_success(request):
     # Calculate totals from order items
     order_items = order.items.select_related('product').all()
     subtotal = sum(item.price * item.quantity for item in order_items)
-    shipping_fee = order.cart.shipping_method.get_fee(subtotal) if order.cart and order.cart.shipping_method else Decimal("0.00")
-    discount = order.cart.discount.get_discount(subtotal) if order.cart and order.cart.discount and order.cart.discount.active else Decimal("0.00")
+
+    # Use stored shipping and discount values (cart may be cleared)
+    shipping_fee = order.shipping_fee
+    discount = order.discount_amount
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
+    # --- Prepare tracking URLs safely ---
+    try:
+        domain = getattr(settings, "SITE_DOMAIN", None)
 
-    print(shipping_fee)
-    # --- Prepare tracking URLs ---
-    if request.user.is_authenticated:
+        if request.user.is_authenticated:
+            if domain:
+                tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}"
+            else:
+                logger.warning("SITE_DOMAIN is not set, falling back to request.build_absolute_uri()")
+                tracking_url = request.build_absolute_uri(
+                    reverse('shop:order_tracking', args=[order.order_number])
+                )
+        else:
+            if domain:
+                tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+            else:
+                logger.warning("SITE_DOMAIN is not set, falling back to request.build_absolute_uri()")
+                tracking_url = request.build_absolute_uri(
+                    f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+                )
+    except Exception as e:
+        logger.error(f"Failed to build tracking URL: {e}")
         tracking_url = request.build_absolute_uri(
             reverse('shop:order_tracking', args=[order.order_number])
-        )
-    else:
-        # Use query parameter for guest
-        tracking_url = request.build_absolute_uri(
-            f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
         )
 
     # Clear session
@@ -501,6 +507,9 @@ def checkout_success(request):
         "tracking_url": tracking_url,  # Pass tracking URL to template
     }
     return render(request, "linetrendy/checkout_success.html", context)
+
+
+
 
 
 
@@ -523,7 +532,6 @@ def store_payment_intent(request):
     return HttpResponse("Method not allowed", status=405)
 
     
-
 
 
 
