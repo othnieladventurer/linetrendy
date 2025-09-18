@@ -474,6 +474,8 @@ def checkout_success(request):
     discount = order.cart.discount.get_discount(subtotal) if order.cart and order.cart.discount and order.cart.discount.active else Decimal("0.00")
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
+
+    print(shipping_fee)
     # --- Prepare tracking URLs ---
     if request.user.is_authenticated:
         tracking_url = request.build_absolute_uri(
