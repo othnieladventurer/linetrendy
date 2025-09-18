@@ -332,32 +332,51 @@ def checkout(request):
 
         try:
             with transaction.atomic():
-                # --- CREATE ORDER (authenticated or guest) ---
                 if request.user.is_authenticated:
+                    order = Order.objects.create(
+                        user=request.user,
+                        cart=cart,
+                        total_amount=final_total,
+                        payment_intent_id=payment_intent_id,
+                        shipping_fee=shipping_fee,
+                        discount_amount=discount,
+                    )
+
+                    if selected_address_id:
+                        address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
+                        address.order = order
+                        address.save()
+                    else:
+                        ShippingAddress.objects.create(
+                            user=request.user,
+                            order=order,
+                            full_name=request.POST.get("full_name"),
+                            line1=request.POST.get("line1"),
+                            line2=request.POST.get("line2"),
+                            city=request.POST.get("city"),
+                            state=request.POST.get("state"),
+                            postal_code=request.POST.get("postal_code"),
+                            country=request.POST.get("country"),
+                            phone=request.POST.get("phone"),
+                        )
+
                     email_to = request.user.email
-                    guest_email = None
-                else:
+
+                else:  # Guest user
                     guest_email = request.POST.get("email")
                     if not guest_email:
                         return HttpResponse("Guest email is required", status=400)
-                    email_to = guest_email
 
-                order = Order.objects.create(
-                    user=request.user if request.user.is_authenticated else None,
-                    guest_email=guest_email,
-                    cart=cart,
-                    total_amount=final_total,
-                    payment_intent_id=payment_intent_id,
-                    shipping_fee=shipping_fee,   # ✅ include for all orders
-                    discount_amount=discount,    # ✅ include for all orders
-                )
+                    order = Order.objects.create(
+                        user=None,
+                        cart=cart,
+                        total_amount=final_total,
+                        payment_intent_id=payment_intent_id,
+                        shipping_fee=shipping_fee,
+                        discount_amount=discount,
+                        guest_email=guest_email,
+                    )
 
-                # --- SHIPPING ADDRESS ---
-                if request.user.is_authenticated and selected_address_id:
-                    address = ShippingAddress.objects.get(id=selected_address_id, user=request.user)
-                    address.order = order
-                    address.save()
-                else:
                     ShippingAddress.objects.create(
                         order=order,
                         full_name=request.POST.get("full_name"),
@@ -368,21 +387,32 @@ def checkout(request):
                         postal_code=request.POST.get("postal_code"),
                         country=request.POST.get("country"),
                         phone=request.POST.get("phone"),
-                        user=request.user if request.user.is_authenticated else None,
                     )
+
+                    request.session["guest_email"] = guest_email
+                    email_to = guest_email
 
                 # --- Build tracking URL safely ---
                 try:
-                    domain = getattr(settings, "SITE_DOMAIN", None)
-                    if request.user.is_authenticated:
-                        tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}" if domain else request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+                    if settings.DEBUG:
+                        tracking_url = request.build_absolute_uri(
+                            reverse('shop:order_tracking', args=[order.order_number])
+                        )
                     else:
-                        tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}" if domain else request.build_absolute_uri(f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}")
+                        domain = getattr(settings, "SITE_DOMAIN", None)
+                        if not domain:
+                            logger.warning("SITE_DOMAIN is not set, falling back to request.build_absolute_uri()")
+                            tracking_url = request.build_absolute_uri(
+                                reverse('shop:order_tracking', args=[order.order_number])
+                            )
+                        else:
+                            tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}"
                 except Exception as e:
                     logger.error(f"Failed to build tracking URL: {e}")
-                    tracking_url = request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+                    tracking_url = request.build_absolute_uri(
+                        reverse('shop:order_tracking', args=[order.order_number])
+                    )
 
-                # --- Email ---
                 email_subject = f"Order Confirmation - {order.order_number}"
                 email_message = (
                     f"Hi,\n\n"
@@ -391,7 +421,7 @@ def checkout(request):
                     "Best regards,\nLinetrendy Team"
                 )
 
-                # --- Create order items ---
+                # Create order items
                 for item in cart_items:
                     OrderItem.objects.create(
                         order=order,
@@ -401,22 +431,27 @@ def checkout(request):
                         price=item.product.price if item.product else getattr(item, 'price', 0),
                     )
 
-                # --- Clear cart ---
+                # Clear cart
                 cart.items.all().delete()
                 cart.shipping_method = None
                 cart.discount = None
                 cart.save()
 
-                # --- Send email ---
+                # --- Safe Email Sending ---
                 try:
-                    send_mail(email_subject, email_message, settings.DEFAULT_FROM_EMAIL, [email_to], fail_silently=False)
+                    send_mail(
+                        email_subject,
+                        email_message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [email_to],
+                        fail_silently=False  # will raise if config broken
+                    )
                 except Exception as e:
                     logger.error(f"Email sending failed: {e}")
+                    # do not raise → checkout should still succeed
 
-                # --- Save payment intent in session ---
+                # Save payment intent in session
                 request.session["last_payment_intent_id"] = payment_intent_id
-                if guest_email:
-                    request.session["guest_email"] = guest_email
 
                 return redirect("shop:checkout_success")
 
@@ -436,7 +471,6 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
-
 
 
 
