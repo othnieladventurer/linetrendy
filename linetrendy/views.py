@@ -692,18 +692,21 @@ def delete_address(request):
 
 
 
-
 def order_tracking_view(request, order_number):
     """
     Allow:
-      - Logged-in users: track only their own orders
+      - Logged-in users: track their own orders, or guest orders by order_number
       - Guests: track order by order_number only
     """
     if request.user.is_authenticated:
-        # Logged-in user: must belong to them
-        order_obj = get_object_or_404(Order, order_number=order_number, user=request.user)
+        try:
+            # Try to fetch the user's own order first
+            order_obj = Order.objects.get(order_number=order_number, user=request.user)
+        except Order.DoesNotExist:
+            # If not found, allow lookup of guest orders
+            order_obj = get_object_or_404(Order, order_number=order_number, user=None)
     else:
-        # Guest: allow lookup only by order_number
+        # Guest user: lookup only by order_number
         order_obj = get_object_or_404(Order, order_number=order_number)
 
     # Steps definition
@@ -738,6 +741,7 @@ def order_tracking_view(request, order_number):
         "total_steps": len(steps),
     }
     return render(request, "linetrendy/order_tracking.html", context)
+
 
 
 
