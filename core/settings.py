@@ -251,10 +251,10 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 
 #Email setup
-EMAIL_TIMEOUT = 15
+EMAIL_TIMEOUT = 5
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com' 
-EMAIL_PORT = 465 
+EMAIL_PORT = 587 
 EMAIL_USE_SSL = True                    
 EMAIL_USE_TLS = False              
 EMAIL_HOST_USER = 'orders@saasiskey.com'

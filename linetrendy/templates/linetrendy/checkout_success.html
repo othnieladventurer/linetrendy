@@ -105,34 +105,64 @@
     <!-- Script to trigger print/download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-document.getElementById("download-receipt").addEventListener("click", function() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+      document.getElementById("download-receipt").addEventListener("click", function() {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p', 'pt', 'a4');
+          const margin = 40;
+          let y = margin;
 
-    let y = 10;
-    doc.setFontSize(16);
-    doc.text("Order Receipt #{{ order.order_number }}", 10, y);
-    y += 10;
-    doc.setFontSize(12);
-    doc.text("Items:", 10, y);
-    y += 8;
+          doc.setFontSize(18);
+          doc.setFont("helvetica", "bold");
+          doc.text("Linetrendy", 40, y);
+          y += 30;
+          doc.setFontSize(16);
+          doc.text("Order Receipt #" + "{{ order.order_number }}", 40, y);
+          y += 25;
 
-    {% for item in order_items %}
-    doc.text("{{ item.product_name }} × {{ item.quantity }} - ${{ item.price|floatformat:2 }}", 10, y);
-    y += 6;
-    {% endfor %}
+          doc.setFontSize(12);
+          doc.setFont("helvetica", "normal");
+          doc.text("Customer: {% if order.guest_email %}{{ order.guest_email }}{% else %}{{ order.user.email }}{% endif %}", 40, y);
+          y += 20;
 
-    y += 4;
-    doc.text("Subtotal: ${{ subtotal|floatformat:2 }}", 10, y); y += 6;
-    doc.text("Shipping: ${{ shipping_fee|floatformat:2 }}", 10, y); y += 6;
-    {% if discount %}
-    doc.text("Discount: - ${{ discount|floatformat:2 }}", 10, y); y += 6;
-    {% endif %}
-    doc.text("Total: ${{ order.total_amount|floatformat:2 }}", 10, y); y += 6;
+          doc.text("Order Summary:", 40, y);
+          y += 15;
 
-    doc.save("receipt_{{ order.order_number }}.pdf");
-});
-</script>
+          {% for item in order_items %}
+          doc.text("{{ item.product_name }} × {{ item.quantity }}", 50, y);
+          doc.text("$ {{ item.price|floatformat:2 }}", 400, y, {align: "right"});
+          y += 15;
+          {% endfor %}
+
+          y += 10;
+          doc.setDrawColor(0);
+          doc.setLineWidth(0.5);
+          doc.line(margin, y, 550, y);
+          y += 15;
+
+          doc.text("Subtotal:", 50, y);
+          doc.text("$ {{ subtotal|floatformat:2 }}", 400, y, {align: "right"});
+          y += 15;
+          doc.text("Shipping:", 50, y);
+          doc.text("$ {{ shipping_fee|floatformat:2 }}", 400, y, {align: "right"});
+          y += 15;
+          {% if discount %}
+          doc.text("Discount:", 50, y);
+          doc.text("- $ {{ discount|floatformat:2 }}", 400, y, {align: "right"});
+          y += 15;
+          {% endif %}
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(14);
+          doc.text("Total:", 50, y);
+          doc.text("$ {{ order.total_amount|floatformat:2 }}", 400, y, {align: "right"});
+          y += 25;
+
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text("Thank you for shopping with Linetrendy!", 40, y);
+
+          doc.save("receipt_{{ order.order_number }}.pdf");
+      });
+    </script>
 
    
   </div>
