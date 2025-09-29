@@ -479,13 +479,17 @@ def checkout_success(request):
             "Best regards,\nLinetrendy Team"
         )
 
-        send_mail(
-            subject=email_subject,
-            message=email_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[email_to],
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject=email_subject,
+                message=email_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email_to],
+                fail_silently=True,  # Prevent crash
+            )
+            logger.info(f"Confirmation email sent to {email_to}")
+        except Exception as e:
+            logger.error(f"Email sending failed: {e}", exc_info=True)
         print(f"Confirmation email sent to {email_to}")  # Debug log
 
     except Exception as e:
