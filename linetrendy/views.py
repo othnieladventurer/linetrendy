@@ -302,7 +302,6 @@ def send_email_async(subject, message, from_email, recipient_list):
 
 
 
-
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product')
@@ -429,16 +428,25 @@ def checkout(request):
                 cart.save()
 
                 # --- Send Email Safely ---
+                # Minimal, focused fix: use get_connection(fail_silently=True) and EmailMessage.send()
+                # so any SMTP/connectivity issues won't bubble up and crash the worker.
                 try:
-                    send_mail(
-                        email_subject,
-                        email_message,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [email_to],
-                        fail_silently=False
+                    from django.core.mail import get_connection, EmailMessage
+
+                    connection = get_connection(fail_silently=True)
+                    email_obj = EmailMessage(
+                        subject=email_subject,
+                        body=email_message,
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        to=[email_to],
+                        connection=connection,
                     )
+                    sent_count = email_obj.send()
+                    if sent_count == 0:
+                        logger.warning("Order confirmation email not sent (0 messages). Check mail backend or connectivity.")
                 except Exception as e:
-                    logger.error(f"Email sending failed: {e}", exc_info=True)
+                    # This catch is purely defensive; with fail_silently=True the connection should not raise.
+                    logger.error(f"Email sending failed unexpectedly: {e}", exc_info=True)
 
                 # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
