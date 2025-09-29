@@ -293,11 +293,17 @@ logger = logging.getLogger(__name__)
 
 def send_email_async(subject, message, from_email, recipient_list):
     """Send email in a separate thread to avoid blocking Gunicorn."""
-    try:
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-    except Exception as e:
-        logger.error(f"Email sending failed: {e}")
+    def _send():
+        try:
+            connection = get_connection(fail_silently=True, timeout=10)
+            email_obj = EmailMessage(subject, message, from_email, recipient_list, connection=connection)
+            sent_count = email_obj.send()
+            if sent_count == 0:
+                logger.warning("Email not sent (0 messages). Check SMTP or backend.")
+        except Exception as e:
+            logger.error(f"Async email sending failed: {e}", exc_info=True)
 
+    threading.Thread(target=_send, daemon=True).start()
 
 
 
