@@ -1,36 +1,35 @@
-<!-- checkouy_success.html -->
 {% extends 'linetrendy/base.html' %}
 
 {% block content %}
 <section class="bg-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-10">
   <div class="bg-white shadow-md rounded-lg p-8 max-w-2xl w-full text-center">
-    
+
     <!-- Success Icon -->
     <div class="mb-6">
       <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     </div>
-    
+
     <!-- Heading -->
     <h1 class="text-3xl font-bold text-blue-600 mb-4">Thank you for your order!</h1>
-    
+
     <!-- Payment/Order Confirmation -->
     <p class="text-gray-700 mb-6">
       Your payment was successfully processed. Your order # is 
       <span class="font-semibold text-gray-800">{{ order.order_number }}</span>.
     </p>
-    
+
     <!-- Order Summary -->
     <div class="text-left border-t border-b border-gray-200 py-4 mb-6">
       <h2 class="text-xl font-semibold text-gray-800 mb-3">Order Summary</h2>
 
-        {% for item in order_items %}
-            <div class="flex justify-between mb-2">
-                <span>{{ item.product_name }} × {{ item.quantity }}</span>
-                <span>${{ item.price|floatformat:2 }}</span>
-            </div>
-        {% endfor %}
+      {% for item in order_items %}
+      <div class="flex justify-between mb-2">
+        <span>{{ item.product_name }} × {{ item.quantity }}</span>
+        <span>${{ item.price|floatformat:2 }}</span>
+      </div>
+      {% endfor %}
 
       <div class="flex justify-between font-medium border-t pt-2">
         <span>Subtotal</span><span>${{ subtotal|floatformat:2 }}</span>
@@ -48,23 +47,96 @@
       </div>
     </div>
 
+    <!-- Email Confirmation -->
     <p class="text-gray-600 mb-6">
-      A confirmation email has been sent to <span class="font-semibold">{{ order.user.email }}</span>.
-      You can track your order status in your account dashboard
+      A confirmation email has been sent to <span class="font-semibold">
+        {% if order.guest_email %}{{ order.guest_email }}{% else %}{{ order.user.email }}{% endif %}
+      </span>.
+      You can track your order status in your account dashboard, please make sure your receipt is downloaded and kept in your files for future inquiries.
     </p>
-    
-    <!-- Continue Shopping Button -->
-     {% if user.is_authenticated %}
-    <a href="{% url 'shop:order_tracking' order.order_number %}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
-      Track My Package
-    </a>
-    {% else %}
-    <a href="{{ tracking_url }}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
-      Track My Package
-    </a>
 
+    <!-- Action Buttons -->
+    <div class="flex justify-center gap-4 mt-4">
+      {% if user.is_authenticated %}
+      <a href="{% url 'shop:order_tracking' order.order_number %}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
+        Track My Package
+      </a>
+      {% else %}
+      <a href="{{ tracking_url }}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition">
+        Track My Package
+      </a>
+      {% endif %}
+
+      <!-- Download Receipt Button -->
+      <button id="download-receipt" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition">
+        Download Receipt
+      </button>
+
+    </div>
+
+    <!-- Hidden receipt content for printing -->
+    <div id="receipt-content" class="hidden">
+      <h2 class="text-2xl font-bold mb-4">Order Receipt #{{ order.order_number }}</h2>
+      <div>
+        {% for item in order_items %}
+        <div class="flex justify-between mb-1">
+          <span>{{ item.product_name }} × {{ item.quantity }}</span>
+          <span>${{ item.price|floatformat:2 }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <hr class="my-2">
+      <div class="flex justify-between">
+        <span>Subtotal:</span><span>${{ subtotal|floatformat:2 }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Shipping:</span><span>${{ shipping_fee|floatformat:2 }}</span>
+      </div>
+      {% if discount %}
+      <div class="flex justify-between text-green-600">
+        <span>Discount:</span><span>- ${{ discount|floatformat:2 }}</span>
+      </div>
+      {% endif %}
+      <div class="flex justify-between font-bold text-lg mt-2">
+        <span>Total:</span><span>${{ order.total_amount|floatformat:2 }}</span>
+      </div>
+    </div>
+
+    <!-- Script to trigger print/download -->
+    <script>
+document.getElementById("download-receipt").addEventListener("click", function() {
+    // Build simple PDF content using jsPDF-style simple text (no library)
+    var orderNumber = "{{ order.order_number }}";
+    var subtotal = "{{ subtotal|floatformat:2 }}";
+    var shipping = "{{ shipping_fee|floatformat:2 }}";
+    var discount = "{{ discount|floatformat:2 }}";
+    var total = "{{ order.total_amount|floatformat:2 }}";
+
+    var receiptText = "Order Receipt #" + orderNumber + "\n\n";
+    receiptText += "Items:\n";
+    {% for item in order_items %}
+    receiptText += "{{ item.product_name }} × {{ item.quantity }} - ${{ item.price|floatformat:2 }}\n";
+    {% endfor %}
+    receiptText += "\nSubtotal: $" + subtotal + "\n";
+    receiptText += "Shipping: $" + shipping + "\n";
+    {% if discount %}
+    receiptText += "Discount: -$" + discount + "\n";
     {% endif %}
+    receiptText += "Total: $" + total + "\n";
+
+    // Create a Blob from the text
+    var blob = new Blob([receiptText], { type: "application/pdf" });
+
+    // Create a download link and trigger click
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "receipt_{{ order.order_number }}.pdf";
+    link.click();
+
+    // Release memory
+    URL.revokeObjectURL(link.href);
+});
+</script>
   </div>
 </section>
 {% endblock %}
-

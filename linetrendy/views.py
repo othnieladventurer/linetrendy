@@ -434,7 +434,6 @@ def checkout(request):
 
 
 
-
 def checkout_success(request):
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
@@ -445,7 +444,7 @@ def checkout_success(request):
         order = Order.objects.get(payment_intent_id=last_order_intent)
 
         # Determine which email to send confirmation to
-        if order.guest_email:  # Always prefer guest_email if set
+        if order.guest_email:
             email_to = order.guest_email
         elif order.user and order.user.email:
             email_to = order.user.email
@@ -464,37 +463,31 @@ def checkout_success(request):
 
     # Build tracking URL
     domain = getattr(settings, "SITE_DOMAIN", None)
-    if order.user:  # Authenticated user
+    if order.user:
         tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}" if domain else request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
-    else:  # Guest user
+    else:
         tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}" if domain else request.build_absolute_uri(f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}")
 
-    # Send confirmation email synchronously
+    # Send confirmation email
+    email_subject = f"Order Confirmation - {order.order_number}"
+    email_message = (
+        f"Hi,\n\n"
+        f"Thank you for your order! Your order number is {order.order_number}.\n"
+        f"You can track your order here: {tracking_url}\n\n"
+        "Best regards,\nLinetrendy Team"
+    )
+
     try:
-        email_subject = f"Order Confirmation - {order.order_number}"
-        email_message = (
-            f"Hi,\n\n"
-            f"Thank you for your order! Your order number is {order.order_number}.\n"
-            f"You can track your order here: {tracking_url}\n\n"
-            "Best regards,\nLinetrendy Team"
+        send_mail(
+            subject=email_subject,
+            message=email_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email_to],
+            fail_silently=False,  # Set to False for debugging
         )
-
-        try:
-            send_mail(
-                subject=email_subject,
-                message=email_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email_to],
-                fail_silently=True,  # Prevent crash
-            )
-            logger.info(f"Confirmation email sent to {email_to}")
-        except Exception as e:
-            logger.error(f"Email sending failed: {e}", exc_info=True)
-        print(f"Confirmation email sent to {email_to}")  # Debug log
-
+        logger.info(f"Confirmation email sent to {email_to}")
     except Exception as e:
-        logger.error(f"Failed to send order confirmation email: {e}", exc_info=True)
-        return HttpResponse("Failed to send confirmation email. Please contact support.", status=500)
+        logger.error(f"Email sending failed: {e}", exc_info=True)
 
     # Clear session
     request.session.pop("last_payment_intent_id", None)
@@ -510,7 +503,6 @@ def checkout_success(request):
         "tracking_url": tracking_url,
     }
     return render(request, "linetrendy/checkout_success.html", context)
-
 
 
 
@@ -532,6 +524,21 @@ def store_payment_intent(request):
 
     
 
+
+def order_receipt(request, order_number):
+    # Fetch the order
+    order = get_object_or_404(Order, order_number=order_number)
+    order_items = order.items.select_related('product').all()
+
+    context = {
+        "order": order,
+        "order_items": order_items,
+        "subtotal": sum(item.price * item.quantity for item in order_items),
+        "shipping_fee": order.shipping_fee,
+        "discount": order.discount_amount,
+        "final_total": order.total_amount,
+    }
+    return render(request, "linetrendy/order_receipt.html", context)
 
 
 
