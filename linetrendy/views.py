@@ -16,6 +16,7 @@ from .utils import get_cart
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.core.mail import EmailMessage, get_connection
 
 logger = logging.getLogger(__name__)
 
