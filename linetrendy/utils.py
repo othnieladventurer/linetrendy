@@ -1,6 +1,8 @@
 from .models import Cart
 from django.utils.crypto import get_random_string
-
+# utils/email.py
+import asyncio
+from django.core.mail import send_mail
 
 
 
@@ -17,4 +19,21 @@ def get_cart(request):
     return cart
 
 
+
+
+
+
+
+
+
+
+async def send_email_async(subject, message, from_email, recipient_list, **kwargs):
+    return await asyncio.to_thread(
+        send_mail,
+        subject,
+        message,
+        from_email,
+        recipient_list,
+        **kwargs
+    )
 

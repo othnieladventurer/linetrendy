@@ -2,6 +2,7 @@ import stripe
 import json
 import threading
 import logging
+import asyncio
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from .models import *
@@ -17,6 +18,8 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.core.mail import EmailMessage, get_connection
+from .utils import send_email_async
+
 
 logger = logging.getLogger(__name__)
 
@@ -289,26 +292,6 @@ def remove_from_cart(request, item_id):
 
 
 
-
-logger = logging.getLogger(__name__)
-
-def send_email_async(subject, message, from_email, recipient_list):
-    """Send email in a separate thread to avoid blocking Gunicorn."""
-    def _send():
-        try:
-            connection = get_connection(fail_silently=True, timeout=10)
-            email_obj = EmailMessage(subject, message, from_email, recipient_list, connection=connection)
-            sent_count = email_obj.send()
-            if sent_count == 0:
-                logger.warning("Email not sent (0 messages). Check SMTP or backend.")
-        except Exception as e:
-            logger.error(f"Async email sending failed: {e}", exc_info=True)
-
-    threading.Thread(target=_send, daemon=True).start()
-
-
-
-
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product')
@@ -410,14 +393,6 @@ def checkout(request):
                     logger.error(f"Failed to build tracking URL: {e}")
                     tracking_url = request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
 
-                email_subject = f"Order Confirmation - {order.order_number}"
-                email_message = (
-                    f"Hi,\n\n"
-                    f"Thank you for your order! Your order number is {order.order_number}.\n"
-                    f"You can track your order here: {tracking_url}\n\n"
-                    "Best regards,\nLinetrendy Team"
-                )
-
                 # --- Create Order Items ---
                 for item in cart_items:
                     OrderItem.objects.create(
@@ -433,27 +408,6 @@ def checkout(request):
                 cart.shipping_method = None
                 cart.discount = None
                 cart.save()
-
-                # --- Send Email Safely ---
-                # Minimal, focused fix: use get_connection(fail_silently=True) and EmailMessage.send()
-                # so any SMTP/connectivity issues won't bubble up and crash the worker.
-                try:
-                    from django.core.mail import get_connection, EmailMessage
-
-                    connection = get_connection(fail_silently=True)
-                    email_obj = EmailMessage(
-                        subject=email_subject,
-                        body=email_message,
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        to=[email_to],
-                        connection=connection,
-                    )
-                    sent_count = email_obj.send()
-                    if sent_count == 0:
-                        logger.warning("Order confirmation email not sent (0 messages). Check mail backend or connectivity.")
-                except Exception as e:
-                    # This catch is purely defensive; with fail_silently=True the connection should not raise.
-                    logger.error(f"Email sending failed unexpectedly: {e}", exc_info=True)
 
                 # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
@@ -486,50 +440,57 @@ def checkout_success(request):
     if not last_order_intent:
         return HttpResponse("No recent order found.", status=400)
 
-    # Get the order linked to this payment_intent
     try:
-        if request.user.is_authenticated:
-            order = Order.objects.get(user=request.user, payment_intent_id=last_order_intent)
+        # Get the order by payment_intent_id
+        order = Order.objects.get(payment_intent_id=last_order_intent)
+
+        # Determine which email to send confirmation to
+        if order.guest_email:  # Always prefer guest_email if set
+            email_to = order.guest_email
+        elif order.user and order.user.email:
+            email_to = order.user.email
         else:
-            guest_email = request.session.get("guest_email")
-            order = Order.objects.get(guest_email=guest_email, payment_intent_id=last_order_intent)
+            return HttpResponse("No valid email found for order.", status=400)
+
     except Order.DoesNotExist:
         return HttpResponse("Order not found.", status=404)
 
-    # Calculate totals from order items
+    # Calculate totals
     order_items = order.items.select_related('product').all()
     subtotal = sum(item.price * item.quantity for item in order_items)
-
-    # Use stored shipping and discount values (cart may be cleared)
     shipping_fee = order.shipping_fee
     discount = order.discount_amount
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # --- Prepare tracking URLs safely ---
-    try:
-        domain = getattr(settings, "SITE_DOMAIN", None)
+    # Build tracking URL
+    domain = getattr(settings, "SITE_DOMAIN", None)
+    if order.user:  # Authenticated user
+        tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}" if domain else request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+    else:  # Guest user
+        tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}" if domain else request.build_absolute_uri(f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}")
 
-        if request.user.is_authenticated:
-            if domain:
-                tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}"
-            else:
-                logger.warning("SITE_DOMAIN is not set, falling back to request.build_absolute_uri()")
-                tracking_url = request.build_absolute_uri(
-                    reverse('shop:order_tracking', args=[order.order_number])
-                )
-        else:
-            if domain:
-                tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
-            else:
-                logger.warning("SITE_DOMAIN is not set, falling back to request.build_absolute_uri()")
-                tracking_url = request.build_absolute_uri(
-                    f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
-                )
-    except Exception as e:
-        logger.error(f"Failed to build tracking URL: {e}")
-        tracking_url = request.build_absolute_uri(
-            reverse('shop:order_tracking', args=[order.order_number])
+    # Send confirmation email synchronously
+    try:
+        email_subject = f"Order Confirmation - {order.order_number}"
+        email_message = (
+            f"Hi,\n\n"
+            f"Thank you for your order! Your order number is {order.order_number}.\n"
+            f"You can track your order here: {tracking_url}\n\n"
+            "Best regards,\nLinetrendy Team"
         )
+
+        send_mail(
+            subject=email_subject,
+            message=email_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email_to],
+            fail_silently=False,
+        )
+        print(f"Confirmation email sent to {email_to}")  # Debug log
+
+    except Exception as e:
+        logger.error(f"Failed to send order confirmation email: {e}", exc_info=True)
+        return HttpResponse("Failed to send confirmation email. Please contact support.", status=500)
 
     # Clear session
     request.session.pop("last_payment_intent_id", None)
@@ -542,13 +503,9 @@ def checkout_success(request):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
-        "tracking_url": tracking_url,  # Pass tracking URL to template
+        "tracking_url": tracking_url,
     }
     return render(request, "linetrendy/checkout_success.html", context)
-
-
-
-
 
 
 
@@ -699,22 +656,32 @@ def delete_address(request):
 
 
 
+
 def order_tracking_view(request, order_number):
     """
-    Allow:
-      - Logged-in users: track their own orders, or guest orders by order_number
-      - Guests: track order by order_number only
+    Track orders:
+      - Logged-in users: their orders
+      - Guests: their orders using session email
     """
+    order_obj = None
+
     if request.user.is_authenticated:
-        try:
-            # Try to fetch the user's own order first
-            order_obj = Order.objects.get(order_number=order_number, user=request.user)
-        except Order.DoesNotExist:
-            # If not found, allow lookup of guest orders
-            order_obj = get_object_or_404(Order, order_number=order_number, user=None)
+        # User's own order
+        order_obj = Order.objects.filter(order_number=order_number, user=request.user).first()
+        if not order_obj:
+            # Fallback to guest order if exists
+            order_obj = Order.objects.filter(order_number=order_number, user=None).first()
     else:
-        # Guest user: lookup only by order_number
-        order_obj = get_object_or_404(Order, order_number=order_number)
+        # Guest: require guest_email in session
+        guest_email = request.session.get("guest_email")
+        if guest_email:
+            order_obj = Order.objects.filter(order_number=order_number, guest_email=guest_email).first()
+        else:
+            # Fallback if session lost (less secure but still works)
+            order_obj = Order.objects.filter(order_number=order_number, user=None).first()
+
+    if not order_obj:
+        return HttpResponse("No order found with that number. Please check and try again.", status=404)
 
     # Steps definition
     steps = [
@@ -748,7 +715,6 @@ def order_tracking_view(request, order_number):
         "total_steps": len(steps),
     }
     return render(request, "linetrendy/order_tracking.html", context)
-
 
 
 
