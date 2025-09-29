@@ -103,40 +103,38 @@
     </div>
 
     <!-- Script to trigger print/download -->
-    <script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
 document.getElementById("download-receipt").addEventListener("click", function() {
-    // Build simple PDF content using jsPDF-style simple text (no library)
-    var orderNumber = "{{ order.order_number }}";
-    var subtotal = "{{ subtotal|floatformat:2 }}";
-    var shipping = "{{ shipping_fee|floatformat:2 }}";
-    var discount = "{{ discount|floatformat:2 }}";
-    var total = "{{ order.total_amount|floatformat:2 }}";
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    var receiptText = "Order Receipt #" + orderNumber + "\n\n";
-    receiptText += "Items:\n";
+    let y = 10;
+    doc.setFontSize(16);
+    doc.text("Order Receipt #{{ order.order_number }}", 10, y);
+    y += 10;
+    doc.setFontSize(12);
+    doc.text("Items:", 10, y);
+    y += 8;
+
     {% for item in order_items %}
-    receiptText += "{{ item.product_name }} × {{ item.quantity }} - ${{ item.price|floatformat:2 }}\n";
+    doc.text("{{ item.product_name }} × {{ item.quantity }} - ${{ item.price|floatformat:2 }}", 10, y);
+    y += 6;
     {% endfor %}
-    receiptText += "\nSubtotal: $" + subtotal + "\n";
-    receiptText += "Shipping: $" + shipping + "\n";
+
+    y += 4;
+    doc.text("Subtotal: ${{ subtotal|floatformat:2 }}", 10, y); y += 6;
+    doc.text("Shipping: ${{ shipping_fee|floatformat:2 }}", 10, y); y += 6;
     {% if discount %}
-    receiptText += "Discount: -$" + discount + "\n";
+    doc.text("Discount: - ${{ discount|floatformat:2 }}", 10, y); y += 6;
     {% endif %}
-    receiptText += "Total: $" + total + "\n";
+    doc.text("Total: ${{ order.total_amount|floatformat:2 }}", 10, y); y += 6;
 
-    // Create a Blob from the text
-    var blob = new Blob([receiptText], { type: "application/pdf" });
-
-    // Create a download link and trigger click
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "receipt_{{ order.order_number }}.pdf";
-    link.click();
-
-    // Release memory
-    URL.revokeObjectURL(link.href);
+    doc.save("receipt_{{ order.order_number }}.pdf");
 });
 </script>
+
+   
   </div>
 </section>
 {% endblock %}
