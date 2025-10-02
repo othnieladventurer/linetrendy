@@ -56,7 +56,30 @@
     </div>
 
     <a href="{% url 'shop:checkout' %}" 
-       class="block mt-9 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold text-center transition duration-200">
-       Proceed to Checkout
+        id="checkout-btn"
+        class="block mt-9 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full font-semibold text-center transition duration-200">
+        Proceed to Checkout
     </a>
 </div>
+
+
+<script>
+document.getElementById("checkout-btn").addEventListener("click", function(event) {
+    const shippingSelect = document.getElementById("shipping_method");
+
+    if (shippingSelect && !shippingSelect.value) {
+        event.preventDefault(); // Stop navigation
+        alert("Please select a shipping method before proceeding to checkout.");
+        shippingSelect.focus(); // Focus on the shipping select
+    }
+});
+</script>
+
+
+
+
+
+
+
+
+
