@@ -19,10 +19,10 @@
 
         <!-- Quantity Form -->
         <form method="POST"
-              hx-post="{% url 'shop:update_cart_quantity' cart_item.id %}"
-              hx-target="#cart-item-{{ cart_item.id }}, #cart-totals"
-              hx-swap="outerHTML"
-              class="flex items-center gap-2">
+            hx-post="{% url 'shop:update_cart_quantity' cart_item.id %}"
+            hx-target="#cart-item-{{ cart_item.id }}"
+            hx-swap="outerHTML"
+            class="flex items-center gap-2">
             {% csrf_token %}
             <button type="submit" name="action" value="decrease" class="flex-none w-10 h-10 bg-gray-200 rounded">-</button>
             <span class="flex-none w-12 h-10 flex items-center justify-center border rounded text-center">{{ cart_item.quantity }}</span>
@@ -31,10 +31,9 @@
 
         <!-- Remove Form -->
         <form method="POST"
-              action="{% url 'shop:remove_from_cart' cart_item.id %}"
-              hx-post="{% url 'shop:remove_from_cart' cart_item.id %}"
-              hx-target="#cart-item-{{ cart_item.id }}, #cart-totals"
-              hx-swap="outerHTML">
+            hx-post="{% url 'shop:remove_from_cart' cart_item.id %}"
+            hx-target="#cart-item-{{ cart_item.id }}"
+            hx-swap="outerHTML">
             {% csrf_token %}
             <button type="submit" class="flex-none w-10 h-10"><i class="fa text-red-600 fa-close"></i></button>
         </form>

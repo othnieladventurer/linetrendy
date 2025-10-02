@@ -42,4 +42,35 @@
         {% endif %}
     </div>
 </section>
+
+
+
+<script>
+function enableCheckoutButton() {
+    const select = document.getElementById("shipping_method");
+    const checkoutBtn = document.getElementById("checkout-btn");
+
+    if (!checkoutBtn) return;
+
+    if (select && select.value) {
+        checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
+        checkoutBtn.removeAttribute("title");
+    } else {
+        checkoutBtn.classList.add("opacity-50", "pointer-events-none");
+        checkoutBtn.setAttribute("title", "Please choose a shipping method to continue");
+    }
+}
+
+// Run on load
+document.addEventListener("DOMContentLoaded", enableCheckoutButton);
+
+// Run again if HTMX swaps cart totals (for promo codes or shipping changes)
+document.body.addEventListener("htmx:afterSwap", function(event) {
+    if (event.target.id === "cart-totals-wrapper") {
+        enableCheckoutButton();
+    }
+});
+</script>
+
+
 {% endblock content %}

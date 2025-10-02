@@ -96,6 +96,8 @@ def shop(request):
 
 
 
+
+
 def cart(request):
     # Get or create cart for this user (guest or authenticated)
     cart = get_cart(request)
@@ -104,16 +106,22 @@ def cart(request):
     # Compute cart count
     cart_count = sum(item.quantity for item in cart_items)
 
-    # Handle shipping selection or promo code
+    # Determine if shipping is required
+    require_shipping_address = True
+
+    # Compute subtotal
+    subtotal = sum(item.product.price * item.quantity for item in cart_items)
+
+    # Handle POST requests (shipping selection, promo codes, quantity updates)
     if request.method == 'POST':
         if request.headers.get("HX-Request"):  # HTMX request
-            # Shipping
+            # Update shipping method if provided
             if 'shipping_method' in request.POST:
                 method_id = request.POST.get('shipping_method')
                 cart.shipping_method = get_object_or_404(ShippingMethod, id=method_id)
                 cart.save()
 
-            # Promo code
+            # Apply promo code if provided
             if 'promo_code' in request.POST:
                 code = request.POST.get('promo_code')
                 try:
@@ -125,12 +133,7 @@ def cart(request):
                     cart.save()
 
             # Compute totals
-            subtotal = sum(item.product.price * item.quantity for item in cart_items)
-
-            # Determine if shipping is required
-            require_shipping_address = subtotal <= 35
-
-            shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method and require_shipping_address else Decimal('0.00')
+            shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
             discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
             final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
 
@@ -148,7 +151,7 @@ def cart(request):
             return render(request, 'linetrendy/partials/cart_totals.html', context)
 
         else:
-            # Regular POST fallback for non-HTMX
+            # Regular POST fallback (non-HTMX)
             if 'shipping_method' in request.POST:
                 method_id = request.POST.get('shipping_method')
                 cart.shipping_method = get_object_or_404(ShippingMethod, id=method_id)
@@ -166,9 +169,7 @@ def cart(request):
             return redirect('shop:cart')
 
     # Normal GET request
-    subtotal = sum(item.product.price * item.quantity for item in cart_items)
-    require_shipping_address = subtotal <= 35
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method and require_shipping_address else Decimal('0.00')
+    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
     discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
     final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
 
@@ -185,7 +186,6 @@ def cart(request):
     }
 
     return render(request, 'linetrendy/cart.html', context)
-
 
 
 
@@ -218,6 +218,7 @@ def add_to_cart(request):
     return redirect("/")
 
 
+
 def update_cart_quantity(request, item_id):
     cart = get_cart(request)
     cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
@@ -239,7 +240,8 @@ def update_cart_quantity(request, item_id):
     cart_count = sum(i.quantity for i in cart_items)
 
     # Determine if shipping is required (subtotal <= 35)
-    require_shipping_address = subtotal <= Decimal("35.00")
+    require_shipping_address = True
+
 
     context = {
         "cart_item": cart_item,
@@ -280,7 +282,8 @@ def remove_from_cart(request, item_id):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
-        "cart_count": cart_count
+        "cart_count": cart_count,
+        "require_shipping_address": True, 
     }
 
     if request.headers.get("HX-Request") == "true":

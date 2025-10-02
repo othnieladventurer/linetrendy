@@ -26,7 +26,6 @@ class CustomSignupForm(SignupForm):
     password2 = forms.CharField(
         widget=forms.PasswordInput, required=True, label="Confirm Password"
     )
-    captcha = ReCaptchaField()
 
     def save(self, request):
         user = super().save(request)
