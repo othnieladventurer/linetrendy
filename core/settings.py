@@ -41,6 +41,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     'https://www.linetrendy.saasiskey.com',
     'https://linetrendy.saasiskey.com',
+    'https://linetrendy.com',
+
     'https://linetrendy-production.up.railway.app',
 
 ]
@@ -149,6 +151,11 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 
 SITE_DOMAIN = "https://linetrendy.saasiskey.com"
+
+
+
+USE_TZ = True
+TIME_ZONE = 'America/New_York'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

@@ -6,6 +6,7 @@ from decimal import Decimal
 from django_countries.fields import CountryField
 from django.db import transaction
 import uuid
+import pytz
 
 # Create your models here.
 
@@ -306,7 +307,19 @@ class BillingAddress(models.Model):
 
 
 
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(editable=False)
+    is_active = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        if not self.subscribed_at:
+            local_tz = pytz.timezone("Asia/Karachi")  # ← replace with your timezone
+            self.subscribed_at = timezone.now().astimezone(local_tz)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.email
 
 
 

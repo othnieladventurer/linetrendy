@@ -3,6 +3,7 @@ import json
 import threading
 import logging
 import asyncio
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from .models import *
@@ -21,6 +22,8 @@ from django.core.mail import EmailMessage, get_connection
 from .utils import send_email_async
 
 
+
+
 logger = logging.getLogger(__name__)
 
 # Create your views here.
@@ -33,16 +36,37 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 
+@csrf_exempt
 def index(request):
-    product=Product.objects.all().order_by('-created_at')
+    # Handle AJAX newsletter subscription
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            email = data.get("email")
+
+            if not email:
+                return JsonResponse({"success": False, "message": "Please enter an email."})
+
+            obj, created = Newsletter.objects.get_or_create(email=email)
+            if not created:
+                return JsonResponse({"success": False, "message": "Already subscribed."})
+
+            return JsonResponse({"success": True, "message": "Subscribed successfully!"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": "Something went wrong."})
+
+    # Normal GET request
+    product = Product.objects.all().order_by('-created_at')
     category = Category.objects.all()
 
     context = {
         'products': product[:8],
-        'categories': category,  
+        'categories': category,
     }
     return render(request, 'linetrendy/index.html', context)
 
+
+    
 
 
 def product_detail(request, slug):
@@ -824,7 +848,6 @@ def faq(request):
 
 def disclaimer(request):
     return render(request, 'linetrendy/disclaimer.html')
-
 
 
 

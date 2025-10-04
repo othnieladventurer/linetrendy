@@ -138,3 +138,24 @@ class OrderItemAdmin(ModelAdmin):
             return f"Guest ({obj.order.guest_email})"
         return f"Guest #{obj.order.id}"
     customer_display.short_description = "Customer"
+
+
+
+
+
+
+
+@admin.register(Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = ("email", "subscribed_at", "is_active")
+    list_filter = ("is_active", "subscribed_at")
+    search_fields = ("email",)
+    ordering = ("-subscribed_at",)
+
+
+
+
+
+
+
+

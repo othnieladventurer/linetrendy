@@ -56,17 +56,81 @@ addToCartBtns.forEach(btn => {
     });
 });
 
-// Newsletter Form Submission
-const newsletterForm = document.querySelector('form');
+// Newsletter Subscription
+// Newsletter Subscription
+document.getElementById("newsletterForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-newsletterForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const emailInput = newsletterForm.querySelector('input[type="email"]');
-    
-    // In a real app, you would send this to your backend
-    alert(`Thank you for subscribing with ${emailInput.value}! You'll receive our beauty tips soon.`);
-    emailInput.value = '';
+  const emailInput = document.getElementById("emailInput");
+  const btn = document.getElementById("subscribeBtn");
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Subscribing...";
+
+  try {
+    const response = await fetch("/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      btn.textContent = "Subscribed ✓";
+      btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+      btn.classList.add("bg-green-500");
+    } else {
+      btn.textContent = data.message;
+      btn.disabled = false;
+    }
+  } catch (error) {
+    btn.textContent = "Error! Try again.";
+    btn.disabled = false;
+  }
 });
+
+// Helper to get CSRF token from cookie
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Helper for CSRF token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 
 // Search Functionality
 const searchBtn = document.querySelector('button[aria-label="Search"]');
