@@ -20,6 +20,7 @@ from django.core.mail import send_mail
 from django.db.models import Q
 from django.core.mail import EmailMessage, get_connection
 from .utils import send_email_async
+from .models import Newsletter, Testimonial
 
 
 
@@ -59,9 +60,12 @@ def index(request):
     product = Product.objects.all().order_by('-created_at')
     category = Category.objects.all()
 
+    testimonial = Testimonial.objects.all()
+
     context = {
         'products': product[:8],
         'categories': category,
+        'testimonials': testimonial
     }
     return render(request, 'linetrendy/index.html', context)
 

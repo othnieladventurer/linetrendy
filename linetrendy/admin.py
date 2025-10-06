@@ -1,6 +1,8 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin  # Use django-unfold
 from .models import *
+from .forms import TestimonialAdminForm
+from django.utils.html import format_html   
 
 # ----------------------
 # Product & Category
@@ -159,3 +161,52 @@ class NewsletterAdmin(admin.ModelAdmin):
 
 
 
+
+@admin.register(Testimonial)
+class TestimonialAdmin(ModelAdmin):
+    form = TestimonialAdminForm
+
+    list_display = ("name", "short_content", "created_at", "preview_image", "rating_stars")
+    readonly_fields = ("created_at", "preview_image", "rating_stars")  # preview only
+    search_fields = ("name", "content")
+    ordering = ("-created_at",)
+
+    # Include rating in the form
+    fieldsets = (
+        ("Client Info", {
+            "fields": ("name", "image", "rating"),  # rating editable here
+        }),
+        ("Testimonial Content", {
+            "fields": ("content",),
+        }),
+        ("Metadata", {
+            "fields": ("created_at",),
+            "classes": ("collapse",),
+        }),
+    )
+
+    # Short preview of content
+    def short_content(self, obj):
+        return (obj.content[:60] + "...") if len(obj.content) > 60 else obj.content
+    short_content.short_description = "Content Preview"
+
+    # Image preview
+    def preview_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="height:60px;border-radius:6px;" />', obj.image.url)
+        return "—"
+    preview_image.short_description = "Image"
+
+    # Dynamic star preview
+    def rating_stars(self, obj):
+        html = '<div class="flex space-x-1">'
+        for i in range(1, 6):
+            if i <= obj.rating:
+                html += '<i class="fas fa-star text-blue-600"></i>'
+            else:
+                html += '<i class="fas fa-star text-gray-300"></i>'
+        html += '</div>'
+        return format_html(html)
+    rating_stars.short_description = "Rating"
+
+    

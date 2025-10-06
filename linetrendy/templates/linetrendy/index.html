@@ -200,6 +200,7 @@
 
 <!-- Testimonials Section -->
 <!-- ✅ Testimonials Section with Owl Carousel -->
+{% if testimonials %}
 <section class="py-16 bg-gray-100">
   <div class="container mx-auto px-4">
     <h2 class="text-3xl font-heading font-bold text-center mb-12 text-red-600">
@@ -210,77 +211,40 @@
     <div class="owl-carousel owl-theme">
       
       <!-- Testimonial 1 -->
+
+      {% for testimonial in testimonials %}
       <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
         <div class="flex mb-4">
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
+          {% for i in "12345" %}
+            {% if forloop.counter <= testimonial.rating %}
+              <i class="fas fa-star text-blue-600"></i>
+            {% else %}
+              <i class="fas fa-star text-gray-300"></i>
+            {% endif %}
+          {% endfor %}
         </div>
         <p class="text-red-800 mb-4">
-          "This serum transformed my skin! I've never felt more confident. The glow is real and it's completely natural."
+          "{{ testimonial.content }}"
         </p>
         <div class="flex items-center">
           <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
             <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah L." class="w-full h-full object-cover">
           </div>
           <div>
-            <h4 class="font-bold text-blue-500">Sarah L.</h4>
-            <p class="text-sm text-red-600">Verified Customer</p>
+            <h4 class="font-bold text-blue-500">{{ testimonial.name }}</h4>
+            <p class="text-sm text-red-600">Customer</p>
           </div>
         </div>
       </div>
+      {% endfor %}
 
-      <!-- Testimonial 2 -->
-      <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
-        <div class="flex mb-4">
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-        </div>
-        <p class="text-red-800 mb-4">
-          "Absolutely love this! My skin feels smoother and healthier after just a few weeks of use."
-        </p>
-        <div class="flex items-center">
-          <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
-            <img src="https://randomuser.me/api/portraits/men/34.jpg" alt="John D." class="w-full h-full object-cover">
-          </div>
-          <div>
-            <h4 class="font-bold text-blue-500">John D.</h4>
-            <p class="text-sm text-red-600">Verified Customer</p>
-          </div>
-        </div>
-      </div>
+   
 
-      <!-- Testimonial 3 -->
-      <div class="testimonial-card bg-white p-6 rounded-lg shadow-md">
-        <div class="flex mb-4">
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-          <i class="fas fa-star text-blue-600"></i>
-        </div>
-        <p class="text-red-800 mb-4">
-          "Highly recommend this serum! It feels lightweight and makes my skin glow naturally."
-        </p>
-        <div class="flex items-center">
-          <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
-            <img src="https://randomuser.me/api/portraits/women/55.jpg" alt="Emma W." class="w-full h-full object-cover">
-          </div>
-          <div>
-            <h4 class="font-bold text-blue-500">Emma W.</h4>
-            <p class="text-sm text-red-600">Verified Customer</p>
-          </div>
-        </div>
-      </div>
-
+      
     </div>
   </div>
 </section>
+{% endif %}
 
 
 <!-- Newsletter Section -->

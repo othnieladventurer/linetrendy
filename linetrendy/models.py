@@ -324,3 +324,32 @@ class Newsletter(models.Model):
 
 
 
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    content = models.TextField()
+    image = models.ImageField(upload_to='testimonials/', null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(default=0)  # 0–5
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Testimonial by {self.name}"
+
+    def star_rating(self):
+        """Return HTML for 5 stars with dynamic coloring."""
+        stars_html = ""
+        for i in range(1, 6):
+            if i <= self.rating:
+                stars_html += '<i class="fas fa-star text-blue-600"></i> '
+            else:
+                stars_html += '<i class="fas fa-star text-gray-300"></i> '
+        return stars_html
+    star_rating.allow_tags = True  # For older Django versions
+    star_rating.short_description = "Rating"
+
+
+
+
+
+
+
