@@ -1,0 +1,114 @@
+{% extends "linetrendy/emails/email_base.html" %}
+
+{% block email_content %}
+<!-- Greeting -->
+<p class="text-lg mb-6">Hello <strong>{{ recipient_name }}</strong>,</p>
+
+<!-- Main Message -->
+<p class="mb-6">Your order <strong>{{ order_number }}</strong> status has been updated:</p>
+
+<!-- Order Status Card -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-8">
+    <tr>
+        <td class="bg-red-50 border-l-4 p-6 rounded">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <span class="bg-red-600 text-white py-2 px-4 rounded font-semibold" style="display: inline-block;">
+                            {{ status_display }}
+                        </span>
+                        <br><br>
+                        <table width="100%" class="text-gray-700">
+                            <tr>
+                                <td width="120"><strong>Order #:</strong></td>
+                                <td>{{ order_number }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Amount:</strong></td>
+                                <td>${{ total_amount }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Order Date:</strong></td>
+                                <td>{{ order_date }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Status Specific Message -->
+{% if status == "shipped" %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-xl mb-4">🚚 <strong>Your order has been shipped!</strong></p>
+            <p>It's on its way to you. You will receive tracking information soon.</p>
+        </td>
+    </tr>
+</table>
+{% elif status == "out_for_delivery" %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-xl mb-4">📦 <strong>Your order is out for delivery!</strong></p>
+            <p>Please ensure someone is available to receive your package today.</p>
+        </td>
+    </tr>
+</table>
+{% elif status == "delivered" %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-xl mb-4">✅ <strong>Your order has been delivered!</strong></p>
+            <p>We hope you love your items. Thank you for shopping with us!</p>
+        </td>
+    </tr>
+</table>
+{% elif status == "cancelled" %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-xl mb-4">❌ <strong>Your order has been cancelled.</strong></p>
+            <p>If this was unexpected, please contact our support team.</p>
+        </td>
+    </tr>
+</table>
+{% elif status == "refunded" %}
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-xl mb-4">💳 <strong>Your order has been refunded.</strong></p>
+            <p>The amount will be credited back to your original payment method within 5-7 business days.</p>
+        </td>
+    </tr>
+</table>
+{% endif %}
+
+<!-- Divider -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td class="divider"></td>
+    </tr>
+</table>
+
+<!-- Support Section -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="mb-6">
+    <tr>
+        <td class="text-center">
+            <p class="text-gray-600 mb-4">If you have any questions about your order, please contact our customer support team.</p>
+        </td>
+    </tr>
+</table>
+
+<!-- Support Button -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td class="text-center">
+            <a href="mailto:support@linetrendy.com" class="btn">Contact Support</a>
+        </td>
+    </tr>
+</table>
+{% endblock %}

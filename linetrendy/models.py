@@ -1,3 +1,5 @@
+import uuid
+import pytz
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
@@ -5,8 +7,7 @@ from django.conf import settings
 from decimal import Decimal
 from django_countries.fields import CountryField
 from django.db import transaction
-import uuid
-import pytz
+from decimal import Decimal, getcontext, ROUND_HALF_UP
 
 # Create your models here.
 
@@ -121,19 +122,43 @@ class Discount(models.Model):
                                   help_text="Percentage discount, e.g., 10 for 10%")
     active = models.BooleanField(default=True)
 
-    def get_discount(self, subtotal):
-        """Calculate discount amount based on subtotal"""
-        if self.amount:
-            return self.amount
-        elif self.percent:
-            return subtotal * (self.percent / 100)
-        return Decimal('0.00')
+    def clean(self):
+        """Validate that either amount or percent is set, but not both."""
+        if self.amount and self.percent:
+            raise ValidationError("Cannot set both amount and percent discount.")
+        if not self.amount and not self.percent:
+            raise ValidationError("Either amount or percent must be set.")
+        if self.percent and (self.percent < 0 or self.percent > 100):
+            raise ValidationError("Percent discount must be between 0 and 100.")
+
+    def get_discount(self, subtotal: Decimal) -> Decimal:
+        """Calculate discount amount based on subtotal."""
+        if self.amount is not None:
+            # For fixed amount discount, return the amount (capped at subtotal)
+            discount = min(self.amount, subtotal)
+            return discount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        elif self.percent is not None:
+            # For percentage discount
+            percent_decimal = Decimal(self.percent) / Decimal("100")
+            discount = subtotal * percent_decimal
+            return discount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return Decimal("0.00")
 
     def __str__(self):
         return self.code
-    
 
 
+
+class DiscountUsage(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    discount = models.ForeignKey("Discount", on_delete=models.CASCADE)
+    used_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "discount")  # ensures one-time use
+
+    def __str__(self):
+        return f"{self.user} used {self.discount.code}"
 
 
 
@@ -179,6 +204,7 @@ class Order(models.Model):
     STATUS_CHOICES = [
         ("placed", "Order Placed"),
         ("shipped", "Shipped"),
+        ("out_for_delivery", "Out for delivery"),
         ("delivered", "Delivered"),
         ("cancelled", "Cancelled"),
         ("refunded", "Refunded"),
@@ -217,6 +243,16 @@ class Order(models.Model):
                     new_seq = 1
                 self.order_number = f"ORD{today}-{new_seq:03d}"
         super().save(*args, **kwargs)
+
+    def get_customer_email(self):
+        if self.user:
+            return self.user.email
+        return self.guest_email
+
+    def get_customer_name(self):
+        if self.user:
+            return self.user.get_full_name() or self.user.username
+        return "Customer"
 
     def __str__(self):
         display_status = dict(self.STATUS_CHOICES).get(self.status, self.status)

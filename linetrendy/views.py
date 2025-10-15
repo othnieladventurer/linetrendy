@@ -126,94 +126,158 @@ def shop(request):
 
 
 
+
+
 def cart(request):
-    # Get or create cart for this user (guest or authenticated)
-    cart = get_cart(request)
-    cart_items = cart.items.select_related('product').all()
+    """Display and update the shopping cart with HTMX-friendly promo code support."""
 
-    # Compute cart count
-    cart_count = sum(item.quantity for item in cart_items)
-
-    # Determine if shipping is required
-    require_shipping_address = True
-
-    # Compute subtotal
-    subtotal = sum(item.product.price * item.quantity for item in cart_items)
-
-    # Handle POST requests (shipping selection, promo codes, quantity updates)
-    if request.method == 'POST':
-        if request.headers.get("HX-Request"):  # HTMX request
-            # Update shipping method if provided
-            if 'shipping_method' in request.POST:
-                method_id = request.POST.get('shipping_method')
-                cart.shipping_method = get_object_or_404(ShippingMethod, id=method_id)
-                cart.save()
-
-            # Apply promo code if provided
-            if 'promo_code' in request.POST:
-                code = request.POST.get('promo_code')
-                try:
-                    discount_obj = Discount.objects.get(code__iexact=code, active=True)
-                    cart.discount = discount_obj
-                    cart.save()
-                except Discount.DoesNotExist:
-                    cart.discount = None
-                    cart.save()
-
-            # Compute totals
-            shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
-            discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
-            final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
-
-            context = {
-                'cart_items': cart_items,
-                'cart': cart,
-                'cart_count': cart_count,
-                'total_price': subtotal,
-                'shipping_fee': shipping_fee,
-                'discount': discount,
-                'final_total': final_total,
-                'shipping_methods': ShippingMethod.objects.all(),
-                'require_shipping_address': require_shipping_address,
-            }
-            return render(request, 'linetrendy/partials/cart_totals.html', context)
-
+    # -------------------------
+    # 1. Get or create user's cart
+    # -------------------------
+    if request.user.is_authenticated:
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+    else:
+        cart_id = request.session.get("cart_id")
+        if cart_id:
+            cart = Cart.objects.filter(id=cart_id).first()
         else:
-            # Regular POST fallback (non-HTMX)
-            if 'shipping_method' in request.POST:
-                method_id = request.POST.get('shipping_method')
-                cart.shipping_method = get_object_or_404(ShippingMethod, id=method_id)
-                cart.save()
+            cart = Cart.objects.create()
+            request.session["cart_id"] = cart.id
 
-            if 'promo_code' in request.POST:
-                code = request.POST.get('promo_code')
-                try:
-                    discount_obj = Discount.objects.get(code__iexact=code, active=True)
-                    cart.discount = discount_obj
-                    cart.save()
-                except Discount.DoesNotExist:
-                    cart.discount = None
-                    cart.save()
-            return redirect('shop:cart')
+    # -------------------------
+    # 2. Get cart items and subtotal
+    # -------------------------
+    cart_items = CartItem.objects.filter(cart=cart)
+    total_price = sum(
+        Decimal(str(item.product.price)) * Decimal(item.quantity)
+        for item in cart_items
+    ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    # Normal GET request
-    shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal('0.00')
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal('0.00')
-    final_total = max(subtotal + shipping_fee - discount, Decimal('0.00'))
+    shipping_fee = Decimal("0.00")
 
+    # -------------------------
+    # 3. Handle shipping method
+    # -------------------------
+    if request.method == "POST" and request.POST.get("shipping_method"):
+        shipping_id = request.POST.get("shipping_method")
+        if shipping_id:
+            shipping_method = get_object_or_404(ShippingMethod, id=shipping_id)
+            cart.shipping_method = shipping_method
+            cart.save()
+            shipping_fee = shipping_method.fee
+    elif cart.shipping_method:
+        shipping_fee = cart.shipping_method.fee
+
+    # -------------------------
+    # 4. Calculate discount base (subtotal + shipping)
+    # -------------------------
+    discount_base = total_price + shipping_fee
+
+    # -------------------------
+    # 5. Promo code handling - USE discount_base instead of total_price
+    # -------------------------
+    promo_message = ""
+    promo_error = ""
+    discount = Decimal("0.00")
+    discount_type = None
+    applied_promo_code = request.session.get("promo_code")
+
+    if request.method == "POST":
+        promo_code = request.POST.get("promo_code", "").strip()
+        remove_promo = request.POST.get("remove_promo")
+
+        if promo_code:
+            try:
+                promo = Discount.objects.get(code__iexact=promo_code, active=True)
+
+                if request.user.is_authenticated:
+                    already_used = DiscountUsage.objects.filter(
+                        user=request.user, discount=promo
+                    ).exists()
+                    if already_used:
+                        promo_error = "You have already used this promo code."
+                        request.session.pop("promo_code", None)
+                        applied_promo_code = None
+                    else:
+                        request.session["promo_code"] = promo.code
+                        request.session.modified = True
+                        applied_promo_code = promo.code
+                        discount = promo.get_discount(discount_base)  # Use discount_base
+                        discount_type = "amount" if promo.amount else "percent"
+                        promo_message = "Promo code applied successfully!"
+                else:
+                    promo_error = "You must be logged in to use this promo code."
+                    request.session.pop("promo_code", None)
+                    applied_promo_code = None
+
+            except Discount.DoesNotExist:
+                request.session.pop("promo_code", None)
+                applied_promo_code = None
+                promo_error = "Invalid or expired promo code."
+
+        elif remove_promo:
+            request.session.pop("promo_code", None)
+            applied_promo_code = None
+            discount = Decimal("0.00")
+            discount_type = None
+            promo_message = "Promo code removed."
+
+    # Recalculate discount if promo already applied
+    elif applied_promo_code:
+        promo = Discount.objects.filter(code__iexact=applied_promo_code, active=True).first()
+        if promo:
+            if request.user.is_authenticated:
+                already_used = DiscountUsage.objects.filter(
+                    user=request.user, discount=promo
+                ).exists()
+                if already_used:
+                    request.session.pop("promo_code", None)
+                    applied_promo_code = None
+                    discount = Decimal("0.00")
+                else:
+                    discount = promo.get_discount(discount_base)  # Use discount_base
+                    discount_type = "amount" if promo.amount else "percent"
+            else:
+                discount = promo.get_discount(discount_base)  # Use discount_base
+                discount_type = "amount" if promo.amount else "percent"
+
+    # -------------------------
+    # 6. Calculate final total
+    # -------------------------
+    discount = discount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    final_total = (total_price + shipping_fee - discount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    if final_total < 0:
+        final_total = Decimal("0.00")
+
+
+
+    # -------------------------
+    # 7. Prepare context
+    # -------------------------
     context = {
-        'cart_items': cart_items,
-        'cart': cart,
-        'cart_count': cart_count,
-        'total_price': subtotal,
-        'shipping_fee': shipping_fee,
-        'discount': discount,
-        'final_total': final_total,
-        'shipping_methods': ShippingMethod.objects.all(),
-        'require_shipping_address': require_shipping_address,
+        "cart": cart,
+        "cart_items": cart_items,
+        "total_price": total_price,
+        "shipping_fee": shipping_fee,
+        "discount": discount,
+        "discount_type": discount_type,
+        "final_total": final_total,
+        "require_shipping_address": True,
+        "shipping_methods": ShippingMethod.objects.all(),
+        "applied_promo_code": applied_promo_code,
+        "promo_message": promo_message,
+        "promo_error": promo_error,
     }
 
-    return render(request, 'linetrendy/cart.html', context)
+    # -------------------------
+    # 8. Render response
+    # -------------------------
+    if request.headers.get("HX-Request"):
+        return render(request, "linetrendy/partials/cart_totals.html", context)
+
+    return render(request, "linetrendy/cart.html", context)
+
+
 
 
 
@@ -332,7 +396,30 @@ def checkout(request):
 
     subtotal = sum((item.product.price if item.product else 0) * item.quantity for item in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
-    discount = cart.discount.get_discount(subtotal) if cart.discount and cart.discount.active else Decimal("0.00")
+    
+    # FIX: Get discount from session instead of cart.discount
+    applied_promo_code = request.session.get("promo_code")
+    discount = Decimal("0.00")
+    
+    if applied_promo_code:
+        try:
+            promo = Discount.objects.filter(code__iexact=applied_promo_code, active=True).first()
+            if promo:
+                # For checkout, calculate discount on subtotal + shipping (same as cart view)
+                discount_base = subtotal + shipping_fee
+                discount = promo.get_discount(discount_base)
+                
+                # Check if user has already used this promo (for authenticated users)
+                if request.user.is_authenticated:
+                    already_used = DiscountUsage.objects.filter(
+                        user=request.user, discount=promo
+                    ).exists()
+                    if already_used:
+                        discount = Decimal("0.00")
+                        request.session.pop("promo_code", None)
+        except Discount.DoesNotExist:
+            request.session.pop("promo_code", None)
+    
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -434,11 +521,22 @@ def checkout(request):
                         price=item.product.price if item.product else getattr(item, 'price', 0),
                     )
 
-                # --- Clear Cart ---
+                # --- Clear Cart and Session Discount ---
                 cart.items.all().delete()
                 cart.shipping_method = None
-                cart.discount = None
                 cart.save()
+                
+                # Clear the promo code from session after successful order
+                if 'promo_code' in request.session:
+                    # Record discount usage for authenticated users
+                    if request.user.is_authenticated and applied_promo_code:
+                        try:
+                            promo = Discount.objects.get(code__iexact=applied_promo_code)
+                            DiscountUsage.objects.create(user=request.user, discount=promo)
+                        except Discount.DoesNotExist:
+                            pass
+                    
+                    del request.session['promo_code']
 
                 # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
@@ -461,7 +559,6 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
-
 
 
 

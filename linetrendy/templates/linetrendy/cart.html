@@ -56,18 +56,16 @@ function enableCheckoutButton() {
     if (select && select.value) {
         checkoutBtn.classList.remove("opacity-50", "pointer-events-none");
         checkoutBtn.removeAttribute("title");
-    } else {
+    } else if (select) {
         checkoutBtn.classList.add("opacity-50", "pointer-events-none");
         checkoutBtn.setAttribute("title", "Please choose a shipping method to continue");
     }
 }
 
-// Run on load
 document.addEventListener("DOMContentLoaded", enableCheckoutButton);
 
-// Run again if HTMX swaps cart totals (for promo codes or shipping changes)
-document.body.addEventListener("htmx:afterSwap", function(event) {
-    if (event.target.id === "cart-totals-wrapper") {
+document.body.addEventListener("htmx:afterSwap", function (event) {
+    if (event.target.id === "cart-totals") {
         enableCheckoutButton();
     }
 });

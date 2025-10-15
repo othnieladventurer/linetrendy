@@ -81,6 +81,16 @@ class DiscountAdmin(ModelAdmin):
 
 
 
+@admin.register(DiscountUsage)
+class DiscountUsageAdmin(ModelAdmin):
+    list_display = ("user", "discount", "used_at")
+    list_filter = ("used_at",)
+    search_fields = ("user__username", "discount__code")
+
+
+    
+
+
 @admin.register(BillingAddress)
 class BillingAddressAdmin(ModelAdmin):
     list_display = ("order", "full_name", "city", "state", "country")
