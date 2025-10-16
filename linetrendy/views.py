@@ -128,30 +128,35 @@ def shop(request):
 
 
 
+
 def cart(request):
     """Display and update the shopping cart with HTMX-friendly promo code support."""
 
     # -------------------------
-    # 1. Get or create user's cart
+    # 1. Get or create user's cart (respecting user OR session)
     # -------------------------
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user)
     else:
-        cart_id = request.session.get("cart_id")
-        if cart_id:
-            cart = Cart.objects.filter(id=cart_id).first()
-        else:
-            cart = Cart.objects.create()
-            request.session["cart_id"] = cart.id
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+
+        cart = Cart.objects.filter(session_key=session_key).first()
+        if not cart:
+            cart = Cart.objects.create(session_key=session_key)
 
     # -------------------------
     # 2. Get cart items and subtotal
     # -------------------------
-    cart_items = CartItem.objects.filter(cart=cart)
+    cart_items = cart.items.all()  # use related_name="items"
+
     total_price = sum(
-        Decimal(str(item.product.price)) * Decimal(item.quantity)
+        (Decimal(str(item.product.price)) * Decimal(item.quantity))
         for item in cart_items
-    ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    ) or Decimal("0.00")
+    total_price = Decimal(total_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     shipping_fee = Decimal("0.00")
 
@@ -169,12 +174,12 @@ def cart(request):
         shipping_fee = cart.shipping_method.fee
 
     # -------------------------
-    # 4. Calculate discount base (subtotal + shipping)
+    # 4. Calculate discount base
     # -------------------------
     discount_base = total_price + shipping_fee
 
     # -------------------------
-    # 5. Promo code handling - USE discount_base instead of total_price
+    # 5. Promo code handling
     # -------------------------
     promo_message = ""
     promo_error = ""
@@ -189,7 +194,6 @@ def cart(request):
         if promo_code:
             try:
                 promo = Discount.objects.get(code__iexact=promo_code, active=True)
-
                 if request.user.is_authenticated:
                     already_used = DiscountUsage.objects.filter(
                         user=request.user, discount=promo
@@ -200,16 +204,14 @@ def cart(request):
                         applied_promo_code = None
                     else:
                         request.session["promo_code"] = promo.code
-                        request.session.modified = True
                         applied_promo_code = promo.code
-                        discount = promo.get_discount(discount_base)  # Use discount_base
+                        discount = promo.get_discount(discount_base)
                         discount_type = "amount" if promo.amount else "percent"
                         promo_message = "Promo code applied successfully!"
                 else:
                     promo_error = "You must be logged in to use this promo code."
                     request.session.pop("promo_code", None)
                     applied_promo_code = None
-
             except Discount.DoesNotExist:
                 request.session.pop("promo_code", None)
                 applied_promo_code = None
@@ -222,34 +224,19 @@ def cart(request):
             discount_type = None
             promo_message = "Promo code removed."
 
-    # Recalculate discount if promo already applied
     elif applied_promo_code:
         promo = Discount.objects.filter(code__iexact=applied_promo_code, active=True).first()
         if promo:
-            if request.user.is_authenticated:
-                already_used = DiscountUsage.objects.filter(
-                    user=request.user, discount=promo
-                ).exists()
-                if already_used:
-                    request.session.pop("promo_code", None)
-                    applied_promo_code = None
-                    discount = Decimal("0.00")
-                else:
-                    discount = promo.get_discount(discount_base)  # Use discount_base
-                    discount_type = "amount" if promo.amount else "percent"
-            else:
-                discount = promo.get_discount(discount_base)  # Use discount_base
-                discount_type = "amount" if promo.amount else "percent"
+            discount = promo.get_discount(discount_base)
+            discount_type = "amount" if promo.amount else "percent"
 
     # -------------------------
     # 6. Calculate final total
     # -------------------------
-    discount = discount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    discount = Decimal(discount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     final_total = (total_price + shipping_fee - discount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     if final_total < 0:
         final_total = Decimal("0.00")
-
-
 
     # -------------------------
     # 7. Prepare context
@@ -276,6 +263,9 @@ def cart(request):
         return render(request, "linetrendy/partials/cart_totals.html", context)
 
     return render(request, "linetrendy/cart.html", context)
+
+
+
 
 
 
