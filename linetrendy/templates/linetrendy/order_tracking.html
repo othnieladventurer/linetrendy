@@ -54,6 +54,7 @@
           <p class="mt-2 font-medium
               {% if order.status == 'placed' %}text-yellow-600
               {% elif order.status == 'shipped' %}text-blue-600
+              {% elif order.status == 'out_for_delivery' %}text-indigo-600
               {% elif order.status == 'delivered' %}text-green-600
               {% elif order.status == 'cancelled' or order.status == 'refunded' %}text-red-600
               {% else %}text-gray-600{% endif %}">
@@ -65,16 +66,39 @@
         <div class="relative mb-8 h-12">
           <div class="absolute top-5 left-3 right-3 h-1 bg-gray-200 rounded"></div>
           <div id="progress-filled" class="absolute top-5 left-3 h-1 bg-green-600 rounded transition-all duration-1000" style="width:0;"></div>
+
           <div class="flex justify-between relative h-full items-center px-3">
-            {% for step in tracking_steps %}
+            <!-- Step 1 -->
             <div class="flex flex-col items-center z-10">
-              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg {{ step.color }}"></div>
-              <p class="mt-2 text-sm text-gray-700 text-center">{{ step.label }}</p>
-              {% if step.date %}
-              <p class="text-xs text-gray-500">{{ step.date|date:"M d" }}</p>
-              {% endif %}
+              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg 
+                {% if order.status in 'placed shipped out_for_delivery delivered' %}bg-green-600{% else %}bg-gray-300{% endif %}">
+              </div>
+              <p class="mt-2 text-sm text-gray-700 text-center">Order Placed</p>
             </div>
-            {% endfor %}
+
+            <!-- Step 2 -->
+            <div class="flex flex-col items-center z-10">
+              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg 
+                {% if order.status in 'shipped out_for_delivery delivered' %}bg-green-600{% else %}bg-gray-300{% endif %}">
+              </div>
+              <p class="mt-2 text-sm text-gray-700 text-center">Shipped</p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex flex-col items-center z-10">
+              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg 
+                {% if order.status in 'out_for_delivery delivered' %}bg-green-600{% else %}bg-gray-300{% endif %}">
+              </div>
+              <p class="mt-2 text-sm text-gray-700 text-center">Out for Delivery</p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="flex flex-col items-center z-10">
+              <div class="w-6 h-6 rounded-full border-2 border-white shadow-lg 
+                {% if order.status == 'delivered' %}bg-green-600{% else %}bg-gray-300{% endif %}">
+              </div>
+              <p class="mt-2 text-sm text-gray-700 text-center">Delivered</p>
+            </div>
           </div>
         </div>
 
@@ -83,11 +107,13 @@
           <h3 class="text-xl font-semibold text-gray-800 mb-4">Shipping Address</h3>
           {% if order.shipping_addresses.all %}
             {% for address in order.shipping_addresses.all %}
-                <p class="font-semibold text-gray-800">Shipping Address:</p>
+              <p class="font-semibold text-gray-800">Shipping Address:</p>
               {% if user.is_authenticated %}
                 <p class="font-medium text-gray-800">{{ user.email }}</p>
               {% else %}
-
+                {% if order.guest_email %}
+                <p class="font-medium text-gray-800">{{ order.guest_email }}</p>
+                {% endif %}
               {% endif %}
               <p class="text-gray-700">{{ address.full_name }}</p>
               <p class="text-gray-600">{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</p>
@@ -96,27 +122,23 @@
               {% if address.phone %}
               <p class="text-gray-600">{{ address.phone }}</p>
               {% endif %}
-
-            </div>
             {% endfor %}
           {% endif %}
         </div>
 
         {% if user.is_authenticated %}
-        <!-- Back Button for logged-in users -->
         <div class="mt-6">
           <a href="{% url 'shop:account_page' %}" class="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
             Back to Orders
           </a>
         </div>
         {% endif %}
+
         {% elif not user.is_authenticated and request.GET.order_number %}
-        <!-- Invalid order number -->
         <div class="text-center py-10">
           <p class="text-gray-600">No order found with that number. Please check and try again.</p>
         </div>
         {% endif %}
-
       </div>
     </div>
   </div>
@@ -126,8 +148,10 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.getElementById("progress-filled");
-    const currentStep = {{ current_step }};
-    const totalSteps = {{ total_steps }};
+    const currentStatus = "{{ order.status }}";
+    const statusOrder = ["placed", "shipped", "out_for_delivery", "delivered"];
+    const currentStep = statusOrder.indexOf(currentStatus) + 1;
+    const totalSteps = statusOrder.length;
     const parentWidth = progressBar.parentElement.offsetWidth;
     const leftPadding = 24;
     const rightPadding = 24;
@@ -140,3 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 {% endif %}
 {% endblock %}
+
+
+

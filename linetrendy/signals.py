@@ -1,10 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from .models import Order
-
-
 
 
 @receiver(post_save, sender=Order)
@@ -25,7 +23,7 @@ def send_order_status_email(sender, instance, created, **kwargs):
     status_display = dict(Order.STATUS_CHOICES).get(instance.status, instance.status)
     subject = f"Order Update: Your Order #{instance.order_number} is {status_display}"
     
-    # Professional email content
+    # ✅ Call helper functions directly (no `self`)
     plain_text = f"""
 Dear {recipient_name},
 
@@ -36,7 +34,7 @@ Current Status: {status_display}
 Total Amount: ${instance.total_amount}
 Order Date: {instance.created_at.strftime("%B %d, %Y")}
 
-{self.get_status_message(instance.status)}
+{get_status_message(instance.status)}
 
 Thank you for choosing LineTrendy for your hair care needs.
 
@@ -78,7 +76,7 @@ The LineTrendy Team
                 <p><strong>Order Date:</strong> {instance.created_at.strftime("%B %d, %Y")}</p>
             </div>
             
-            <p>{self.get_status_message_html(instance.status)}</p>
+            <p>{get_status_message_html(instance.status)}</p>
             
             <p>Thank you for choosing LineTrendy for your hair care needs.</p>
         </div>
@@ -93,21 +91,21 @@ The LineTrendy Team
 """
     
     # Send both plain text and HTML versions
-    from django.core.mail import EmailMultiAlternatives
-    
     email = EmailMultiAlternatives(
         subject=subject,
         body=plain_text,
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[recipient_email],
-        reply_to=['support@linetrendy.com'],
+        reply_to=['linetrendyllc@gmail.com'],
     )
     email.attach_alternative(html_content, "text/html")
     email.send(fail_silently=False)
     
     print(f"Professional email sent to {recipient_email}")
 
-def get_status_message(self, status):
+
+# ✅ Helper functions should not use `self`
+def get_status_message(status):
     messages = {
         "placed": "We've received your order and are preparing it for shipment.",
         "shipped": "Your order has been shipped and is on its way to you.",
@@ -118,7 +116,8 @@ def get_status_message(self, status):
     }
     return messages.get(status, "Your order status has been updated.")
 
-def get_status_message_html(self, status):
+
+def get_status_message_html(status):
     messages = {
         "placed": "We've received your order and are preparing it for shipment. You'll receive another update when your order ships.",
         "shipped": "Your order has been shipped and is on its way to you. You should receive it soon.",
@@ -128,4 +127,3 @@ def get_status_message_html(self, status):
         "refunded": "Your refund has been processed. The amount will be credited to your original payment method within 5-7 business days.",
     }
     return messages.get(status, "Your order status has been updated.")
-

@@ -490,16 +490,13 @@ def checkout(request):
                     request.session["guest_email"] = guest_email
                     email_to = guest_email
 
-                # --- Build Tracking URL ---
-                try:
-                    domain = getattr(settings, "SITE_DOMAIN", request.get_host())
-                    if request.user.is_authenticated:
-                        tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}"
-                    else:
-                        tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
-                except Exception as e:
-                    logger.error(f"Failed to build tracking URL: {e}")
-                    tracking_url = request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+                # --- Build Tracking URL using request domain (FIX) ---
+                if request.user.is_authenticated:
+                    tracking_path = reverse('shop:order_tracking', args=[order.order_number])
+                else:
+                    tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+
+                tracking_url = request.build_absolute_uri(tracking_path)
 
                 # --- Create Order Items ---
                 for item in cart_items:
@@ -552,6 +549,9 @@ def checkout(request):
 
 
 
+
+
+
 def checkout_success(request):
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
@@ -561,12 +561,15 @@ def checkout_success(request):
         # Get the order by payment_intent_id
         order = Order.objects.get(payment_intent_id=last_order_intent)
 
-        # Determine which email to send confirmation to
+        # Determine email recipient
+        email_to = None
         if order.guest_email:
             email_to = order.guest_email
         elif order.user and order.user.email:
             email_to = order.user.email
-        else:
+
+        if not email_to:
+            logger.warning(f"No valid email for order {order.order_number}")
             return HttpResponse("No valid email found for order.", status=400)
 
     except Order.DoesNotExist:
@@ -579,12 +582,12 @@ def checkout_success(request):
     discount = order.discount_amount
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # Build tracking URL
-    domain = getattr(settings, "SITE_DOMAIN", None)
+    # --- FIX: Build absolute tracking URL using current request domain ---
     if order.user:
-        tracking_url = f"{domain}{reverse('shop:order_tracking', args=[order.order_number])}" if domain else request.build_absolute_uri(reverse('shop:order_tracking', args=[order.order_number]))
+        tracking_path = reverse('shop:order_tracking', args=[order.order_number])
     else:
-        tracking_url = f"{domain}{reverse('shop:guest_order_tracking')}?order_number={order.order_number}" if domain else request.build_absolute_uri(f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}")
+        tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
+    tracking_url = request.build_absolute_uri(tracking_path)
 
     # Send confirmation email
     email_subject = f"Order Confirmation - {order.order_number}"
@@ -596,16 +599,17 @@ def checkout_success(request):
     )
 
     try:
+        logger.info(f"Sending order confirmation to {email_to} for order {order.order_number}")
         send_mail(
             subject=email_subject,
             message=email_message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[email_to],
-            fail_silently=False,  # Set to False for debugging
+            fail_silently=False,  # Will raise exception if it fails
         )
-        logger.info(f"Confirmation email sent to {email_to}")
+        logger.info(f"Confirmation email sent successfully to {email_to}")
     except Exception as e:
-        logger.error(f"Email sending failed: {e}", exc_info=True)
+        logger.error(f"Email sending failed for order {order.order_number} to {email_to}: {e}", exc_info=True)
 
     # Clear session
     request.session.pop("last_payment_intent_id", None)
@@ -618,7 +622,7 @@ def checkout_success(request):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
-        "tracking_url": tracking_url,
+        "tracking_url": tracking_url,  # ✅ absolute URL for template
     }
     return render(request, "linetrendy/checkout_success.html", context)
 
