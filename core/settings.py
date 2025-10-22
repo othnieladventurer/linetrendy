@@ -273,13 +273,14 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 
 #Email setup
-EMAIL_TIMEOUT = 5
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.privateemail.com' 
-EMAIL_PORT = 465 
-EMAIL_USE_SSL = True                    
-EMAIL_USE_TLS = False              
-EMAIL_HOST_USER = 'orders@saasiskey.com'
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')   
-DEFAULT_FROM_EMAIL = 'Orders <orders@saasiskey.com>'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  # make sure this stays False when TLS is True
+EMAIL_HOST_USER = 'Linetrendyllc@gmail.com'
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # your Gmail app password (not your normal login!)
+DEFAULT_FROM_EMAIL = 'Linetrendy <linetrendyllc@gmail.com>'
+
+
 
