@@ -23,6 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+ENVIRONMENT= env('ENVIRONMENT', default='production')
+SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'credentials', 'service_account.json')
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -159,14 +167,24 @@ TIME_ZONE = 'America/New_York'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DATABASE_URL'),
+        'PORT': '5432', 
     }
 }
 
 
+POSTGRES_LOCALLY= False
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY == False:
+    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

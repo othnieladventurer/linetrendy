@@ -589,7 +589,7 @@ def checkout_success(request):
         tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
     tracking_url = request.build_absolute_uri(tracking_path)
 
-    # Send confirmation email
+    # --- Email sending with fresh SMTP connection ---
     email_subject = f"Order Confirmation - {order.order_number}"
     email_message = (
         f"Hi,\n\n"
@@ -600,14 +600,22 @@ def checkout_success(request):
 
     try:
         logger.info(f"Sending order confirmation to {email_to} for order {order.order_number}")
-        send_mail(
+
+        # Use a fresh SMTP connection
+        from django.core.mail import get_connection, EmailMessage
+
+        connection = get_connection(fail_silently=False)  # fresh connection per email
+        email = EmailMessage(
             subject=email_subject,
-            message=email_message,
+            body=email_message,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[email_to],
-            fail_silently=False,  # Will raise exception if it fails
+            to=[email_to],
+            connection=connection,
         )
+        email.send(fail_silently=False)  # raise exception on failure
+
         logger.info(f"Confirmation email sent successfully to {email_to}")
+
     except Exception as e:
         logger.error(f"Email sending failed for order {order.order_number} to {email_to}: {e}", exc_info=True)
 
@@ -625,6 +633,8 @@ def checkout_success(request):
         "tracking_url": tracking_url,  # ✅ absolute URL for template
     }
     return render(request, "linetrendy/checkout_success.html", context)
+
+
 
 
 

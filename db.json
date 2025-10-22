@@ -1,0 +1,5565 @@
+﻿[
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "account",
+        "model": "emailaddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "account",
+        "model": "emailconfirmation"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "socialaccount",
+        "model": "socialaccount"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "socialaccount",
+        "model": "socialapp"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "socialaccount",
+        "model": "socialtoken"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "category"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "discount"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "shippingmethod"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "cart"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "product"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "productimage"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "cartitem"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "users",
+        "model": "customuser"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "order"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "orderitem"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "billingaddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "shippingaddress"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "newsletter"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "testimonial"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "fields": {
+        "app_label": "linetrendy",
+        "model": "discountusage"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "05snc3pkk2wyr9feica0c8kt5aqlkbp3",
+    "fields": {
+        "session_data": "e30:1ux4tA:caGBTg8gi1ch_PuOYHrK2TAo06IW4pgQ4Pr0Lj_cJgI",
+        "expire_date": "2025-09-26T14:36:36.698Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "0eirnw1tpa5a87anjp0iwq7wwpvexopc",
+    "fields": {
+        "session_data": "e30:1utV12:tryGO0QCb4R0oX0G1B070BYKwNjqCVTO8C_SoFqzsIU",
+        "expire_date": "2025-09-16T17:41:56.818Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "1eyppowyqeodd6m6v8c6d6vmz4p4b2ds",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1us0nO:WQEvMyZDSj3-h-jMYyqANG_C7_aqnFJG7v2r-CC4UVs",
+        "expire_date": "2025-09-12T15:13:42.171Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2akub99kwud004gnkwne4i8lu4i8vde7",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1v3Fr0:01bWfdjRxPW5l28OoK7Y6lKdG2A59sHAoAAGDTM9Vw0",
+        "expire_date": "2025-10-13T15:31:54.261Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "5pfqgpriz5sgi7np4ske40jj05ilmh9q",
+    "fields": {
+        "session_data": "e30:1utV13:SxFXFNQEPELGg8OcdykZ0FE3_KNm9M02-iCg74BcpXI",
+        "expire_date": "2025-09-16T17:41:57.876Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "5wc7e3aoj81obu9yspy105p9a75rkb6i",
+    "fields": {
+        "session_data": "e30:1uuB1n:QruPa_ohpHukjwmL3qcnOFKULviYlZZKCji_gUL1RX0",
+        "expire_date": "2025-09-18T14:33:31.825Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "63gjc31jjjo99mg10pxsdo1fa0l0jmfe",
+    "fields": {
+        "session_data": "e30:1utXdk:Q0EL5p1wM-yAv6XGz13fj1M3dqEknns6HznlKQzPxH4",
+        "expire_date": "2025-09-16T20:30:04.575Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "7r5rhzzeddcrmwfowieefv1hlpunakav",
+    "fields": {
+        "session_data": ".eJxVkMFugzAMht_FZ4SSQAjlNPW-J5gm5CTOyFqSCodtVdV3H2y99Gb5__7Pkm-AzuU1lRHXMlEq0WGJOY0zlSl7huHtBv8zDHBB5u-8eKgACwzSaG36XjaqbqVoGlUBzRjPG3mir5iQXS7lhRE58omutcsz3N8r-Ds2rkzLGHevhKedRXeitAf-E9NH3nqpLNHWO1I_Uq5fs6fz8cE-CSbkaWs7r5tA4UBt7zWSM8JZ3wVjVPCHILzvlUUrSCoVhDDUWa-ld51WrmuV7HcpE_P-D_q5xOUKg7j_AsdeZ78:1up6hQ:w0NlzJwUtkA6DIFpurRlC0XMXiWoEvUnz9oxkhLV_is",
+        "expire_date": "2025-09-04T14:55:32.811Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "8zda7f55pwxwzj8wz01m6rl7ksxqwoti",
+    "fields": {
+        "session_data": "e30:1uzM5S:KJ9J-Z9ruOPvE-v3SMykqiIZBXbrAxF0JIj6p5uRYxk",
+        "expire_date": "2025-10-02T21:22:42.981Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "9ucvy3kgk8zkctvpxmvfd785kmauwvty",
+    "fields": {
+        "session_data": ".eJxVkMFugzAMht_FZ4QSIAnlNPW-J5gm5CTOyFqSCodtVdV3H2y99Gb5__7Pkm-AzuU1lRHXMlEq0WGJOY0zlSl7huHtBv8zDHBB5u-8eKgACwzSKNXLtjVtrXSvOq0qoBnjeUNP9BUTssulvDAiRz7RtXZ5hvt7BX_XxpVpGeMulvC0s-hOlPbAf2L6yFsvlSXaekfqR8r1a_Z0Pj7YJ8GEPG1t51UbKByo671CckY463Uwpgn-EIT3fWPRCpJNE4QwpK1X0jutGqe7Rva7lIl5fwj9XOJyhUHcfwEgTGgF:1upDGZ:V5mVRJuDPA96ESUhAFzGAdgul0X1jlP2735ec0hEIvA",
+        "expire_date": "2025-09-04T21:56:15.578Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "amhf80t9toj2pmrn9fafwox6hz3z2vx4",
+    "fields": {
+        "session_data": ".eJxVkMFugzAQRP9lzwjZjrGBU5V7v6Cq0GKvi5tgR6xpG0X590KbS26rnZm3o70BOpfXVAZcy0SpRIcl5jTMVKbsGfq3G_zP0MMFmb_z4qECLNBL2xithGl0bQ-is52ugGaM5816oq-YkF0u5YUROfKJrrXLM9zfK_i7NqxMyxB3sISn3YjuRGkX_Cemj7zlUlniWO-W-qFy_Zo9nY8P7xNgQp62dPAWjW2kFwe5tRRNCMq6liSSac2IEkMnVasV-mCUcK0dpUSptQ8NosIdysS8P4R-LnG5Qi_uv8BaZv0:1urlFP:AkIV36TdGTM-R96NkyBxvtqhMkzmR4Jawa8lbImgBtM",
+        "expire_date": "2025-09-11T22:37:35.334Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "d0q8jcpl3668djjgaml07jnsrykcomrb",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1utTaF:u42vEhZDjTZZNCRTKLtcBRSVcduWbHQYqloLnr68F_I",
+        "expire_date": "2025-09-16T16:10:11.435Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "du1slj2ontp2i6sj72hu4ekrwhebtl3t",
+    "fields": {
+        "session_data": "e30:1v3Hbe:odSGNL8qclw9gM98zlSvqInACJW4Cmqe9QwCwJVkMcw",
+        "expire_date": "2025-10-13T17:24:10.249Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "e6s7kb2hlpx11htkew9vmlgp7cn4wgm1",
+    "fields": {
+        "session_data": "e30:1v4KAK:OnPrAmOzi1WU2GLSKS6d_JKN6iIJMMRfzrWjQGlcTd8",
+        "expire_date": "2025-10-16T14:20:16.401Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "fgjs1vhil8wdra8ua8butnqcrkn2j2wx",
+    "fields": {
+        "session_data": ".eJxVkMFugzAMht_FZ4RCIAQ4Tb3vCaYJOYkzMkpS4bCtqvrug62X3iz_3_9Z8g3Q2rTFPOKWJ4o5WMwhxXGhPCXHMLzd4H-GAS7I_J1WBwVghqHSqq17XStR9o3qtJAF0ILhvKMzfYWIbFPOL4zIgWe6ljYtcH8v4O_auDGtYzjEFTztDNqZ4hG4T4wfae_FvAZTHkj5SLl8TY7Opwf7JJiQp71tnao9-Z6azikkq4U1rvVaS-96L5zrpEEjqJLSC6GpNU5VzrZK2raRVXdImZiPh9DPJaxXGMT9Fx-gaAQ:1urfBX:i7Z7uniXfcFDooBCLxTT8r0OvGedYLj7VRdVf1xtV18",
+        "expire_date": "2025-09-11T16:09:11.532Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "hgujrqu28didffnki5gcqqw3en3nak1y",
+    "fields": {
+        "session_data": "eyJhY2NvdW50X3ZlcmlmaWVkX2VtYWlsIjpudWxsfQ:1urm0d:ELhZoiRSaqajtbe_PDg30xGqdOKGz2LdiyuR21pAGaA",
+        "expire_date": "2025-09-11T23:26:23.165Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ioy5r0olcsj7rj8pyedg6v03v5ui064c",
+    "fields": {
+        "session_data": "e30:1ur2xd:WW_v7x0xkxSvd5ceAj0AyZpEN9zrYF2OSgHHoYKppVI",
+        "expire_date": "2025-09-09T23:20:17.338Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "k29n67c3l33ytqqwkk76fie3n9h6d293",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1v4KOB:_23WwJNZ2ZfZu6Axfmdb-36G1dYdpcmKDgNy6uvMQ2U",
+        "expire_date": "2025-10-16T14:34:35.902Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kdrevlrf798n2qszyalfe5upr3e1hjpw",
+    "fields": {
+        "session_data": "e30:1utoPM:VAt0dst-42IWjMp8m1R3vo0tN89ZM6WWeYBcMpXtoVo",
+        "expire_date": "2025-09-17T14:24:20.774Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kzz74nf78xl8r1i8hfvkb6nnhl937vc8",
+    "fields": {
+        "session_data": "e30:1urGk9:KCbG8xxTyMQQhoB2yjzRy8lFQ41E164c-8mECo4MBpw",
+        "expire_date": "2025-09-10T14:03:17.978Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "l3snvwl1yg2x0dig5w7j64kyutd590cn",
+    "fields": {
+        "session_data": "e30:1v4LpI:Gl0e6f-utTwpAB-ZDVeKR11R4uE6iXprE838SyI2L_0",
+        "expire_date": "2025-10-16T16:06:40.957Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "mcahrjbv9oirnwe23wed5jak4kwznadh",
+    "fields": {
+        "session_data": "e30:1v9Qj5:fZKd7OOqiY9wmEXrOPrr0oqrg5h5-hBh09igyV1vyRw",
+        "expire_date": "2025-10-30T16:21:15.633Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "mm9siub012dd374dmwgar0s1838co6ke",
+    "fields": {
+        "session_data": ".eJxVkMtugzAQRf9l1ghhFz_Kqsq-X1BFaLDHxSXYEWPSRlH-vdBmk91o7rlnpLkBOpfXVHpcy0ipRIcl5tTPVMbsGbqPG_zP0MEZmb_z4qECLNAJo3QrG61MrazWWskKaMZ42tCJLjEhu1zKGyNy5Imutcsz3I8V_F3rV6alj7tYwNNuQDdR2gP_hekzb71UljjUO1I_Uq7fs6fT4cE-CUbkcWsHb1AbJXzzIrRqGxWCNM6SQNJWDygwvAppW4k-aNk4awYhULStDwpR4i5lYt4fQj_nuFyha-6_wlRm_w:1urlFR:HIKVAKI6Cfdjg1wR5Vg1P1_8E-BbGhA8u1cz6Y301RU",
+        "expire_date": "2025-09-11T22:37:37.934Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "mykcsnkajo25pd2k3n12skhjz898f1oc",
+    "fields": {
+        "session_data": "e30:1v3EhT:wnFt2wmvKRy0delZNRLhLwCi5vIvBZh2mGrfRBZWL4g",
+        "expire_date": "2025-10-13T14:17:59.403Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "nwml0czsp2jlu33etkdahpurfwkl03ko",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1v5m7L:DXBmYL93v0K9jBdlsWrq4--M3Hh0fkxEPIHtIr9WfHY",
+        "expire_date": "2025-10-20T14:23:11.071Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "o5ovp82l748wdaoi16tkyxtgwz0pxrqf",
+    "fields": {
+        "session_data": "e30:1utDm1:fmktFJMhgzrKugo7WayGpV-YanSDLFUgLsxiEY9cBOg",
+        "expire_date": "2025-09-15T23:17:17.046Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "qodoxbcgc3qbcb7jv496hu2qfnpovo1c",
+    "fields": {
+        "session_data": "e30:1urmOJ:6roZeaeVXgVCI7amxKm5wdy7bGK9rw48Z-Xyx1kUrZQ",
+        "expire_date": "2025-09-11T23:50:51.681Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "tu7f2vcd7g1lxqq4dxcx17hbuih9i408",
+    "fields": {
+        "session_data": "e30:1v3Eln:XpmWZCnbBim1loXCtL4ruf75W50FWEGJQ3YcTg60vc4",
+        "expire_date": "2025-10-13T14:22:27.778Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "v8mrdh7yuh0gp5hl1qx4ekrha27z9ztr",
+    "fields": {
+        "session_data": "e30:1v55J4:K86eLzZcpsevZk1uwG-YiVD7Gi2FnE5owcs-Po8sM9c",
+        "expire_date": "2025-10-18T16:40:26.053Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "wpoyayy88lxnv6w053fyg1ik126hkfu0",
+    "fields": {
+        "session_data": ".eJxVjDEOwjAMAP-SGUU4bkXKyM4bIie2SQElUtNOiL9DpA6w3p3uZQJtaw5bkyXMbM4GzOGXRUoPKV3wncqt2lTLuszR9sTuttlrZXle9vZvkKnlvvWME6uAi0jHUWHyoC459pF0ZMUBCFnYq34L0RMDoBM3JGRGAPP-AABSOKw:1v5nqz:NgAAYl9QMnDFZvxZyOTc0H2HsFcYpk2FtEjC3m4FCvE",
+        "expire_date": "2025-10-20T16:14:25.452Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "yqmvcpq2dp0375kuyk4i3sfjsk7q5yrw",
+    "fields": {
+        "session_data": ".eJxVkEFuhDAMRe_iNUJJShJgVXXfE1QVchJTUoZkhEPb0WjuXmhnMzvL__1nyVdA7_OWyoBbmSiV6LHEnIaFypQDQ_92hf8Zejgj83deA1SABXpptZFG2a6tG9NpaVUFtGA87ehMXzEh-1zKMyNy5Jkutc8L3N4r-Ls2bEzrEA-xhIedQz9TOoLwiekj771U1ujqA6nvKdevOdDp5c4-CCbkaW_7oJ9GGjtq2qCRvBXeBTNaq8bQjSKEVjl0gqRSoxCWjAtaBm-08qZRsj2kTMzHQ-jnHNcL9OL2CyQjaAk:1uqvYY:HTc8i0qWsvvH8mjlUmULeHfP6Hp5xbsvo7f-3mlNpwY",
+        "expire_date": "2025-09-09T15:25:54.830Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zezdq8khrw9bciry05shniqckn48pyug",
+    "fields": {
+        "session_data": "e30:1uzJX9:fwKoIW8Unyk7vi74R3riMYcG-nFD4c9ltLKPjGMwlig",
+        "expire_date": "2025-10-02T18:39:07.878Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zo7yfdhpky2s1phxdom7k1i7coyiqtub",
+    "fields": {
+        "session_data": "e30:1urGao:12yDpF69sZI4dIhcGX2BPpWGGedrqgbFWyRSB9VFuGo",
+        "expire_date": "2025-09-10T13:53:38.444Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zxjpms26hxvj66u2urjlcy1vb91wq9sn",
+    "fields": {
+        "session_data": "e30:1ureNE:tr_PihhvdRJWg-Q7blZN57Up3Zrtatx1ZOLT3gHMvQk",
+        "expire_date": "2025-09-11T15:17:12.378Z"
+    }
+},
+{
+    "model": "linetrendy.category",
+    "pk": 1,
+    "fields": {
+        "name": "Cleaners, treatment, deep conditioner",
+        "description": "",
+        "thumbnail": "categories/WhatsApp_Image_2025-08-12_at_10_HZbG5Wn.12.06_AM_1.jpeg",
+        "slug": "cleaners-treatment-deep-conditioner"
+    }
+},
+{
+    "model": "linetrendy.category",
+    "pk": 2,
+    "fields": {
+        "name": "Growth Oil & Leave in Serum",
+        "description": "",
+        "thumbnail": "categories/WhatsApp_Image_2025-08-12_at_10_84NV0Xk.12.07_AM_1.jpeg",
+        "slug": "growth-oil-leave-in-serum"
+    }
+},
+{
+    "model": "linetrendy.category",
+    "pk": 3,
+    "fields": {
+        "name": "Styling Products",
+        "description": "",
+        "thumbnail": "categories/WhatsApp_Image_2025-08-12_at_10_JsNhs0w.12.07_AM.jpeg",
+        "slug": "styling-products"
+    }
+},
+{
+    "model": "linetrendy.category",
+    "pk": 4,
+    "fields": {
+        "name": "Bundles & Sets, Growth & Strengthening",
+        "description": "",
+        "thumbnail": "categories/WhatsApp_Image_2025-08-12_at_10_GeeaUom.12.06_AM.jpeg",
+        "slug": "bundles-sets-growth-strengthening"
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 1,
+    "fields": {
+        "category": 1,
+        "name": "Linetrendy black soap shampoo - 16oz",
+        "description": "Black Soap Shampoo û 16 oz\r\nExperience deep cleansing and scalp nourishment with our Black Soap Shampoo. Crafted with authentic African black soap, this powerful yet gentle formula removes buildup, soothes dry scalp, and promotes healthy hair growth. Infused with natural oils and herbal extracts, it hydrates and refreshes while leaving your hair soft, clean, and manageable. Perfect for all hair types, especially natural, curly, or textured hair.\r\n\r\nSize: 16 oz\r\nFree from sulfates, parabens, and harsh chemicals no paraffins, no mineral oil, no DEA, no animal testing.\r\n\r\nRemember: consistency is key!\r\nHair product for all hair types.\r\n\r\nThis gentle yet effective shampoo removes product buildup, detoxifies the scalp, and promotes a healthy environment for hair growth.",
+        "price": "12.00",
+        "created_at": "2025-08-21T15:03:21.073Z",
+        "updated_at": "2025-08-21T15:03:21.073Z",
+        "slug": "linetrendy-black-soap-shampoo-16oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 2,
+    "fields": {
+        "category": 1,
+        "name": "Linetrendy Herbal Repair Hair Mask 8 oz",
+        "description": "This intensive mask penetrates deep into the hair shaft to restore moisture, reduce breakage, and strengthen from root to tip.\r\n\r\nHair Mask 8 oz\r\n\r\nRevive and nourish your hair with our deep-conditioning Hair Mask, made with a powerful blend of traditional Indian and African herbs. This rich, creamy formula penetrates each strand to restore moisture, strengthen roots, and promote healthy growth. Infused with natural ingredients like Amla and Neem, it helps reduce breakage, combat dryness, and enhance shine. Ideal for all hair types, especially dry, damaged, or curly textures. Treat your hair to the ancient secrets of Ayurvedic care in every use.\r\n\r\nNo parabens. No sulfates. No paraffins. No mineral oil. No DEA. No animal testing.\r\n\r\nRemember: Consistency is key! Suitable for all hair types.",
+        "price": "10.00",
+        "created_at": "2025-08-21T15:05:13.275Z",
+        "updated_at": "2025-09-01T23:21:11.096Z",
+        "slug": "linetrendy-herbal-repair-hair-mask-8-oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 3,
+    "fields": {
+        "category": 1,
+        "name": "Linetrendy Deep Moisture Fenugreek Conditioner 16oz",
+        "description": "This rich, creamy conditioner deeply hydrates dry, brittle hair while reducing breakage and shedding.\r\n\r\nFenugreek Conditioner û 16 oz Nourish, strengthen, and revitalize your hair with our Fenugreek Conditioner. Infused with the powerful benefits of fenugreek seeds, this rich, creamy formula deeply moisturizes dry and brittle strands, helps reduce hair fall, and promotes a healthier scalp. Perfect for all hair types, it leaves your hair soft, manageable, and full of shine. Use after shampooing for best results. Key Benefits: Strengthens hair from root to tip Helps reduce shedding and breakage Softens and detangles Enhances shine and moisture No parabens, no sulfates, no paraffins, no mineral oil, no DEA, no animal testing.\r\n\r\nKey Benefits: Strengthens hair from root to tip Helps reduce shedding and breakage Softens and detangles Enhances shine and moisture No parabens, no sulfates, no paraffins, no mineral oil, no DEA, no animal testing.\r\n\r\nRemember: consistency is key! Hair product for all hair types.",
+        "price": "12.00",
+        "created_at": "2025-08-21T15:07:34.212Z",
+        "updated_at": "2025-08-21T17:23:53.001Z",
+        "slug": "linetrendy-deep-moisture-fenugreek-conditioner-16-oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 4,
+    "fields": {
+        "category": 2,
+        "name": "Linetrendy Root Revival Serum 4 oz",
+        "description": "Herbal Hair Leave-In Serum û 4 oz\r\nNourish and protect your hair with our lightweight, herbal-infused Leave-In Serum, crafted with a powerful trio of rosemary, clove, and thyme. This natural blend strengthens hair from root to tip, stimulates scalp circulation, and promotes healthy growth. Rosemary helps reduce shedding and supports thicker hair, clove enhances shine and soothes the scalp, while thyme works to purify and balance. Ideal for daily use, this serum tames frizz, adds moisture, and leaves your hair soft, manageable, and naturally radiant.\r\n\r\nGreat for all hair typesùespecially dry, thinning, or textured hair.\r\n\r\nNo parabens, no sulfates, no paraffins, no mineral oil, no DEA, no animal testing.\r\nGive your hair the daily boost it deserves with LinetrendyÆs Herbal Growth Leave-In Serum\r\n\r\nRemember: consistency is key!\r\nHair product for all hair types.",
+        "price": "10.00",
+        "created_at": "2025-08-21T15:12:06.732Z",
+        "updated_at": "2025-08-21T15:12:06.732Z",
+        "slug": "linetrendy-root-revival-serum-4-oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 5,
+    "fields": {
+        "category": 2,
+        "name": "Linetrendy Herbal Infused Hair Growth Oil û 2oz",
+        "description": "Nourishing Herbal Hair Oil û 2 oz\r\nRevitalize your hair and scalp with our potent blend of mixed oils and herbs in this lightweight, nutrient-rich Hair Oil. Infused with a powerful combination of natural oils and traditional herbs, this treatment deeply hydrates, strengthens, and promotes healthy hair growth. Whether you're sealing moisture, soothing a dry scalp, or adding shine, this multipurpose oil delivers visible results. Great for hot oil treatments, scalp massages, or daily nourishment.\r\n\r\nPerfect for all hair typesùespecially dry, brittle, or thinning hair.\r\n\r\nNo parabens, no sulfates, no paraffins, no mineral oil, no DEA, no animal testing.\r\n\r\nNourish your scalp and stimulate healthy hair growth with our all-natural Herbal Infused Hair Oil.\r\n\r\nRemember: consistency is key!\r\nHair product for all hair types.",
+        "price": "15.00",
+        "created_at": "2025-08-21T15:13:56.279Z",
+        "updated_at": "2025-10-16T16:20:52.280Z",
+        "slug": "herbal-infused-hair-growth-oil-2oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 6,
+    "fields": {
+        "category": 3,
+        "name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "description": "Herbal Hair Pomade û 8 oz\r\nSeal in moisture, define your style, and promote healthy hair growth with our rich Herbal Hair Pomade, crafted with a nourishing blend of natural herbs and mixed oils. This non-greasy formula melts into your strands, helping to reduce breakage, add shine, and condition the scalp. Infused with traditional herbs and powerful oils, itÆs perfect for protecting ends, laying edges, or styling natural hair.\r\n\r\nIdeal for all hair typesùespecially thick, curly, and dry textures in need of moisture and control.\r\n\r\nNo parabens, no sulfates, no paraffins, no mineral oil, no DEA, no animal testing.\r\n\r\nNourishing blend of natural oils and healing herbs crafted to protect, smooth, and strengthen your hair.\r\n\r\nRemember: consistency is key!\r\nHair product for all hair types.",
+        "price": "10.00",
+        "created_at": "2025-08-21T15:15:54.551Z",
+        "updated_at": "2025-08-21T15:15:54.551Z",
+        "slug": "linetrendy-herbal-hold-moisture-pomade-8oz",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.product",
+    "pk": 8,
+    "fields": {
+        "category": 4,
+        "name": "Linetrendy Full Hair Journey set",
+        "description": "Luxurious, all-in-one bundle designed to promote healthy hair growth, restore moisture, and strengthen every strand.\r\n\r\nRemember: consistency is key!\r\nHair product for all hair types.",
+        "price": "60.00",
+        "created_at": "2025-08-21T15:20:05.189Z",
+        "updated_at": "2025-09-01T23:18:43.045Z",
+        "slug": "linetrendy-full-hair-journey-set",
+        "related_products": []
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 1,
+    "fields": {
+        "product": 1,
+        "image": "product_images/shampoo_At9ERAa_nkpyDSV.jpg",
+        "created_at": "2025-08-21T15:04:08.124Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 2,
+    "fields": {
+        "product": 2,
+        "image": "product_images/pomade_Yz44o40_UIQGitN.jpg",
+        "created_at": "2025-08-21T15:06:00.299Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 3,
+    "fields": {
+        "product": 3,
+        "image": "product_images/conditioner_XSOWUVn_1.jpg",
+        "created_at": "2025-08-21T15:07:57.707Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 4,
+    "fields": {
+        "product": 4,
+        "image": "product_images/serum_f_GLfP6xT_bMYJeuO.jpg",
+        "created_at": "2025-08-21T15:12:42.993Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 5,
+    "fields": {
+        "product": 5,
+        "image": "product_images/hair_oil_LVQKkBK_GNcUvKI.jpg",
+        "created_at": "2025-08-21T15:14:40.938Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 6,
+    "fields": {
+        "product": 6,
+        "image": "product_images/pomade_63Tgbfk_4YKyZ50.jpg",
+        "created_at": "2025-08-21T15:16:22.563Z"
+    }
+},
+{
+    "model": "linetrendy.productimage",
+    "pk": 7,
+    "fields": {
+        "product": 8,
+        "image": "product_images/pack_6Ef4sr7_FzPrh7e.jpg",
+        "created_at": "2025-08-21T15:20:41.541Z"
+    }
+},
+{
+    "model": "linetrendy.shippingmethod",
+    "pk": 4,
+    "fields": {
+        "name": "Priority mail express 1-3 business day",
+        "fee": "30.00",
+        "free_over": null
+    }
+},
+{
+    "model": "linetrendy.shippingmethod",
+    "pk": 5,
+    "fields": {
+        "name": "Priority mail 3-5 business day",
+        "fee": "15.00",
+        "free_over": null
+    }
+},
+{
+    "model": "linetrendy.shippingmethod",
+    "pk": 6,
+    "fields": {
+        "name": "Standard shipping 5 to 10 business",
+        "fee": "10.00",
+        "free_over": null
+    }
+},
+{
+    "model": "linetrendy.discount",
+    "pk": 1,
+    "fields": {
+        "code": "LNTDY152025",
+        "amount": null,
+        "percent": "10.00",
+        "active": true
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 32,
+    "fields": {
+        "cart": 2,
+        "product": 8,
+        "quantity": 1,
+        "created_at": "2025-08-27T14:55:50.880Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 33,
+    "fields": {
+        "cart": 2,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-08-27T14:55:52.411Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 37,
+    "fields": {
+        "cart": 4,
+        "product": 8,
+        "quantity": 1,
+        "created_at": "2025-08-27T17:48:10.767Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 38,
+    "fields": {
+        "cart": 4,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-08-27T17:48:12.236Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 48,
+    "fields": {
+        "cart": 10,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-08-28T15:16:07.734Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 49,
+    "fields": {
+        "cart": 11,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-08-28T15:16:45.961Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 52,
+    "fields": {
+        "cart": 20,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-09-01T14:50:25.951Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 70,
+    "fields": {
+        "cart": 24,
+        "product": 1,
+        "quantity": 1,
+        "created_at": "2025-09-02T17:32:56.071Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 73,
+    "fields": {
+        "cart": 1,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-09-02T19:33:39.789Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 90,
+    "fields": {
+        "cart": 39,
+        "product": 8,
+        "quantity": 12,
+        "created_at": "2025-10-02T14:30:35.143Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 91,
+    "fields": {
+        "cart": 39,
+        "product": 6,
+        "quantity": 9,
+        "created_at": "2025-10-02T14:30:37.936Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 92,
+    "fields": {
+        "cart": 39,
+        "product": 5,
+        "quantity": 8,
+        "created_at": "2025-10-02T14:30:39.243Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 93,
+    "fields": {
+        "cart": 39,
+        "product": 4,
+        "quantity": 11,
+        "created_at": "2025-10-02T14:30:43.289Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 94,
+    "fields": {
+        "cart": 39,
+        "product": 3,
+        "quantity": 2,
+        "created_at": "2025-10-02T14:30:45.186Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 95,
+    "fields": {
+        "cart": 39,
+        "product": 2,
+        "quantity": 1,
+        "created_at": "2025-10-02T14:30:46.525Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 96,
+    "fields": {
+        "cart": 39,
+        "product": 1,
+        "quantity": 1,
+        "created_at": "2025-10-02T14:30:48.977Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 108,
+    "fields": {
+        "cart": 43,
+        "product": 8,
+        "quantity": 1,
+        "created_at": "2025-10-02T16:33:23.901Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 109,
+    "fields": {
+        "cart": 43,
+        "product": 6,
+        "quantity": 1,
+        "created_at": "2025-10-02T16:33:26.318Z"
+    }
+},
+{
+    "model": "linetrendy.cartitem",
+    "pk": 110,
+    "fields": {
+        "cart": 47,
+        "product": 2,
+        "quantity": 1,
+        "created_at": "2025-10-15T12:50:39.935Z"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 25,
+    "fields": {
+        "order": 29,
+        "product": 8,
+        "product_name": "Linetrendy Full Hair Journey set",
+        "quantity": 1,
+        "price": "60.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 26,
+    "fields": {
+        "order": 29,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 27,
+    "fields": {
+        "order": 30,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 28,
+    "fields": {
+        "order": 30,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 29,
+    "fields": {
+        "order": 31,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 30,
+    "fields": {
+        "order": 32,
+        "product": 8,
+        "product_name": "Linetrendy Full Hair Journey set",
+        "quantity": 1,
+        "price": "60.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 31,
+    "fields": {
+        "order": 33,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 32,
+    "fields": {
+        "order": 34,
+        "product": 2,
+        "product_name": "Linetrendy Herbal Repair Hair Mask 8 oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 33,
+    "fields": {
+        "order": 35,
+        "product": 4,
+        "product_name": "Linetrendy Root Revival Serum 4 oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 34,
+    "fields": {
+        "order": 36,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 35,
+    "fields": {
+        "order": 37,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 36,
+    "fields": {
+        "order": 38,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 37,
+    "fields": {
+        "order": 39,
+        "product": 4,
+        "product_name": "Linetrendy Root Revival Serum 4 oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 38,
+    "fields": {
+        "order": 40,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 39,
+    "fields": {
+        "order": 41,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 40,
+    "fields": {
+        "order": 42,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 41,
+    "fields": {
+        "order": 43,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 42,
+    "fields": {
+        "order": 44,
+        "product": 8,
+        "product_name": "Linetrendy Full Hair Journey set",
+        "quantity": 1,
+        "price": "60.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 43,
+    "fields": {
+        "order": 45,
+        "product": 8,
+        "product_name": "Linetrendy Full Hair Journey set",
+        "quantity": 1,
+        "price": "60.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 44,
+    "fields": {
+        "order": 46,
+        "product": 3,
+        "product_name": "Linetrendy Deep Moisture Fenugreek Conditioner 16oz",
+        "quantity": 1,
+        "price": "12.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 45,
+    "fields": {
+        "order": 47,
+        "product": 1,
+        "product_name": "Linetrendy black soap shampoo - 16oz",
+        "quantity": 1,
+        "price": "12.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 46,
+    "fields": {
+        "order": 48,
+        "product": 8,
+        "product_name": "Linetrendy Full Hair Journey set",
+        "quantity": 1,
+        "price": "60.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 47,
+    "fields": {
+        "order": 49,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 48,
+    "fields": {
+        "order": 50,
+        "product": 5,
+        "product_name": "Herbal Infused Hair Growth Oil û 2oz",
+        "quantity": 1,
+        "price": "15.00"
+    }
+},
+{
+    "model": "linetrendy.orderitem",
+    "pk": 49,
+    "fields": {
+        "order": 51,
+        "product": 6,
+        "product_name": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "quantity": 1,
+        "price": "10.00"
+    }
+},
+{
+    "model": "linetrendy.newsletter",
+    "pk": 1,
+    "fields": {
+        "email": "othnielnixonlafons@gmail.com",
+        "subscribed_at": "2025-10-04T17:20:50.529Z",
+        "is_active": true
+    }
+},
+{
+    "model": "linetrendy.newsletter",
+    "pk": 2,
+    "fields": {
+        "email": "info@saasiskey.com",
+        "subscribed_at": "2025-10-04T17:22:28.785Z",
+        "is_active": true
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": [
+            "admin",
+            "logentry"
+        ],
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view permission",
+        "content_type": [
+            "auth",
+            "permission"
+        ],
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view group",
+        "content_type": [
+            "auth",
+            "group"
+        ],
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view content type",
+        "content_type": [
+            "contenttypes",
+            "contenttype"
+        ],
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view session",
+        "content_type": [
+            "sessions",
+            "session"
+        ],
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add email address",
+        "content_type": [
+            "account",
+            "emailaddress"
+        ],
+        "codename": "add_emailaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change email address",
+        "content_type": [
+            "account",
+            "emailaddress"
+        ],
+        "codename": "change_emailaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete email address",
+        "content_type": [
+            "account",
+            "emailaddress"
+        ],
+        "codename": "delete_emailaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view email address",
+        "content_type": [
+            "account",
+            "emailaddress"
+        ],
+        "codename": "view_emailaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add email confirmation",
+        "content_type": [
+            "account",
+            "emailconfirmation"
+        ],
+        "codename": "add_emailconfirmation"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change email confirmation",
+        "content_type": [
+            "account",
+            "emailconfirmation"
+        ],
+        "codename": "change_emailconfirmation"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete email confirmation",
+        "content_type": [
+            "account",
+            "emailconfirmation"
+        ],
+        "codename": "delete_emailconfirmation"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view email confirmation",
+        "content_type": [
+            "account",
+            "emailconfirmation"
+        ],
+        "codename": "view_emailconfirmation"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add social account",
+        "content_type": [
+            "socialaccount",
+            "socialaccount"
+        ],
+        "codename": "add_socialaccount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change social account",
+        "content_type": [
+            "socialaccount",
+            "socialaccount"
+        ],
+        "codename": "change_socialaccount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete social account",
+        "content_type": [
+            "socialaccount",
+            "socialaccount"
+        ],
+        "codename": "delete_socialaccount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view social account",
+        "content_type": [
+            "socialaccount",
+            "socialaccount"
+        ],
+        "codename": "view_socialaccount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add social application",
+        "content_type": [
+            "socialaccount",
+            "socialapp"
+        ],
+        "codename": "add_socialapp"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change social application",
+        "content_type": [
+            "socialaccount",
+            "socialapp"
+        ],
+        "codename": "change_socialapp"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete social application",
+        "content_type": [
+            "socialaccount",
+            "socialapp"
+        ],
+        "codename": "delete_socialapp"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view social application",
+        "content_type": [
+            "socialaccount",
+            "socialapp"
+        ],
+        "codename": "view_socialapp"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add social application token",
+        "content_type": [
+            "socialaccount",
+            "socialtoken"
+        ],
+        "codename": "add_socialtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change social application token",
+        "content_type": [
+            "socialaccount",
+            "socialtoken"
+        ],
+        "codename": "change_socialtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete social application token",
+        "content_type": [
+            "socialaccount",
+            "socialtoken"
+        ],
+        "codename": "delete_socialtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view social application token",
+        "content_type": [
+            "socialaccount",
+            "socialtoken"
+        ],
+        "codename": "view_socialtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add Category",
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "codename": "add_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change Category",
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "codename": "change_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete Category",
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "codename": "delete_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view Category",
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "codename": "view_category"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add discount",
+        "content_type": [
+            "linetrendy",
+            "discount"
+        ],
+        "codename": "add_discount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change discount",
+        "content_type": [
+            "linetrendy",
+            "discount"
+        ],
+        "codename": "change_discount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete discount",
+        "content_type": [
+            "linetrendy",
+            "discount"
+        ],
+        "codename": "delete_discount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view discount",
+        "content_type": [
+            "linetrendy",
+            "discount"
+        ],
+        "codename": "view_discount"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add shipping method",
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "codename": "add_shippingmethod"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change shipping method",
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "codename": "change_shippingmethod"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete shipping method",
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "codename": "delete_shippingmethod"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view shipping method",
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "codename": "view_shippingmethod"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add cart",
+        "content_type": [
+            "linetrendy",
+            "cart"
+        ],
+        "codename": "add_cart"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change cart",
+        "content_type": [
+            "linetrendy",
+            "cart"
+        ],
+        "codename": "change_cart"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete cart",
+        "content_type": [
+            "linetrendy",
+            "cart"
+        ],
+        "codename": "delete_cart"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view cart",
+        "content_type": [
+            "linetrendy",
+            "cart"
+        ],
+        "codename": "view_cart"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add product",
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "codename": "add_product"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change product",
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "codename": "change_product"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete product",
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "codename": "delete_product"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view product",
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "codename": "view_product"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add product image",
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "codename": "add_productimage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change product image",
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "codename": "change_productimage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete product image",
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "codename": "delete_productimage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view product image",
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "codename": "view_productimage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add cart item",
+        "content_type": [
+            "linetrendy",
+            "cartitem"
+        ],
+        "codename": "add_cartitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change cart item",
+        "content_type": [
+            "linetrendy",
+            "cartitem"
+        ],
+        "codename": "change_cartitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete cart item",
+        "content_type": [
+            "linetrendy",
+            "cartitem"
+        ],
+        "codename": "delete_cartitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view cart item",
+        "content_type": [
+            "linetrendy",
+            "cartitem"
+        ],
+        "codename": "view_cartitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add custom user",
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "codename": "add_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change custom user",
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "codename": "change_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete custom user",
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "codename": "delete_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view custom user",
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "codename": "view_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add order",
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "codename": "add_order"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change order",
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "codename": "change_order"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete order",
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "codename": "delete_order"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view order",
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "codename": "view_order"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add order item",
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "codename": "add_orderitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change order item",
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "codename": "change_orderitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete order item",
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "codename": "delete_orderitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view order item",
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "codename": "view_orderitem"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add billing address",
+        "content_type": [
+            "linetrendy",
+            "billingaddress"
+        ],
+        "codename": "add_billingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change billing address",
+        "content_type": [
+            "linetrendy",
+            "billingaddress"
+        ],
+        "codename": "change_billingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete billing address",
+        "content_type": [
+            "linetrendy",
+            "billingaddress"
+        ],
+        "codename": "delete_billingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view billing address",
+        "content_type": [
+            "linetrendy",
+            "billingaddress"
+        ],
+        "codename": "view_billingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add shipping address",
+        "content_type": [
+            "linetrendy",
+            "shippingaddress"
+        ],
+        "codename": "add_shippingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change shipping address",
+        "content_type": [
+            "linetrendy",
+            "shippingaddress"
+        ],
+        "codename": "change_shippingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete shipping address",
+        "content_type": [
+            "linetrendy",
+            "shippingaddress"
+        ],
+        "codename": "delete_shippingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view shipping address",
+        "content_type": [
+            "linetrendy",
+            "shippingaddress"
+        ],
+        "codename": "view_shippingaddress"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add newsletter",
+        "content_type": [
+            "linetrendy",
+            "newsletter"
+        ],
+        "codename": "add_newsletter"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change newsletter",
+        "content_type": [
+            "linetrendy",
+            "newsletter"
+        ],
+        "codename": "change_newsletter"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete newsletter",
+        "content_type": [
+            "linetrendy",
+            "newsletter"
+        ],
+        "codename": "delete_newsletter"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view newsletter",
+        "content_type": [
+            "linetrendy",
+            "newsletter"
+        ],
+        "codename": "view_newsletter"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add testimonials",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "add_testimonials"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change testimonials",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "change_testimonials"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete testimonials",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "delete_testimonials"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view testimonials",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "view_testimonials"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add testimonial",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "add_testimonial"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change testimonial",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "change_testimonial"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete testimonial",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "delete_testimonial"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view testimonial",
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "codename": "view_testimonial"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can add discount usage",
+        "content_type": [
+            "linetrendy",
+            "discountusage"
+        ],
+        "codename": "add_discountusage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can change discount usage",
+        "content_type": [
+            "linetrendy",
+            "discountusage"
+        ],
+        "codename": "change_discountusage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can delete discount usage",
+        "content_type": [
+            "linetrendy",
+            "discountusage"
+        ],
+        "codename": "delete_discountusage"
+    }
+},
+{
+    "model": "auth.permission",
+    "fields": {
+        "name": "Can view discount usage",
+        "content_type": [
+            "linetrendy",
+            "discountusage"
+        ],
+        "codename": "view_discountusage"
+    }
+},
+{
+    "model": "users.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$wFiiVa2WT1qWmAR7WgpDiG$xOhTBzm/kOJb7wlC04VvJt4bv3E4UtjvhRfytJimPwM=",
+        "last_login": "2025-10-16T16:09:24.074Z",
+        "is_superuser": true,
+        "email": "kevinascott@saasiskey.com",
+        "first_name": "Kevin A",
+        "last_name": "Scott",
+        "role": "customer",
+        "is_active": true,
+        "is_staff": true,
+        "date_joined": "2025-08-21T14:54:34.445Z",
+        "profile_picture": "",
+        "phone_number": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$r61I4I1yInHwGQ8bLqb0hl$onNxgwrE0Z5g86Ou5h6X7jUW8xr4bO5TEnqDhNpezAY=",
+        "last_login": "2025-08-28T14:57:31.220Z",
+        "is_superuser": false,
+        "email": "linetrendy@gmail.com",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2025-08-28T14:57:27.276Z",
+        "profile_picture": "",
+        "phone_number": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$yEO86fjfTtCtiYjpz8vhl3$9LKuEuC4Pt1NvBo/8n1U3iAfVrf1dx50qHDCeXC9li0=",
+        "last_login": "2025-08-28T15:16:39Z",
+        "is_superuser": false,
+        "email": "amaurissaint@saasiskey.com",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2025-08-28T15:11:03.144Z",
+        "profile_picture": "",
+        "phone_number": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.customuser",
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$MbrqczKYEFjbIBdi0krWPY$NqIvvKbappS58bcwsxvEb+yjasPdv0CczSqcRmuWRno=",
+        "last_login": "2025-10-02T16:06:32.891Z",
+        "is_superuser": false,
+        "email": "othnielnixonlafond@gmail.com",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer",
+        "is_active": true,
+        "is_staff": false,
+        "date_joined": "2025-10-02T16:06:27.649Z",
+        "profile_picture": "",
+        "phone_number": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 11,
+    "fields": {
+        "user": null,
+        "order": null,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "Florida",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": "+13173846051"
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 12,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "order": 29,
+        "full_name": "Othniel Nixon Lafond",
+        "line1": "Delmas 3#199",
+        "line2": "",
+        "city": "Port-au-prince",
+        "state": "",
+        "postal_code": "HT6220",
+        "country": "Haiti",
+        "phone": "+18000101100"
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 13,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "order": 32,
+        "full_name": "Othniel Nixon Lafond",
+        "line1": "9413 aspen grove lane",
+        "line2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46250",
+        "country": "US",
+        "phone": "+18000101100"
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 14,
+    "fields": {
+        "user": null,
+        "order": 33,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "Florida",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 15,
+    "fields": {
+        "user": null,
+        "order": 34,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 16,
+    "fields": {
+        "user": null,
+        "order": 35,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 17,
+    "fields": {
+        "user": null,
+        "order": 36,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 18,
+    "fields": {
+        "user": null,
+        "order": 37,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 19,
+    "fields": {
+        "user": null,
+        "order": 38,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 20,
+    "fields": {
+        "user": null,
+        "order": 39,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 21,
+    "fields": {
+        "user": null,
+        "order": 40,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 22,
+    "fields": {
+        "user": null,
+        "order": 41,
+        "full_name": "Othniel Nixon Lafond - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 23,
+    "fields": {
+        "user": null,
+        "order": 42,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 24,
+    "fields": {
+        "user": null,
+        "order": 43,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 25,
+    "fields": {
+        "user": null,
+        "order": 44,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 26,
+    "fields": {
+        "user": null,
+        "order": 45,
+        "full_name": "John Doe",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Indianapolis",
+        "state": "IN",
+        "postal_code": "46250",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 27,
+    "fields": {
+        "user": null,
+        "order": 46,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 28,
+    "fields": {
+        "user": null,
+        "order": 47,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Miami",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 29,
+    "fields": {
+        "user": null,
+        "order": 48,
+        "full_name": "John Doe - OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 30,
+    "fields": {
+        "user": null,
+        "order": 49,
+        "full_name": "OL655207",
+        "line1": "6600 NW 12TH AVE SUITE 215",
+        "line2": "",
+        "city": "Fort Lauderdale",
+        "state": "FL",
+        "postal_code": "33309",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 31,
+    "fields": {
+        "user": null,
+        "order": 50,
+        "full_name": "John Doe",
+        "line1": "312 W. 2nd St #1755",
+        "line2": "",
+        "city": "Casper,",
+        "state": "IN",
+        "postal_code": "82601",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.shippingaddress",
+    "pk": 32,
+    "fields": {
+        "user": null,
+        "order": 51,
+        "full_name": "John Doe",
+        "line1": "312 West 2nd Street",
+        "line2": "Unit #175",
+        "city": "Casper",
+        "state": "WY",
+        "postal_code": "82601",
+        "country": "US",
+        "phone": null
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 29,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "guest_email": null,
+        "cart": 1,
+        "payment_intent_id": "pi_3S2wmcDUVjdauCtQ3dwhFTcV",
+        "total_amount": "70.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-02T16:10:10.453Z",
+        "status": "delivered",
+        "order_number": "ORD20250902-001"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 30,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "guest_email": null,
+        "cart": 1,
+        "payment_intent_id": "pi_3S2x07DUVjdauCtQ0dMLQ55O",
+        "total_amount": "37.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-02T16:24:07.469Z",
+        "status": "delivered",
+        "order_number": "ORD20250902-002"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 31,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "guest_email": null,
+        "cart": 1,
+        "payment_intent_id": "pi_3S2xtwDUVjdauCtQ04VkDfj7",
+        "total_amount": "34.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-02T17:21:48.264Z",
+        "status": "cancelled",
+        "order_number": "ORD20250902-003"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 32,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "guest_email": null,
+        "cart": 1,
+        "payment_intent_id": "pi_3S2y2uDUVjdauCtQ0OykTtMs",
+        "total_amount": "60.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-02T17:31:04.945Z",
+        "status": "delivered",
+        "order_number": "ORD20250902-004"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 33,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 25,
+        "payment_intent_id": "pi_3S2y7dDUVjdauCtQ1MUEdtv3",
+        "total_amount": "29.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-02T17:35:57.942Z",
+        "status": "placed",
+        "order_number": "ORD20250902-005"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 34,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 30,
+        "payment_intent_id": "pi_3S3dI3DUVjdauCtQ2mYZ1NBD",
+        "total_amount": "22.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-04T13:33:27.528Z",
+        "status": "placed",
+        "order_number": "ORD20250904-001"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 35,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 30,
+        "payment_intent_id": "pi_3S3eDxDUVjdauCtQ3fGK7LhA",
+        "total_amount": "29.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-04T14:33:17.337Z",
+        "status": "placed",
+        "order_number": "ORD20250904-002"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 36,
+    "fields": {
+        "user": null,
+        "guest_email": "info@saasiskey.com",
+        "cart": 32,
+        "payment_intent_id": "pi_3S8lm1DUVjdauCtQ0Eg0Q2kh",
+        "total_amount": "27.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-18T18:38:13.150Z",
+        "status": "placed",
+        "order_number": "ORD20250918-001"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 37,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 33,
+        "payment_intent_id": "pi_3S8nFzDUVjdauCtQ0DI0Q1wg",
+        "total_amount": "29.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-18T20:13:15.595Z",
+        "status": "placed",
+        "order_number": "ORD20250918-002"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 38,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 33,
+        "payment_intent_id": "pi_3S8ncnDUVjdauCtQ254pKDck",
+        "total_amount": "27.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-18T20:36:49.816Z",
+        "status": "placed",
+        "order_number": "ORD20250918-003"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 39,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 33,
+        "payment_intent_id": "pi_3S8oL7DUVjdauCtQ21DIfLq8",
+        "total_amount": "22.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-18T21:22:37.795Z",
+        "status": "placed",
+        "order_number": "ORD20250918-004"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 40,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 34,
+        "payment_intent_id": "pi_3SChtoRxflV0gX7o0eK0axye",
+        "total_amount": "22.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T14:17:56.623Z",
+        "status": "placed",
+        "order_number": "ORD20250929-001"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 41,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 35,
+        "payment_intent_id": "pi_3SChy9RxflV0gX7o0WM17lTg",
+        "total_amount": "29.00",
+        "shipping_fee": "19.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T14:22:25.178Z",
+        "status": "placed",
+        "order_number": "ORD20250929-002"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 42,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCj2ZRxflV0gX7o1shuWJH7",
+        "total_amount": "22.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T15:31:03.250Z",
+        "status": "placed",
+        "order_number": "ORD20250929-003"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 43,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCjUwRxflV0gX7o1vblR8mL",
+        "total_amount": "27.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T16:00:22.230Z",
+        "status": "placed",
+        "order_number": "ORD20250929-004"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 44,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCjZ3RxflV0gX7o0wZtenVp",
+        "total_amount": "60.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T16:04:37.965Z",
+        "status": "placed",
+        "order_number": "ORD20250929-005"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 45,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCjbPRxflV0gX7o1DBKdIzS",
+        "total_amount": "60.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T16:07:03.721Z",
+        "status": "placed",
+        "order_number": "ORD20250929-006"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 46,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCjhiRxflV0gX7o02i0b9wv",
+        "total_amount": "24.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T16:13:34.794Z",
+        "status": "placed",
+        "order_number": "ORD20250929-007"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 47,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCkh0RxflV0gX7o1rl4RtHr",
+        "total_amount": "24.00",
+        "shipping_fee": "12.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T17:16:54.460Z",
+        "status": "placed",
+        "order_number": "ORD20250929-008"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 48,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 37,
+        "payment_intent_id": "pi_3SCknzRxflV0gX7o0lXWBZoy",
+        "total_amount": "60.00",
+        "shipping_fee": "0.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-09-29T17:24:07.282Z",
+        "status": "placed",
+        "order_number": "ORD20250929-009"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 49,
+    "fields": {
+        "user": null,
+        "guest_email": "info@saasiskey.com",
+        "cart": 48,
+        "payment_intent_id": "pi_3SIrEZRxflV0gX7o1qPkLhn6",
+        "total_amount": "30.00",
+        "shipping_fee": "15.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-10-16T13:28:47.585Z",
+        "status": "placed",
+        "order_number": "ORD20251016-001"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 50,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 48,
+        "payment_intent_id": "pi_3SItEjRxflV0gX7o0aldOstE",
+        "total_amount": "45.00",
+        "shipping_fee": "30.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-10-16T15:37:05.775Z",
+        "status": "placed",
+        "order_number": "ORD20251016-002"
+    }
+},
+{
+    "model": "linetrendy.order",
+    "pk": 51,
+    "fields": {
+        "user": null,
+        "guest_email": "othnielnixonlafond@gmail.com",
+        "cart": 48,
+        "payment_intent_id": "pi_3SItYkRxflV0gX7o1GMCz70V",
+        "total_amount": "20.00",
+        "shipping_fee": "10.00",
+        "discount_amount": "0.00",
+        "created_at": "2025-10-16T15:57:46.816Z",
+        "status": "out_for_delivery",
+        "order_number": "ORD20251016-003"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "session_key": null,
+        "shipping_method": 4,
+        "discount": null,
+        "updated_at": "2025-10-15T14:00:10.586Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 2,
+    "fields": {
+        "user": null,
+        "session_key": "kzz74nf78xl8r1i8hfvkb6nnhl937vc8",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-27T14:03:17.581Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 3,
+    "fields": {
+        "user": null,
+        "session_key": "zblcaugzkvv0fcwbv6bv56zo25ceixmo",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-27T18:55:06.566Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 4,
+    "fields": {
+        "user": null,
+        "session_key": "SsW8jkvpp0GfMJxiPeTE0uc7ELDF1gR7",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-27T17:48:03.488Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 5,
+    "fields": {
+        "user": null,
+        "session_key": "z0h92hupbozzho6g3pbkib06wvbjnodx",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T02:16:14.032Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 6,
+    "fields": {
+        "user": null,
+        "session_key": "nsb4gqy78lk5a7nus0ztw6wkcl1ndr1k",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:01:32.529Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 7,
+    "fields": {
+        "user": null,
+        "session_key": "bs98g5mjl7u51ren4cel2grhjk74ceyg",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:04:46.265Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 8,
+    "fields": {
+        "user": null,
+        "session_key": "tdk790v39wkm9xtkuepftb85847ds2wl",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:10:20.492Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 9,
+    "fields": {
+        "user": null,
+        "session_key": "kd1wsu13d5y7oqzh2k4b0otj6fqawt4g",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:14:21.395Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 10,
+    "fields": {
+        "user": null,
+        "session_key": "xmling31pnwtpukr75q9irh16rd43f41",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:16:07.595Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "amaurissaint@saasiskey.com"
+        ],
+        "session_key": null,
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:16:45.840Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 12,
+    "fields": {
+        "user": null,
+        "session_key": "zxjpms26hxvj66u2urjlcy1vb91wq9sn",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:17:12.237Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 13,
+    "fields": {
+        "user": null,
+        "session_key": "ne9r4pl6zzt4t7v2isxacqtbiw3d2u95",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T15:23:51.797Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 14,
+    "fields": {
+        "user": null,
+        "session_key": "79732psdffwkvr8dl6p0n8mcu673trk7",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T16:09:18.169Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 15,
+    "fields": {
+        "user": null,
+        "session_key": "4132nf5e67mmlafdyd3eyvw12xkntuz9",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T22:35:08.286Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 16,
+    "fields": {
+        "user": null,
+        "session_key": "d5uapk82vw4vvhw6dfg9bmuvd297c225",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T23:27:36.260Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 17,
+    "fields": {
+        "user": null,
+        "session_key": "qodoxbcgc3qbcb7jv496hu2qfnpovo1c",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-28T23:50:51.234Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 18,
+    "fields": {
+        "user": null,
+        "session_key": "tj616fp86wrupz5p1exzs3gpx2q8hmk9",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-29T15:07:02.475Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 19,
+    "fields": {
+        "user": null,
+        "session_key": "3jufrd7rm2u4ubhsg9jiqk66nmlwmbhm",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-08-29T15:07:56.644Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 20,
+    "fields": {
+        "user": null,
+        "session_key": "tkjzew2idoeie8lv1j0d6m90fsmrmm95",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-01T14:50:06.318Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 21,
+    "fields": {
+        "user": null,
+        "session_key": "o5ovp82l748wdaoi16tkyxtgwz0pxrqf",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-01T23:17:16.018Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 22,
+    "fields": {
+        "user": null,
+        "session_key": "lb55ke7ivqx7o46cuwk5aeruxhj2w2nu",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T14:49:36.694Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 23,
+    "fields": {
+        "user": null,
+        "session_key": "9iedqls49n4zry4eaf6mrri07n1fjnj7",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T16:18:34.535Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 24,
+    "fields": {
+        "user": null,
+        "session_key": "du60boz5bzj3i2wnb947g1rkklhr08on",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T17:33:09.246Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 25,
+    "fields": {
+        "user": null,
+        "session_key": "gtdll9i1y60l4vzihbqircguo0zijj2l",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T17:35:58.500Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 26,
+    "fields": {
+        "user": null,
+        "session_key": "0eirnw1tpa5a87anjp0iwq7wwpvexopc",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T17:41:56.602Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 27,
+    "fields": {
+        "user": null,
+        "session_key": "5pfqgpriz5sgi7np4ske40jj05ilmh9q",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T17:41:57.524Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 28,
+    "fields": {
+        "user": null,
+        "session_key": "63gjc31jjjo99mg10pxsdo1fa0l0jmfe",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-02T20:30:04.429Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 29,
+    "fields": {
+        "user": null,
+        "session_key": "kdrevlrf798n2qszyalfe5upr3e1hjpw",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-03T14:24:19.675Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 30,
+    "fields": {
+        "user": null,
+        "session_key": "5wc7e3aoj81obu9yspy105p9a75rkb6i",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-04T14:33:17.343Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 31,
+    "fields": {
+        "user": null,
+        "session_key": "05snc3pkk2wyr9feica0c8kt5aqlkbp3",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-12T14:36:35.337Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 32,
+    "fields": {
+        "user": null,
+        "session_key": "zezdq8khrw9bciry05shniqckn48pyug",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-18T18:38:13.980Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 33,
+    "fields": {
+        "user": null,
+        "session_key": "8zda7f55pwxwzj8wz01m6rl7ksxqwoti",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-18T21:22:37.858Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 34,
+    "fields": {
+        "user": null,
+        "session_key": "mykcsnkajo25pd2k3n12skhjz898f1oc",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-29T14:17:56.632Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 35,
+    "fields": {
+        "user": null,
+        "session_key": "tu7f2vcd7g1lxqq4dxcx17hbuih9i408",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-29T14:22:25.222Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 36,
+    "fields": {
+        "user": null,
+        "session_key": "p9odx1uvfa7p6kn58mcmqza13psipkf3",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-29T14:23:20.170Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 37,
+    "fields": {
+        "user": null,
+        "session_key": "du1slj2ontp2i6sj72hu4ekrwhebtl3t",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-29T17:24:07.297Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 38,
+    "fields": {
+        "user": null,
+        "session_key": "ibw9yroqpk160yb5pot0ctsekghj9xqj",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-09-29T15:31:40.556Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 39,
+    "fields": {
+        "user": null,
+        "session_key": "e6s7kb2hlpx11htkew9vmlgp7cn4wgm1",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-02T14:20:15.457Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 40,
+    "fields": {
+        "user": null,
+        "session_key": "wfeycn0j4m0axam4arex1vzzu97maq60",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-02T14:33:57.913Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 41,
+    "fields": {
+        "user": null,
+        "session_key": "njq2jteeiw9yx291pcavuaij2brkfhv6",
+        "shipping_method": 4,
+        "discount": null,
+        "updated_at": "2025-10-02T16:01:03.662Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 42,
+    "fields": {
+        "user": null,
+        "session_key": "ps7fgceqw86pr152duic9y5ipepivk1v",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-02T16:05:36.234Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 43,
+    "fields": {
+        "user": null,
+        "session_key": "l3snvwl1yg2x0dig5w7j64kyutd590cn",
+        "shipping_method": 4,
+        "discount": null,
+        "updated_at": "2025-10-02T16:33:55.070Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 44,
+    "fields": {
+        "user": null,
+        "session_key": "v8mrdh7yuh0gp5hl1qx4ekrha27z9ztr",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-04T16:40:20.167Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 45,
+    "fields": {
+        "user": null,
+        "session_key": "xl5m2mxmtoju6ekrpmhe2duzq9prnrz0",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-06T14:11:33.263Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 46,
+    "fields": {
+        "user": null,
+        "session_key": "x7ce4hjgh6bsw4xea7wtees52krw1325",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-06T16:05:43.653Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 47,
+    "fields": {
+        "user": null,
+        "session_key": "zc9md9eem55v9g3n075g4xkz4e3jws6c",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-14T16:43:05.118Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 48,
+    "fields": {
+        "user": null,
+        "session_key": "mhk9mdvg9gr69gsk4yd8m7kod7mk7erf",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-16T15:57:46.827Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 49,
+    "fields": {
+        "user": null,
+        "session_key": null,
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-16T12:16:55.369Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 50,
+    "fields": {
+        "user": null,
+        "session_key": null,
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-16T12:35:16.843Z"
+    }
+},
+{
+    "model": "linetrendy.cart",
+    "pk": 51,
+    "fields": {
+        "user": null,
+        "session_key": "mcahrjbv9oirnwe23wed5jak4kwznadh",
+        "shipping_method": null,
+        "discount": null,
+        "updated_at": "2025-10-16T16:21:15.598Z"
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "linetrendy@gmail.com"
+        ],
+        "email": "linetrendy@gmail.com",
+        "verified": false,
+        "primary": true
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "amaurissaint@saasiskey.com"
+        ],
+        "email": "andyjmaurissaint@saasiskey.com",
+        "verified": false,
+        "primary": true
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "amaurissaint@saasiskey.com"
+        ],
+        "email": "amaurissaint@saasiskey.com",
+        "verified": false,
+        "primary": false
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "email": "kevinascott@saasiskey.com",
+        "verified": false,
+        "primary": false
+    }
+},
+{
+    "model": "account.emailaddress",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "othnielnixonlafond@gmail.com"
+        ],
+        "email": "othnielnixonlafond@gmail.com",
+        "verified": false,
+        "primary": true
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2025-08-21T14:58:29.031Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "object_id": "1",
+        "object_repr": "Cleaners, treatment, deep conditioner",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2025-08-21T14:59:15.750Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "object_id": "2",
+        "object_repr": "Growth Oil & Leave in Serum",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2025-08-21T14:59:54.824Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "object_id": "3",
+        "object_repr": "Styling Products",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2025-08-21T15:00:47.204Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "category"
+        ],
+        "object_id": "4",
+        "object_repr": "Bundles & Sets, Growth & Strengthening",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2025-08-21T15:03:21.082Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "1",
+        "object_repr": "Linetrendy black soap shampoo - 16oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2025-08-21T15:04:08.129Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "1",
+        "object_repr": "Image for Linetrendy black soap shampoo - 16oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2025-08-21T15:05:13.281Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Linetrendy Herbal Repair Hair Mask 8 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2025-08-21T15:06:00.308Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "2",
+        "object_repr": "Image for Linetrendy Herbal Repair Hair Mask 8 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2025-08-21T15:07:34.278Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Linetrendy Deep Moisture Fenugreek Conditioner 16 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2025-08-21T15:07:57.711Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "3",
+        "object_repr": "Image for Linetrendy Deep Moisture Fenugreek Conditioner 16 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2025-08-21T15:12:06.741Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "4",
+        "object_repr": "Linetrendy Root Revival Serum 4 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2025-08-21T15:12:42.996Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "4",
+        "object_repr": "Image for Linetrendy Root Revival Serum 4 oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2025-08-21T15:13:56.309Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "5",
+        "object_repr": "Herbal Infused Hair Growth Oil û 2oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2025-08-21T15:14:40.956Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "5",
+        "object_repr": "Image for Herbal Infused Hair Growth Oil û 2oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2025-08-21T15:15:54.619Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "6",
+        "object_repr": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2025-08-21T15:16:22.572Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "6",
+        "object_repr": "Image for Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2025-08-21T15:18:09.708Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "7",
+        "object_repr": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2025-08-21T15:18:39.830Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "7",
+        "object_repr": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2025-08-21T15:20:05.244Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "8",
+        "object_repr": "Linetrendy Full Hair Journey set",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2025-08-21T15:20:41.623Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "7",
+        "object_repr": "Image for Linetrendy Full Hair Journey set",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2025-08-21T15:21:32.395Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "productimage"
+        ],
+        "object_id": "6",
+        "object_repr": "Image for Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2025-08-21T15:22:08.431Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "7",
+        "object_repr": "Linetrendy Herbal Hold & Moisture Pomade 8oz",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2025-08-21T15:28:57.487Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "1",
+        "object_repr": "1 day Shipping",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2025-08-21T15:29:19.505Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "2",
+        "object_repr": "Standard Shipping",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2025-08-21T15:29:33.309Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "3",
+        "object_repr": "Free shipping on orders over $35",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2025-08-21T17:22:53.005Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Linetrendy Deep Moisture",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\", \"Price\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2025-08-21T17:23:53.052Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Linetrendy Deep Moisture Fenugreek Conditioner 16oz",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2025-08-27T22:55:05.299Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "7",
+        "object_repr": "Order None by Guest #7 - completed ($54.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2025-08-27T22:55:25.031Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "5",
+        "object_repr": "Order None by kevinascott@saasiskey.com - completed ($0.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2025-08-27T22:55:33.732Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "4",
+        "object_repr": "Order None by kevinascott@saasiskey.com - completed ($0.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2025-08-27T22:55:41.249Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "3",
+        "object_repr": "Order None by kevinascott@saasiskey.com - completed ($0.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2025-08-27T22:55:49.117Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "2",
+        "object_repr": "Order None by kevinascott@saasiskey.com - completed ($0.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2025-08-27T22:56:11.032Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "6",
+        "object_repr": "Order None by kevinascott@saasiskey.com - completed ($132.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+        "action_time": "2025-08-27T22:56:21.299Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "1",
+        "object_repr": "Order ORD20250827-004 by kevinascott@saasiskey.com - completed ($149.00)",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+        "action_time": "2025-08-28T00:08:50.496Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "11",
+        "object_repr": "Order ORD20250827-005 by kevinascott@saasiskey.com - Order Placed ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+        "action_time": "2025-08-28T00:08:57.329Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "10",
+        "object_repr": "Order ORD20250827-003 by kevinascott@saasiskey.com - Order Placed ($91.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+        "action_time": "2025-08-28T00:09:01.812Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "1",
+        "object_repr": "Order ORD20250827-004 by kevinascott@saasiskey.com - Order Placed ($149.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+        "action_time": "2025-08-28T00:33:14.939Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "10",
+        "object_repr": "Order ORD20250827-003 by kevinascott@saasiskey.com - Order Placed ($91.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 39,
+    "fields": {
+        "action_time": "2025-08-28T00:33:14.939Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "9",
+        "object_repr": "Order ORD20250827-002 by Guest #9 - completed ($79.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 40,
+    "fields": {
+        "action_time": "2025-08-28T00:33:14.939Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "8",
+        "object_repr": "Order ORD20250827-001 by Guest #8 - completed ($22.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 41,
+    "fields": {
+        "action_time": "2025-08-28T00:33:14.939Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "1",
+        "object_repr": "Order ORD20250827-004 by kevinascott@saasiskey.com - Order Placed ($149.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 42,
+    "fields": {
+        "action_time": "2025-08-28T00:52:11.497Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "13",
+        "object_repr": "Order ORD20250828-002 by kevinascott@saasiskey.com - Order Placed ($53.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 43,
+    "fields": {
+        "action_time": "2025-08-28T00:52:20.863Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "12",
+        "object_repr": "Order ORD20250828-001 by kevinascott@saasiskey.com - Order Placed ($37.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 44,
+    "fields": {
+        "action_time": "2025-08-28T00:52:47.029Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "11",
+        "object_repr": "Order ORD20250827-005 by kevinascott@saasiskey.com - Shipped ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 45,
+    "fields": {
+        "action_time": "2025-08-28T01:05:20.230Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "11",
+        "object_repr": "Order ORD20250827-005 by kevinascott@saasiskey.com - Delivered ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 46,
+    "fields": {
+        "action_time": "2025-08-28T15:10:11.226Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "4",
+        "object_repr": "andyayiti@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 47,
+    "fields": {
+        "action_time": "2025-08-28T15:10:11.226Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "3",
+        "object_repr": "andyjmaurissaint@saasiskey.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 48,
+    "fields": {
+        "action_time": "2025-08-28T15:15:37.084Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "6",
+        "object_repr": "andyayiti@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 49,
+    "fields": {
+        "action_time": "2025-08-28T16:08:19.306Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "5",
+        "object_repr": "amaurissaint@saasiskey.com",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Email\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 50,
+    "fields": {
+        "action_time": "2025-08-28T23:41:55.899Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "6",
+        "object_repr": "othnielnixonlafond@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 51,
+    "fields": {
+        "action_time": "2025-09-01T15:50:09.227Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "12",
+        "object_repr": "Order ORD20250828-001 by kevinascott@saasiskey.com - Shipped ($37.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 52,
+    "fields": {
+        "action_time": "2025-09-01T19:41:46.363Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "object_id": "16",
+        "object_repr": "1 ╫ Linetrendy Herbal Hold & Moisture Pomade 8oz ($10.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Product\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 53,
+    "fields": {
+        "action_time": "2025-09-01T19:42:50.892Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "orderitem"
+        ],
+        "object_id": "17",
+        "object_repr": "1 ╫ Linetrendy Deep Moisture Fenugreek Conditioner 16oz ($12.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Product\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 54,
+    "fields": {
+        "action_time": "2025-09-01T19:55:30.578Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "16",
+        "object_repr": "Order ORD20250901-003 by kevinascott@saasiskey.com - Shipped ($31.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 55,
+    "fields": {
+        "action_time": "2025-09-01T23:18:43.050Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "8",
+        "object_repr": "Linetrendy Full Hair Journey set",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 56,
+    "fields": {
+        "action_time": "2025-09-01T23:21:11.127Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Linetrendy Herbal Repair Hair Mask 8 oz",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 57,
+    "fields": {
+        "action_time": "2025-09-02T15:25:30.814Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingaddress"
+        ],
+        "object_id": "11",
+        "object_repr": "Othniel Nixon Lafond - OL655207, 6600 NW 12TH AVE SUITE 215, Fort Lauderdale",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 58,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "25",
+        "object_repr": "Order ORD20250902-001 by kevinascott@saasiskey.com - Order Placed ($22.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 59,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "24",
+        "object_repr": "Order ORD20250901-011 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 60,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "23",
+        "object_repr": "Order ORD20250901-010 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 61,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "22",
+        "object_repr": "Order ORD20250901-009 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 62,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "21",
+        "object_repr": "Order ORD20250901-008 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 63,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "20",
+        "object_repr": "Order ORD20250901-007 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 64,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "19",
+        "object_repr": "Order ORD20250901-006 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 65,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "18",
+        "object_repr": "Order ORD20250901-005 by Guest (info@saasiskey.com) - Order Placed ($29.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 66,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "17",
+        "object_repr": "Order ORD20250901-004 by kevinascott@saasiskey.com - Order Placed ($79.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 67,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "16",
+        "object_repr": "Order ORD20250901-003 by kevinascott@saasiskey.com - Shipped ($31.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 68,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "15",
+        "object_repr": "Order ORD20250901-002 by kevinascott@saasiskey.com - Order Placed ($10.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 69,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "14",
+        "object_repr": "Order ORD20250901-001 by kevinascott@saasiskey.com - Cancelled ($22.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 70,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "13",
+        "object_repr": "Order ORD20250828-002 by kevinascott@saasiskey.com - Order Placed ($53.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 71,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "12",
+        "object_repr": "Order ORD20250828-001 by kevinascott@saasiskey.com - Shipped ($37.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 72,
+    "fields": {
+        "action_time": "2025-09-02T15:34:41.938Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "11",
+        "object_repr": "Order ORD20250827-005 by kevinascott@saasiskey.com - Delivered ($60.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 73,
+    "fields": {
+        "action_time": "2025-09-02T15:47:02.821Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "27",
+        "object_repr": "Order ORD20250902-002 by kevinascott@saasiskey.com - Shipped ($24.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 74,
+    "fields": {
+        "action_time": "2025-09-02T15:48:23.737Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "28",
+        "object_repr": "Order ORD20250902-003 by kevinascott@saasiskey.com - Delivered ($34.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 75,
+    "fields": {
+        "action_time": "2025-09-02T16:08:15.237Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "28",
+        "object_repr": "Order ORD20250902-003 by kevinascott@saasiskey.com - Delivered ($34.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 76,
+    "fields": {
+        "action_time": "2025-09-02T16:08:15.237Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "27",
+        "object_repr": "Order ORD20250902-002 by kevinascott@saasiskey.com - Shipped ($24.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 77,
+    "fields": {
+        "action_time": "2025-09-02T16:08:15.237Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "26",
+        "object_repr": "Order ORD20250902-001 by kevinascott@saasiskey.com - Order Placed ($70.00)",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 78,
+    "fields": {
+        "action_time": "2025-09-02T16:26:26.977Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "29",
+        "object_repr": "Order ORD20250902-001 by kevinascott@saasiskey.com - Shipped ($70.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 79,
+    "fields": {
+        "action_time": "2025-09-02T16:26:34.777Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "30",
+        "object_repr": "Order ORD20250902-002 by kevinascott@saasiskey.com - Delivered ($37.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 80,
+    "fields": {
+        "action_time": "2025-09-02T17:17:01.534Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "3",
+        "object_repr": "Free shipping on orders over $35",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 81,
+    "fields": {
+        "action_time": "2025-10-02T14:35:02.347Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "2",
+        "object_repr": "Standard Shipping",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 82,
+    "fields": {
+        "action_time": "2025-10-02T14:35:02.347Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "1",
+        "object_repr": "1 day Shipping",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 83,
+    "fields": {
+        "action_time": "2025-10-02T14:37:52.757Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "4",
+        "object_repr": "Priority mail express 1- 3 business day",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 84,
+    "fields": {
+        "action_time": "2025-10-02T14:38:46.044Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "5",
+        "object_repr": "Priority mail 3-5 business day",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 85,
+    "fields": {
+        "action_time": "2025-10-02T14:39:32.111Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "6",
+        "object_repr": "Standard shipping 5 to 10 business",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 86,
+    "fields": {
+        "action_time": "2025-10-02T16:06:07.409Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "7",
+        "object_repr": "othnielnixonlafond@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 87,
+    "fields": {
+        "action_time": "2025-10-02T16:06:07.409Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "users",
+            "customuser"
+        ],
+        "object_id": "8",
+        "object_repr": "thefreakbeatz@gmail.com",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 88,
+    "fields": {
+        "action_time": "2025-10-02T16:34:20.685Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "shippingmethod"
+        ],
+        "object_id": "4",
+        "object_repr": "Priority mail express 1-3 business day",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 89,
+    "fields": {
+        "action_time": "2025-10-06T14:45:05.536Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "object_id": "1",
+        "object_repr": "Testimonial by Test Name",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 90,
+    "fields": {
+        "action_time": "2025-10-06T16:16:17.058Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "object_id": "1",
+        "object_repr": "Testimonial by Test Name",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Rating\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 91,
+    "fields": {
+        "action_time": "2025-10-06T16:16:23.621Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "object_id": "1",
+        "object_repr": "Testimonial by Test Name",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 92,
+    "fields": {
+        "action_time": "2025-10-06T16:16:45.793Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "object_id": "1",
+        "object_repr": "Testimonial by Test Name",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Rating\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 93,
+    "fields": {
+        "action_time": "2025-10-06T16:19:23.651Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "testimonial"
+        ],
+        "object_id": "1",
+        "object_repr": "Testimonial by Test Name",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 94,
+    "fields": {
+        "action_time": "2025-10-15T12:53:10.901Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "discount"
+        ],
+        "object_id": "1",
+        "object_repr": "LNTDY152025",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 95,
+    "fields": {
+        "action_time": "2025-10-15T16:30:27.102Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "32",
+        "object_repr": "Order ORD20250902-004 by kevinascott@saasiskey.com - Shipped ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 96,
+    "fields": {
+        "action_time": "2025-10-15T16:31:51.635Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "32",
+        "object_repr": "Order ORD20250902-004 by kevinascott@saasiskey.com - Out for delivery ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 97,
+    "fields": {
+        "action_time": "2025-10-15T17:37:55.728Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "32",
+        "object_repr": "Order ORD20250902-004 by kevinascott@saasiskey.com - Delivered ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 98,
+    "fields": {
+        "action_time": "2025-10-15T17:39:30.862Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "32",
+        "object_repr": "Order ORD20250902-004 by kevinascott@saasiskey.com - Order Placed ($60.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 99,
+    "fields": {
+        "action_time": "2025-10-16T16:14:20.195Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "51",
+        "object_repr": "Order ORD20251016-003 by Guest (othnielnixonlafond@gmail.com) - Shipped ($20.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 100,
+    "fields": {
+        "action_time": "2025-10-16T16:18:40.505Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "order"
+        ],
+        "object_id": "51",
+        "object_repr": "Order ORD20251016-003 by Guest (othnielnixonlafond@gmail.com) - Out for delivery ($20.00)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 101,
+    "fields": {
+        "action_time": "2025-10-16T16:20:52.285Z",
+        "user": [
+            "kevinascott@saasiskey.com"
+        ],
+        "content_type": [
+            "linetrendy",
+            "product"
+        ],
+        "object_id": "5",
+        "object_repr": "Linetrendy Herbal Infused Hair Growth Oil û 2oz",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+}
+]

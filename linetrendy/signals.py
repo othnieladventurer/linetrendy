@@ -83,7 +83,7 @@ The LineTrendy Team
         
         <div class="footer">
             <p>Best regards,<br>The LineTrendy Team</p>
-            <p>Need help? Contact us at support@linetrendy.com</p>
+            <p>Need help? Contact us at linetrendyllc@gmail.com</p>
         </div>
     </div>
 </body>
