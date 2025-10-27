@@ -278,7 +278,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # make sure this stays False when TLS is True
-EMAIL_HOST_USER = 'Linetrendyllc@gmail.com'
+EMAIL_HOST_USER = 'linetrendyllc@gmail.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # your Gmail app password (not your normal login!)
 DEFAULT_FROM_EMAIL = 'Linetrendy <linetrendyllc@gmail.com>'
 
