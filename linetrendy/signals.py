@@ -4,12 +4,19 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from .models import Order
 from django.urls import reverse
+import threading
 
 
 
 
 
 
+def send_email_async(email):
+    """Send email in a separate thread to avoid blocking checkout."""
+    try:
+        email.send(fail_silently=True)
+    except Exception as e:
+        print(f"⚠️ Failed to send email: {e}")
 
 @receiver(post_save, sender=Order)
 def send_order_confirmation_email(sender, instance, created, **kwargs):
@@ -20,24 +27,25 @@ def send_order_confirmation_email(sender, instance, created, **kwargs):
     if instance.user:
         recipient_email = instance.user.email
         recipient_name = instance.user.get_full_name() or instance.user.username
+        tracking_path = reverse('shop:order_tracking', args=[instance.order_number])
     else:
         recipient_email = instance.guest_email
         recipient_name = "Customer"
+        tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={instance.order_number}"
 
     if not recipient_email:
         return
 
-    # Build tracking URL (hardcode your domain)
-    BASE_URL = getattr(settings, "BASE_URL", "https://www.linetrendy.com")
-    if instance.user:
-        tracking_path = reverse('shop:order_tracking', args=[instance.order_number])
+    # Build absolute URL (use request if available, otherwise fallback to BASE_URL)
+    request = getattr(instance, "_request", None)
+    if request:
+        tracking_url = request.build_absolute_uri(tracking_path)
     else:
-        tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={instance.order_number}"
-    tracking_url = f"{BASE_URL}{tracking_path}"
+        BASE_URL = getattr(settings, "BASE_URL", "https://linetrendy.com")
+        tracking_url = BASE_URL.rstrip("/") + tracking_path
 
     # Email subject and content
     subject = f"Order Confirmation - #{instance.order_number}"
-
     plain_text = f"""
 Dear {recipient_name},
 
@@ -54,7 +62,6 @@ We’ll notify you again once your order has been shipped!
 Best regards,
 The LineTrendy Team
 """
-
     html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -74,12 +81,9 @@ The LineTrendy Team
             <h1>LineTrendy</h1>
             <p>Hair Products for All Hair Types</p>
         </div>
-        
         <div class="content">
             <p>Dear {recipient_name},</p>
-            
             <p>Thank you for your order! Here are your order details:</p>
-            
             <div class="order-info">
                 <h3>Order Details</h3>
                 <p><strong>Order Number:</strong> #{instance.order_number}</p>
@@ -87,10 +91,8 @@ The LineTrendy Team
                 <p><strong>Order Date:</strong> {instance.created_at.strftime("%B %d, %Y")}</p>
                 <p><strong>Track your order:</strong> <a href="{tracking_url}">{tracking_url}</a></p>
             </div>
-
             <p>We’ll notify you again once your order has been shipped!</p>
         </div>
-        
         <div class="footer">
             <p>Best regards,<br>The LineTrendy Team</p>
             <p>Need help? Contact us at linetrendyllc@gmail.com</p>
@@ -100,7 +102,7 @@ The LineTrendy Team
 </html>
 """
 
-    # Send safely
+    # Prepare the email
     email = EmailMultiAlternatives(
         subject=subject,
         body=plain_text,
@@ -110,11 +112,9 @@ The LineTrendy Team
     )
     email.attach_alternative(html_content, "text/html")
 
-    try:
-        email.send(fail_silently=True)
-        print(f"✅ Order confirmation email sent to {recipient_email}")
-    except Exception as e:
-        print(f"⚠️ Failed to send confirmation email to {recipient_email}: {e}")
+    # Send asynchronously
+    threading.Thread(target=send_email_async, args=(email,)).start()
+    print(f"✅ Order confirmation email triggered to {recipient_email} (async)")
 
 
 
