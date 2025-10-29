@@ -274,13 +274,26 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 #Email setup
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # make sure this stays False when TLS is True
-EMAIL_HOST_USER = 'linetrendyllc@gmail.com'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # your Gmail app password (not your normal login!)
-DEFAULT_FROM_EMAIL = 'Linetrendy <linetrendyllc@gmail.com>'
+DEFAULT_FROM_EMAIL = 'linetrendy.com no-reply <noreplylinetrendy@gmail.com>'
+
+
+
+
+
+UNFOLD = {
+    "SITE_TITLE": "Linetrendy Admin",
+    "SITE_HEADER": "Linetrendy Admin",
+    "SITE_URL": "/admin/",
+    "SHOW_HISTORY": True,
+}
+
+
 
 
 

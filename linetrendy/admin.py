@@ -8,6 +8,14 @@ from django.utils.html import format_html
 # Product & Category
 # ----------------------
 
+
+admin.site.site_header = "Linetrendy Admin"
+admin.site.site_title = "Linetrendy Admin Portal"
+admin.site.index_title = "Welcome to Linetrendy Dashboard"
+
+
+
+
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1  # Number of empty image fields to show

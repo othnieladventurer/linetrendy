@@ -551,6 +551,7 @@ def checkout(request):
 
 
 
+from django.core.mail import get_connection, EmailMultiAlternatives
 
 def checkout_success(request):
     last_order_intent = request.session.get("last_payment_intent_id")
@@ -582,37 +583,90 @@ def checkout_success(request):
     discount = order.discount_amount
     final_total = max(subtotal + shipping_fee - discount, Decimal("0.00"))
 
-    # --- FIX: Build absolute tracking URL using current request domain ---
+    # Build absolute tracking URL
     if order.user:
         tracking_path = reverse('shop:order_tracking', args=[order.order_number])
     else:
         tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
     tracking_url = request.build_absolute_uri(tracking_path)
 
-    # --- Email sending with fresh SMTP connection ---
+    # Email content using professional HTML design
     email_subject = f"Order Confirmation - {order.order_number}"
-    email_message = (
-        f"Hi,\n\n"
-        f"Thank you for your order! Your order number is {order.order_number}.\n"
-        f"You can track your order here: {tracking_url}\n\n"
-        "Best regards,\nLinetrendy Team"
-    )
+
+    plain_text = f"""
+Dear {order.user.get_full_name() if order.user else 'Customer'},
+
+Thank you for your order!
+
+Order Number: #{order.order_number}
+Total Amount: ${final_total}
+
+You can track your order here: {tracking_url}
+
+Thank you for choosing LineTrendy for your hair care needs.
+
+Best regards,
+The LineTrendy Team
+"""
+
+    html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: #dc2626; color: white; padding: 20px; text-align: center; }}
+        .content {{ background: #f9f9f9; padding: 20px; }}
+        .order-info {{ background: white; padding: 15px; margin: 15px 0; border-left: 4px solid #dc2626; }}
+        .status-badge {{ background: #dc2626; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; }}
+        .footer {{ text-align: center; padding: 20px; color: #666; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LineTrendy</h1>
+            <p>Hair Products for All Hair Types</p>
+        </div>
+        
+        <div class="content">
+            <p>Dear {order.user.get_full_name() if order.user else 'Customer'},</p>
+            
+            <p>Thank you for your order! Here are your order details:</p>
+            
+            <div class="order-info">
+                <h3>Order Details</h3>
+                <p><strong>Order Number:</strong> #{order.order_number}</p>
+                <p><strong>Total Amount:</strong> ${final_total}</p>
+                <p><strong>Tracking URL:</strong> <a href="{tracking_url}">{tracking_url}</a></p>
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <p>Best regards,<br>The LineTrendy Team</p>
+            <p>Need help? Contact us at linetrendyllc@gmail.com</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
 
     try:
         logger.info(f"Sending order confirmation to {email_to} for order {order.order_number}")
 
-        # Use a fresh SMTP connection
-        from django.core.mail import get_connection, EmailMessage
-
-        connection = get_connection(fail_silently=False)  # fresh connection per email
-        email = EmailMessage(
+        # Send both plain text and HTML versions
+        connection = get_connection(fail_silently=False)
+        email = EmailMultiAlternatives(
             subject=email_subject,
-            body=email_message,
+            body=plain_text,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[email_to],
             connection=connection,
         )
-        email.send(fail_silently=False)  # raise exception on failure
+        email.attach_alternative(html_content, "text/html")
+        email.send(fail_silently=False)
 
         logger.info(f"Confirmation email sent successfully to {email_to}")
 
@@ -630,9 +684,10 @@ def checkout_success(request):
         "shipping_fee": shipping_fee,
         "discount": discount,
         "final_total": final_total,
-        "tracking_url": tracking_url,  # ✅ absolute URL for template
+        "tracking_url": tracking_url,
     }
     return render(request, "linetrendy/checkout_success.html", context)
+
 
 
 
