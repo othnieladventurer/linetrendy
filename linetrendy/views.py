@@ -551,8 +551,6 @@ def checkout(request):
 
 
 
-from django.core.mail import get_connection, EmailMultiAlternatives
-
 def checkout_success(request):
     last_order_intent = request.session.get("last_payment_intent_id")
     if not last_order_intent:
@@ -590,91 +588,8 @@ def checkout_success(request):
         tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
     tracking_url = request.build_absolute_uri(tracking_path)
 
-    # Email content using professional HTML design
-    email_subject = f"Order Confirmation - {order.order_number}"
-
-    plain_text = f"""
-Dear {order.user.get_full_name() if order.user else 'Customer'},
-
-Thank you for your order!
-
-Order Number: #{order.order_number}
-Total Amount: ${final_total}
-
-You can track your order here: {tracking_url}
-
-Thank you for choosing LineTrendy for your hair care needs.
-
-Best regards,
-The LineTrendy Team
-"""
-
-    html_content = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background: #dc2626; color: white; padding: 20px; text-align: center; }}
-        .content {{ background: #f9f9f9; padding: 20px; }}
-        .order-info {{ background: white; padding: 15px; margin: 15px 0; border-left: 4px solid #dc2626; }}
-        .status-badge {{ background: #dc2626; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; }}
-        .footer {{ text-align: center; padding: 20px; color: #666; }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>LineTrendy</h1>
-            <p>Hair Products for All Hair Types</p>
-        </div>
-        
-        <div class="content">
-            <p>Dear {order.user.get_full_name() if order.user else 'Customer'},</p>
-            
-            <p>Thank you for your order! Here are your order details:</p>
-            
-            <div class="order-info">
-                <h3>Order Details</h3>
-                <p><strong>Order Number:</strong> #{order.order_number}</p>
-                <p><strong>Total Amount:</strong> ${final_total}</p>
-                <p><strong>Tracking URL:</strong> <a href="{tracking_url}">{tracking_url}</a></p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Best regards,<br>The LineTrendy Team</p>
-            <p>Need help? Contact us at linetrendyllc@gmail.com</p>
-        </div>
-    </div>
-</body>
-</html>
-"""
-
-    # ✅ Safe email sending with long timeout and no checkout crash
-    try:
-        logger.info(f"Sending order confirmation to {email_to} for order {order.order_number}")
-
-        connection = get_connection(
-            fail_silently=True,
-            timeout=getattr(settings, "EMAIL_TIMEOUT", 60),  # long timeout (default 60s)
-        )
-
-        email = EmailMultiAlternatives(
-            subject=email_subject,
-            body=plain_text,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[email_to],
-            connection=connection,
-        )
-        email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=True)  # ✅ Don't block checkout success
-
-        logger.info(f"Confirmation email sent successfully (or safely skipped) to {email_to}")
-
-    except Exception as e:
-        logger.error(f"Email sending failed for order {order.order_number} to {email_to}: {e}", exc_info=True)
+    # ✅ Signal handles email sending now, so no SMTP or timeout logic here
+    logger.info(f"Checkout successful for order {order.order_number} — signal will send confirmation email.")
 
     # Clear session safely
     request.session.pop("last_payment_intent_id", None)
@@ -691,7 +606,6 @@ The LineTrendy Team
         "tracking_url": tracking_url,
     }
     return render(request, "linetrendy/checkout_success.html", context)
-
 
 
 
