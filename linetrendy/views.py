@@ -641,7 +641,6 @@ The LineTrendy Team
                 <p><strong>Total Amount:</strong> ${final_total}</p>
                 <p><strong>Tracking URL:</strong> <a href="{tracking_url}">{tracking_url}</a></p>
             </div>
-
         </div>
         
         <div class="footer">
@@ -653,11 +652,15 @@ The LineTrendy Team
 </html>
 """
 
+    # ✅ Safe email sending with long timeout and no checkout crash
     try:
         logger.info(f"Sending order confirmation to {email_to} for order {order.order_number}")
 
-        # Send both plain text and HTML versions
-        connection = get_connection(fail_silently=False)
+        connection = get_connection(
+            fail_silently=True,
+            timeout=getattr(settings, "EMAIL_TIMEOUT", 60),  # long timeout (default 60s)
+        )
+
         email = EmailMultiAlternatives(
             subject=email_subject,
             body=plain_text,
@@ -666,17 +669,18 @@ The LineTrendy Team
             connection=connection,
         )
         email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)
+        email.send(fail_silently=True)  # ✅ Don't block checkout success
 
-        logger.info(f"Confirmation email sent successfully to {email_to}")
+        logger.info(f"Confirmation email sent successfully (or safely skipped) to {email_to}")
 
     except Exception as e:
         logger.error(f"Email sending failed for order {order.order_number} to {email_to}: {e}", exc_info=True)
 
-    # Clear session
+    # Clear session safely
     request.session.pop("last_payment_intent_id", None)
     request.session.pop("guest_email", None)
 
+    # Render success page
     context = {
         "order": order,
         "order_items": order_items,
