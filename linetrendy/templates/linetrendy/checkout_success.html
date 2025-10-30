@@ -49,11 +49,16 @@
 
     <!-- Email Confirmation -->
     <p class="text-gray-600 mb-6">
-      A confirmation email has been sent to <span class="font-semibold">
+      A confirmation email has been sent to 
+      <span class="font-semibold">
         {% if order.guest_email %}{{ order.guest_email }}{% else %}{{ order.user.email }}{% endif %}
-      </span>. If you do not see it in your inbox, please check your spam or promotions folder.  
-      You can track your order status in your account dashboard, and please make sure your receipt is downloaded and kept in your files for future inquiries.
+      </span>.
+      <br>
+      • Check your spam or promotions folder if you don’t see it.<br>
+      • Track your order from your account dashboard.<br>
+      • Save your receipt for future reference.
     </p>
+
 
     <!-- Action Buttons -->
     <div class="flex justify-center gap-4 mt-4">
