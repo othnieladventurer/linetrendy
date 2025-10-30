@@ -8,20 +8,6 @@ import threading
 
 
 
-
-
-
-def send_email_async(email):
-    """Send email in a separate thread to avoid blocking checkout."""
-    try:
-        email.send(fail_silently=False)  # Must be False in production to catch errors
-    except Exception as e:
-        # Log the failure clearly so you know what went wrong in production
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"⚠️ Failed to send order confirmation email: {e}")
-
-
 @receiver(post_save, sender=Order)
 def send_order_confirmation_email(sender, instance, created, **kwargs):
     if not created:  # only trigger for new orders
@@ -31,26 +17,18 @@ def send_order_confirmation_email(sender, instance, created, **kwargs):
     if instance.user:
         recipient_email = instance.user.email
         recipient_name = instance.user.get_full_name() or instance.user.username
-        tracking_path = reverse('shop:order_tracking', args=[instance.order_number])
     else:
         recipient_email = instance.guest_email
         recipient_name = "Customer"
-        tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={instance.order_number}"
 
     if not recipient_email:
         return
 
-    # Build absolute URL using request if attached to instance, otherwise fallback to BASE_URL
-    request = getattr(instance, "_request", None)
-    if request:
-        tracking_url = request.build_absolute_uri(tracking_path)
-    else:
-        BASE_URL = getattr(settings, "BASE_URL", "https://www.linetrendy.com")
-        tracking_url = BASE_URL.rstrip("/") + tracking_path
+    # Use absolute tracking URL saved in the order
+    tracking_url = instance.tracking_url
 
     # Email subject and content
     subject = f"Order Confirmation - #{instance.order_number}"
-
     plain_text = f"""
 Dear {recipient_name},
 
@@ -108,7 +86,7 @@ The LineTrendy Team
 </html>
 """
 
-    # Prepare the email
+    # Send email directly
     email = EmailMultiAlternatives(
         subject=subject,
         body=plain_text,
@@ -117,11 +95,8 @@ The LineTrendy Team
         reply_to=['linetrendyllc@gmail.com'],
     )
     email.attach_alternative(html_content, "text/html")
-
-    # Send asynchronously
-    threading.Thread(target=send_email_async, args=(email,)).start()
-    print(f"✅ Order confirmation email triggered to {recipient_email} (async)")
-
+    email.send()  # Will raise exceptions if there's an issue
+    print(f"✅ Order confirmation email sent to {recipient_email}")
 
 
 

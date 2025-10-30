@@ -239,20 +239,91 @@ document.addEventListener('htmx:afterRequest', function(evt) {
 
 
 //owl-carousel 
-$(document).ready(function(){
-    $(".owl-carousel").owlCarousel({
-        loop: true,
-        margin: 20,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayTimeout: 4000,
-        responsive: {
-            0: { items: 1 },
-            768: { items: 2 },
-            1024: { items: 3 }
+$(".owl-carousel").owlCarousel({
+  loop: true,
+  margin: 20,
+  nav: false,
+  dots: true,
+  autoplay: true,
+  autoplayTimeout: 4000,
+  responsive: {
+    0: { items: 1, stagePadding: 20 },
+    768: { items: 2, stagePadding: 40 },
+    1024: { items: 3, stagePadding: 80 } // 3 full slides + part of the 4th
+  }
+});
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const form = document.getElementById("newsletterForm");
+  const emailInput = document.getElementById("emailInput");
+  const btn = document.getElementById("subscribeBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // prevent page reload
+
+    const email = emailInput.value.trim();
+    if (!email) {
+      alert("Please enter a valid email.");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Subscribing...";
+
+    try {
+      const response = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        btn.textContent = "Subscribed ✓";
+        btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+        btn.classList.add("bg-green-500");
+
+        // Reset email field
+        emailInput.value = "";
+      } else {
+        // ✅ Show alert if already subscribed or error
+        alert(data.message);
+        btn.textContent = "Subscribe";
+        btn.disabled = false;
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+      btn.textContent = "Subscribe";
+      btn.disabled = false;
+    }
+  });
+
+  // Helper to get CSRF token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
-    });
+      }
+    }
+    return cookieValue;
+  }
+
 });
 
 
@@ -298,4 +369,52 @@ function showTab(tab) {
 
 
 // Faw expand collapse page 
+
+
+
+
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    document.getElementById(tab + '-tab').classList.remove('hidden');
+  }
+
+function openAddAddressModal() { document.getElementById('add-address-modal').classList.remove('hidden'); }
+function closeAddAddressModal() { document.getElementById('add-address-modal').classList.add('hidden'); }
+
+function openEditAddressModal(addressId) {
+  const card = document.querySelector(`[data-id='${addressId}']`);
+  if (!card) return;
+  document.getElementById('edit_address_id').value = addressId;
+  document.getElementById('edit_full_name').value = card.dataset.full_name || '';
+  document.getElementById('edit_line1').value = card.dataset.line1 || '';
+  document.getElementById('edit_line2').value = card.dataset.line2 || '';
+  document.getElementById('edit_city').value = card.dataset.city || '';
+  document.getElementById('edit_state').value = card.dataset.state || '';
+  document.getElementById('edit_postal_code').value = card.dataset.postal_code || '';
+  document.getElementById('edit_country').value = card.dataset.country || '';
+  document.getElementById('edit_phone').value = card.dataset.phone || '';
+  document.getElementById('edit-address-modal').classList.remove('hidden');
+}
+function closeEditAddressModal() { document.getElementById('edit-address-modal').classList.add('hidden'); }
+
+function openDeleteModal(addressId) {
+  document.getElementById('delete_address_id').value = addressId;
+  document.getElementById('delete-modal').classList.remove('hidden');
+}
+function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); }
+
+function openCancelModal(orderNumber) {
+  document.getElementById('cancelOrderForm').action = `/cancel-order/${orderNumber}/`;
+  document.getElementById('cancelModal').classList.remove('hidden');
+}
+function closeCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
+
+function toggleOrder(orderId) {
+  document.getElementById('order-' + orderId).classList.toggle('hidden');
+}
+
+
+
+
 

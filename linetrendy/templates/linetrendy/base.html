@@ -4,25 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linetrendy | Hair product for all hair types.</title>
+    <title>Linetrendy | Hair products for all hair types</title>
+
+    <!-- SEO -->
     <meta name="description" content="Discover Linetrendy’s organic hair care: oils, pomades, shampoos, conditioners, masks & serums. Eco-conscious and sustainable for all hair types.">
-    <meta name="keywords" content="consistency is key, ,  Hair productp, sustainable beauty products, luxury cosmetics, clean beauty, cruelty-free">
+    <meta name="keywords" content="consistency is key, hair products, sustainable beauty products, luxury cosmetics, clean beauty, cruelty-free">
     <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- ✅ Owl Carousel CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
 
-
-    <!-- ✅ jQuery & Owl Carousel JS -->
-
-
-    <!-- ✅ Init Script -->
-
-   
-   <script>
+    <!-- Tailwind Custom Config -->
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -31,7 +34,7 @@
                         secondary: '#FFCDD2',
                         accent: '#F44336',
                         dark: '#000000',
-                        light: '#FFEBEE'
+                        light: '#FFEBEE',
                     },
                     fontFamily: {
                         heading: ['"Playfair Display"', 'serif'],
@@ -39,58 +42,89 @@
                     },
                     animation: {
                         'fade-in': 'fadeIn 1s ease-in-out',
-                        'slide-up': 'slideUp 0.5s ease-out'
+                        'slide-up': 'slideUp 0.5s ease-out',
                     },
                     keyframes: {
                         fadeIn: {
                             '0%': { opacity: '0' },
-                            '100%': { opacity: '1' }
+                            '100%': { opacity: '1' },
                         },
                         slideUp: {
                             '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' }
-                        }
-                    }
-                }
-            }
-        }
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                },
+            },
+        };
     </script>
 
+    <!-- Schema Markup -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "ine rendy",
-      "url": "https://bloombeauty.example.com",
-      "logo": "https://bloombeauty.example.com/logo.png",
+      "name": "Linetrendy",
+      "url": "https://linetrendy.example.com",
+      "logo": "https://linetrendy.example.com/logo.png",
       "description": "Premium organic and sustainable beauty products",
       "sameAs": [
-        "https://www.facebook.com/bloombeauty",
-        "https://www.instagram.com/bloombeauty",
-        "https://www.pinterest.com/bloombeauty"
+        "https://www.facebook.com/linetrendy",
+        "https://www.instagram.com/linetrendy",
+        "https://www.pinterest.com/linetrendy"
       ]
     }
     </script>
 </head>
-<body class="font-body">
+
+<body class="font-body bg-white text-gray-800">
+
+    <!-- Navbar -->
     {% include 'linetrendy/partials/navbar.html' %}
 
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
 
-    {% block content %}
-
-    {% endblock content %}
-
+    <!-- Footer -->
     {% include 'linetrendy/partials/footer.html' %}
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Owl Carousel JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <!-- Your main JS -->
-    <script src="{% static 'js/main.js' %}"></script>
+    <!-- =======================
+         Scripts (Load Order)
+    ======================== -->
 
-    <!-- htmx if you need -->
+    <!-- 1️⃣ jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 2️⃣ Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <!-- 3️⃣ htmx (optional, if you use it) -->
     <script src="https://unpkg.com/htmx.org@1.9.4" defer></script>
 
+    <!-- 4️⃣ Your Main JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- 5️⃣ Inline Owl Carousel Init -->
+    <script>
+      $(document).ready(function() {
+        $(".owl-carousel").owlCarousel({
+          loop: true,
+          margin: 20,
+          nav: false,
+          dots: true,
+          autoplay: true,
+          autoplayTimeout: 4000,
+          responsive: {
+            0: { items: 1, stagePadding: 20 },
+            768: { items: 2, stagePadding: 40 },
+            1024: { items: 3, stagePadding: 80 }
+          }
+        });
+      });
+    </script>
 
 </body>
 </html>

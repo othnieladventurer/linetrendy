@@ -6,12 +6,6 @@
 
 
 {% block content %}
-
-<!-- ✅ Owl Carousel CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
-
-
 <section class="hero-image flex items-center justify-center text-center text-white px-4 animate-fade-in relative
     h-[70vh] md:h-screen"
     style="
@@ -290,108 +284,12 @@
     </div>
 </div>
 
-
-
-
-
-
-<!-- ✅ jQuery & Owl Carousel JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-<!-- ✅ Init Script -->
-<script>
-$(".owl-carousel").owlCarousel({
-  loop: true,
-  margin: 20,
-  nav: false,
-  dots: true,
-  autoplay: true,
-  autoplayTimeout: 4000,
-  responsive: {
-    0: { items: 1, stagePadding: 20 },
-    768: { items: 2, stagePadding: 40 },
-    1024: { items: 3, stagePadding: 80 } // 3 full slides + part of the 4th
-  }
-});
-</script>
-
-
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const form = document.getElementById("newsletterForm");
-  const emailInput = document.getElementById("emailInput");
-  const btn = document.getElementById("subscribeBtn");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // prevent page reload
-
-    const email = emailInput.value.trim();
-    if (!email) {
-      alert("Please enter a valid email.");
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = "Subscribing...";
-
-    try {
-      const response = await fetch("/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        btn.textContent = "Subscribed ✓";
-        btn.classList.remove("bg-blue-500", "hover:bg-blue-600");
-        btn.classList.add("bg-green-500");
-
-        // Reset email field
-        emailInput.value = "";
-      } else {
-        // ✅ Show alert if already subscribed or error
-        alert(data.message);
-        btn.textContent = "Subscribe";
-        btn.disabled = false;
-      }
-    } catch (error) {
-      alert("Something went wrong. Please try again.");
-      btn.textContent = "Subscribe";
-      btn.disabled = false;
-    }
-  });
-
-  // Helper to get CSRF token
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + "=")) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
-});
-</script>
-
-
-
-
-
-
 {% endblock content%}
+
+
+
+
+
+
+
+

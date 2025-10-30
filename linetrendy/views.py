@@ -375,8 +375,6 @@ def remove_from_cart(request, item_id):
 
 
 
-
-
 def checkout(request):
     cart = get_cart(request)
     cart_items = cart.items.select_related('product')
@@ -387,7 +385,6 @@ def checkout(request):
     subtotal = sum((item.product.price if item.product else 0) * item.quantity for item in cart_items)
     shipping_fee = cart.shipping_method.get_fee(subtotal) if cart.shipping_method else Decimal("0.00")
     
-    # FIX: Get discount from session instead of cart.discount
     applied_promo_code = request.session.get("promo_code")
     discount = Decimal("0.00")
     
@@ -395,15 +392,10 @@ def checkout(request):
         try:
             promo = Discount.objects.filter(code__iexact=applied_promo_code, active=True).first()
             if promo:
-                # For checkout, calculate discount on subtotal + shipping (same as cart view)
                 discount_base = subtotal + shipping_fee
                 discount = promo.get_discount(discount_base)
-                
-                # Check if user has already used this promo (for authenticated users)
                 if request.user.is_authenticated:
-                    already_used = DiscountUsage.objects.filter(
-                        user=request.user, discount=promo
-                    ).exists()
+                    already_used = DiscountUsage.objects.filter(user=request.user, discount=promo).exists()
                     if already_used:
                         discount = Decimal("0.00")
                         request.session.pop("promo_code", None)
@@ -490,13 +482,16 @@ def checkout(request):
                     request.session["guest_email"] = guest_email
                     email_to = guest_email
 
-                # --- Build Tracking URL using request domain (FIX) ---
+                # --- Surgical Fix: Build absolute tracking URL ---
                 if request.user.is_authenticated:
                     tracking_path = reverse('shop:order_tracking', args=[order.order_number])
                 else:
                     tracking_path = f"{reverse('shop:guest_order_tracking')}?order_number={order.order_number}"
 
                 tracking_url = request.build_absolute_uri(tracking_path)
+                # Save absolute URL in order for signal use
+                order.tracking_url = tracking_url
+                order.save(update_fields=['tracking_url'])
 
                 # --- Create Order Items ---
                 for item in cart_items:
@@ -513,19 +508,15 @@ def checkout(request):
                 cart.shipping_method = None
                 cart.save()
                 
-                # Clear the promo code from session after successful order
                 if 'promo_code' in request.session:
-                    # Record discount usage for authenticated users
                     if request.user.is_authenticated and applied_promo_code:
                         try:
                             promo = Discount.objects.get(code__iexact=applied_promo_code)
                             DiscountUsage.objects.create(user=request.user, discount=promo)
                         except Discount.DoesNotExist:
                             pass
-                    
                     del request.session['promo_code']
 
-                # --- Save payment intent in session ---
                 request.session["last_payment_intent_id"] = payment_intent_id
 
                 return redirect("shop:checkout_success")
@@ -546,7 +537,6 @@ def checkout(request):
         "saved_addresses": request.user.addresses.all() if request.user.is_authenticated else [],
     }
     return render(request, "linetrendy/checkout.html", context)
-
 
 
 

@@ -364,46 +364,4 @@
   </div>
 </div>
 
-<script>
-  function showTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-    document.getElementById(tab + '-tab').classList.remove('hidden');
-  }
-
-  function openAddAddressModal() { document.getElementById('add-address-modal').classList.remove('hidden'); }
-  function closeAddAddressModal() { document.getElementById('add-address-modal').classList.add('hidden'); }
-
-  function openEditAddressModal(addressId) {
-    const card = document.querySelector(`[data-id='${addressId}']`);
-    if (!card) return;
-    document.getElementById('edit_address_id').value = addressId;
-    document.getElementById('edit_full_name').value = card.dataset.full_name || '';
-    document.getElementById('edit_line1').value = card.dataset.line1 || '';
-    document.getElementById('edit_line2').value = card.dataset.line2 || '';
-    document.getElementById('edit_city').value = card.dataset.city || '';
-    document.getElementById('edit_state').value = card.dataset.state || '';
-    document.getElementById('edit_postal_code').value = card.dataset.postal_code || '';
-    document.getElementById('edit_country').value = card.dataset.country || '';
-    document.getElementById('edit_phone').value = card.dataset.phone || '';
-    document.getElementById('edit-address-modal').classList.remove('hidden');
-  }
-  function closeEditAddressModal() { document.getElementById('edit-address-modal').classList.add('hidden'); }
-
-  function openDeleteModal(addressId) {
-    document.getElementById('delete_address_id').value = addressId;
-    document.getElementById('delete-modal').classList.remove('hidden');
-  }
-  function closeDeleteModal() { document.getElementById('delete-modal').classList.add('hidden'); }
-
-  function openCancelModal(orderNumber) {
-    document.getElementById('cancelOrderForm').action = `/cancel-order/${orderNumber}/`;
-    document.getElementById('cancelModal').classList.remove('hidden');
-  }
-  function closeCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
-
-  function toggleOrder(orderId) {
-    document.getElementById('order-' + orderId).classList.toggle('hidden');
-  }
-</script>
-
 {% endblock %}
